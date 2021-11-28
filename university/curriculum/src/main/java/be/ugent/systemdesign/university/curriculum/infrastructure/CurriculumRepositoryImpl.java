@@ -19,11 +19,16 @@ public class CurriculumRepositoryImpl implements CurriculumRepository {
 	CurriculumDataModelRepository curriculumDMRepo;
 	
 	@Override
-	public List<Curriculum> findByCurriculumId(String curriculumId) {
+	public Curriculum findByCurriculumId(String curriculumId) {
+		CurriculumDataModel c = curriculumDMRepo.findById(curriculumId).orElseThrow(CurriculumNotFoundException::new);
+		return mapToCurriculum(c);
+		
+		/*
 		return curriculumDMRepo.findByCurriculumId(curriculumId)
 				.stream()
 				.map(e -> mapToCurriculum(e))
 				.collect(Collectors.toList());
+		*/
 	}
 
 	@Override

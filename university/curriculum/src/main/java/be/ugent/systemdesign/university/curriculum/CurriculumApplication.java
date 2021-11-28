@@ -36,5 +36,12 @@ public class CurriculumApplication {
 			log.info("Saved new inpatient {}", cId);
 		};
 	}
+	
+	@Bean
+	public CommandLineRunner readDatabase(CurriculumDataModelRepository DMrepo, CurriculumRepository repo) {
+		return (args) -> {
+			
+		};
+	}
 
 }

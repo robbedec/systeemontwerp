@@ -41,4 +41,8 @@ public class Curriculum extends AggregateRoot {
 			.build()
 		);
 	}
+	
+	public void markCurriculumAsProposed() {
+		this.curriculumStatus = CurriculumStatus.PROPOSED;
+	}
 }
