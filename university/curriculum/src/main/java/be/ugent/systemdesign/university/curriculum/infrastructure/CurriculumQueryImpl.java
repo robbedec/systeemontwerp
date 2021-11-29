@@ -39,6 +39,4 @@ public class CurriculumQueryImpl implements CurriculumQuery {
 		
 		return crm;
 	}
-
-	
 }
