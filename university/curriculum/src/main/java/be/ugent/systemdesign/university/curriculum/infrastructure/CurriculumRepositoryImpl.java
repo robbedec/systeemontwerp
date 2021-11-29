@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Repository;
 
 import be.ugent.systemdesign.university.curriculum.domain.Course;
@@ -18,23 +19,28 @@ public class CurriculumRepositoryImpl implements CurriculumRepository {
 	@Autowired
 	CurriculumDataModelRepository curriculumDMRepo;
 	
+	@Autowired
+	ApplicationEventPublisher eventPublisher;
+	
 	@Override
 	public Curriculum findByCurriculumId(String curriculumId) {
 		CurriculumDataModel c = curriculumDMRepo.findById(curriculumId).orElseThrow(CurriculumNotFoundException::new);
 		return mapToCurriculum(c);
-		
-		/*
-		return curriculumDMRepo.findByCurriculumId(curriculumId)
-				.stream()
-				.map(e -> mapToCurriculum(e))
-				.collect(Collectors.toList());
-		*/
+	}
+	
+	@Override
+	public Curriculum findByStudentId(String studentId) {
+		CurriculumDataModel c = curriculumDMRepo.findByStudentId(studentId).orElseThrow(CurriculumNotFoundException::new);
+		return mapToCurriculum(c);
 	}
 
 	@Override
-	public String save(Curriculum c) {
+	public void save(Curriculum c) {
 		CurriculumDataModel dataModel = mapToCurriculumDataModel(c);
-		return curriculumDMRepo.save(dataModel).getCurriculumId();
+		curriculumDMRepo.save(dataModel).getCurriculumId();
+		
+		c.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
+		c.clearDomainEvents();
 	}
 	
 	private CurriculumDataModel mapToCurriculumDataModel(Curriculum _c) {

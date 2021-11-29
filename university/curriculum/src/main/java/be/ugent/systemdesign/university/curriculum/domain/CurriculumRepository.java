@@ -5,5 +5,7 @@ import java.util.List;
 public interface CurriculumRepository {
 	
 	Curriculum findByCurriculumId(String curriculumId);
-	String save(Curriculum c);
+	Curriculum findByStudentId(String studentId);
+	
+	void save(Curriculum c);
 }

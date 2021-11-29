@@ -19,19 +19,20 @@ import lombok.Setter;
 public class Curriculum extends AggregateRoot {
 	
 	private String curriculumId;
-	private Integer studentId;
+	private String studentId;
 	private CurriculumStatus curriculumStatus;
 	private LocalDate dateCreated;
 	private LocalDate dateLastChanged;
 	private Year academicYear;
 	private List<Course> courses;
 	
-	public Curriculum() {
-		curriculumStatus = CurriculumStatus.PROVISIONAL;
-		dateCreated = LocalDate.now();
-		dateLastChanged = dateCreated;
-		courses = new ArrayList<>();
-		academicYear = Year.now();
+	public Curriculum(String studentId) {
+		this.studentId = studentId;
+		this.curriculumStatus = CurriculumStatus.PROVISIONAL;
+		this.dateCreated = LocalDate.now();
+		this.dateLastChanged = dateCreated;
+		this.courses = new ArrayList<>();
+		this.academicYear = Year.now();
 	}
 	
 	public void addCourse(String _name, Integer _credits) {
@@ -43,6 +44,14 @@ public class Curriculum extends AggregateRoot {
 	}
 	
 	public void markCurriculumAsProposed() {
+		if (this.curriculumStatus == CurriculumStatus.PROPOSED || this.curriculumStatus == CurriculumStatus.ACCEPTED) {
+			throw new OnlyProvisionOrRejectedCurriculumCanBeProposedException();
+		}
+		
 		this.curriculumStatus = CurriculumStatus.PROPOSED;
+	}
+	
+	public void changeCurriculum(List<Course> _courses, boolean changedByStudent) {
+		this.courses = _courses;
 	}
 }

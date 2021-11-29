@@ -1,10 +1,12 @@
 package be.ugent.systemdesign.university.curriculum.infrastructure;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface CurriculumDataModelRepository extends MongoRepository<CurriculumDataModel, String> {
 
-	List<CurriculumDataModel> findByCurriculumId(String curriculumId);
+	CurriculumDataModel findByCurriculumId(String curriculumId);
+	Optional<CurriculumDataModel> findByStudentId(String studenId);
 }

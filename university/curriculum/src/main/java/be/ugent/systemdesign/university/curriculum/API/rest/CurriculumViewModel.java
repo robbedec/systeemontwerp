@@ -1,6 +1,7 @@
 package be.ugent.systemdesign.university.curriculum.API.rest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import be.ugent.systemdesign.university.curriculum.application.query.CourseReadModel;
 import be.ugent.systemdesign.university.curriculum.application.query.CurriculumReadModel;
@@ -11,12 +12,14 @@ public class CurriculumViewModel {
 
 	private String curriculumStatus;
 	private String academicYear;
-	private String courses;
+	private List<CourseViewModel> courses;
 	
 	public CurriculumViewModel(CurriculumReadModel _c) {
 		this.curriculumStatus = _c.getCurriculumStatus();
 		this.academicYear = _c.getAcademicYear().toString();
+		this.courses = _c.getCourses().stream().map(co -> new CourseViewModel(co)).collect(Collectors.toList());
 		
+		/*
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 		
@@ -32,7 +35,9 @@ public class CurriculumViewModel {
 		}
 		
 		sb.append("]");
-		
 		this.courses = sb.toString();
+		*/
+		
+		
 	}
 }

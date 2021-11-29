@@ -23,14 +23,14 @@ public class CurriculumDataModel {
 	@Id
 	private String curriculumId;
 	
-	private Integer studentId;
+	private String studentId;
 	private String curriculumStatus;
 	private LocalDate dateCreated;
 	private LocalDate dateLastChanged;
 	private Integer academicYear;
 	private List<CourseDataModel> courses;
 	
-	public CurriculumDataModel(String _curriculumId, Integer _studentId, CurriculumStatus _curriculumStatus, LocalDate _dateCreated, LocalDate _dateLastChanged, Year _academicYear, List<Course> _courses) {
+	public CurriculumDataModel(String _curriculumId, String _studentId, CurriculumStatus _curriculumStatus, LocalDate _dateCreated, LocalDate _dateLastChanged, Year _academicYear, List<Course> _courses) {
 		this.curriculumId = _curriculumId;
 		this.studentId = _studentId;
 		this.curriculumStatus = _curriculumStatus.name();
