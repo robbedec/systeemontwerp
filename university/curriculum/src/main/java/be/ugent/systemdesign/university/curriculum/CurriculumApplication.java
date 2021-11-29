@@ -110,5 +110,5 @@ public class CurriculumApplication {
 			  //Response response = service.noteLeftAgainstMedicalAdvice("3"); logResponse(response);
 		  }; 
 	  }
-
+	
 }

@@ -1,5 +1,6 @@
 package be.ugent.systemdesign.university.curriculum.infrastructure;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,11 @@ public class CurriculumQueryImpl implements CurriculumQuery {
 		return mapToReadModel(curriculumDMRepo.findById(curriculumId).orElseThrow(CurriculumNotFoundException::new));
 	}
 	
+	@Override
+	public List<CurriculumReadModel> findAll() {
+		return curriculumDMRepo.findAll().stream().map(cdm -> mapToReadModel(cdm)).collect(Collectors.toList());
+	}
+	
 	private CurriculumReadModel mapToReadModel(CurriculumDataModel _c) {
 		CurriculumReadModel crm = new CurriculumReadModel(
 			_c.getCurriculumStatus(), 
@@ -33,4 +39,6 @@ public class CurriculumQueryImpl implements CurriculumQuery {
 		
 		return crm;
 	}
+
+	
 }
