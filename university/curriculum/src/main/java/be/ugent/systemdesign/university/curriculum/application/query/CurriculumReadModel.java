@@ -9,6 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CurriculumReadModel {
 	
+	private String curriculumId;
 	private String curriculumStatus;
 	private Integer academicYear;
 	private List<CourseReadModel> courses;

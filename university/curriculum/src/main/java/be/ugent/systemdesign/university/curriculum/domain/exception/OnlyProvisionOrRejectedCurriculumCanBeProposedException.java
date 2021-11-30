@@ -1,4 +1,4 @@
-package be.ugent.systemdesign.university.curriculum.domain;
+package be.ugent.systemdesign.university.curriculum.domain.exception;
 
 public class OnlyProvisionOrRejectedCurriculumCanBeProposedException extends RuntimeException {
 

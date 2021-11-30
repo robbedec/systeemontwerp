@@ -10,11 +10,13 @@ import lombok.Getter;
 @Getter
 public class CurriculumViewModel {
 
+	private String curriculumId;
 	private String curriculumStatus;
 	private String academicYear;
 	private List<CourseViewModel> courses;
 	
 	public CurriculumViewModel(CurriculumReadModel _c) {
+		this.curriculumId = _c.getCurriculumId();
 		this.curriculumStatus = _c.getCurriculumStatus();
 		this.academicYear = _c.getAcademicYear().toString();
 		this.courses = _c.getCourses().stream().map(co -> new CourseViewModel(co)).collect(Collectors.toList());

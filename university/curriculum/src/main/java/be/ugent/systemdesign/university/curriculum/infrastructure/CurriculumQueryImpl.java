@@ -28,6 +28,7 @@ public class CurriculumQueryImpl implements CurriculumQuery {
 	
 	private CurriculumReadModel mapToReadModel(CurriculumDataModel _c) {
 		CurriculumReadModel crm = new CurriculumReadModel(
+			_c.getCurriculumId(),
 			_c.getCurriculumStatus(), 
 			_c.getAcademicYear(), 
 			_c.getCourses().stream()

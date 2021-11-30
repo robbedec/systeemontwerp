@@ -5,6 +5,8 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumChangesByStudentDisabledException;
+import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProvisionOrRejectedCurriculumCanBeProposedException;
 import be.ugent.systemdesign.university.curriculum.domain.seedwork.AggregateRoot;
 import lombok.AllArgsConstructor;
 import lombok.AccessLevel;
@@ -52,6 +54,9 @@ public class Curriculum extends AggregateRoot {
 	}
 	
 	public void changeCurriculum(List<Course> _courses, boolean changedByStudent) {
+		if ((this.curriculumStatus == CurriculumStatus.PROPOSED || this.curriculumStatus == CurriculumStatus.ACCEPTED) && changedByStudent) {
+			throw new CurriculumChangesByStudentDisabledException();
+		}
 		this.courses = _courses;
 	}
 }

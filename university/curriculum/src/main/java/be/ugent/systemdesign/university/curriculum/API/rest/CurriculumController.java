@@ -53,6 +53,11 @@ public class CurriculumController {
 		);
 	}
 	
+	@GetMapping("{id}/change")
+	public void changeCurriculumWithId(@PathVariable("id") String curriculumId, @RequestParam("accountId") String accountId) {
+		Response response = curriculumService.changeCurriculum(curriculumId, accountId);
+	}
+	
 	private ResponseEntity<String> createResponseEntity(ResponseStatus status, String happyMessage, HttpStatus happyStatus, String sadMessage, HttpStatus sadStatus){
 		if(status == ResponseStatus.FAIL) 
 			return new ResponseEntity<>(sadMessage, sadStatus);		
