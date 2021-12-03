@@ -19,13 +19,6 @@ services:
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
 
 # ------------Dummy services---------------
-  faculty:
-    build: ./faculty
-    container_name: faculty
-    links:
-      - kafka
-    depends_on:
-      - kafka
 # ------------Core services----------------
   curriculum:
     build: ./curriculum
@@ -35,6 +28,13 @@ services:
       - kafka
     depends_on:
       - curriculum_db
+      - kafka
+  faculty:
+    build: ./faculty
+    container_name: faculty
+    links:
+      - kafka
+    depends_on:
       - kafka
   api_gw:
     build: ./api_gateway
