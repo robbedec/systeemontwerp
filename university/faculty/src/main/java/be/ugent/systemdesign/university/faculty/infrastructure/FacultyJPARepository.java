@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import be.ugent.systemdesign.university.faculty.domain.Faculty;
 
-public interface FacultyJPARepository extends JpaRepository<Faculty, Integer> {
+public interface FacultyJPARepository extends JpaRepository<Faculty, Long> {
 	List<Faculty> findAll();
 	Faculty findByFacultyName(String facultyName);
 	

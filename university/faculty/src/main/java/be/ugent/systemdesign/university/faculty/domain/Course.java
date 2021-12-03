@@ -3,6 +3,7 @@ package be.ugent.systemdesign.university.faculty.domain;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -24,13 +24,20 @@ import lombok.Setter;
 public class Course {
 	
 	@Id
-	private Integer id;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id;
 	private String courseName;
 	private Integer courseCredits;
 	
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "faculty_id")
 	private Faculty faculty;
+	
+	public Course(String _courseName, Integer _courseCredits, Faculty _faculty) {
+		this.courseName = _courseName;
+		this.courseCredits = _courseCredits;
+		this.faculty = _faculty;
+	}
 	
 	public boolean equals(Course obj) {
 		if (obj == null) return false;

@@ -1,7 +1,9 @@
 package be.ugent.systemdesign.university.faculty.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,7 +18,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -25,11 +26,16 @@ import lombok.Setter;
 public class Faculty extends AggregateRoot {
 	
 	@Id
-	private Integer facultyId;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long facultyId;
 	private String facultyName;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "faculty")
-	private List<Course> availableCourses;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "faculty", cascade = CascadeType.ALL, orphanRemoval = true)
+	public List<Course> availableCourses = new ArrayList<>();
+	
+	public Faculty(String _name) {
+		this.facultyName = _name;
+	}
 	
 	public void addCourse(Course _course) {
 		availableCourses.add(_course);
