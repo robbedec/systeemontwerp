@@ -1,10 +1,9 @@
-package com.example.evalutation.infrastructure;
-
-import java.time.LocalDate;
+package com.example.evaluation.infrastructure;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,10 +12,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TaskDataModel {
+@AllArgsConstructor
+public class CertificateDataModel {
 	@Id
-	private String taskId;
+	private String certificateId;
+	private String studentId;
 	private String courseId;
-	private String description;
-	private LocalDate dueDate;
 }

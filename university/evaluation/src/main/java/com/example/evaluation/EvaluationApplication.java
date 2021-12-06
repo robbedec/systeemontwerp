@@ -1,4 +1,4 @@
-package com.example.evalutation;
+package com.example.evaluation;
 
 import org.slf4j.LoggerFactory;
 
@@ -10,12 +10,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.example.evalutation.infrastructure.CertificateDataModel;
-import com.example.evalutation.infrastructure.CertificateDataModelRepository;
-import com.example.evalutation.infrastructure.TaskDataModel;
-import com.example.evalutation.infrastructure.TaskDataModelRepository;
-import com.example.evalutation.infrastructure.TaskSubmissionDataModel;
-import com.example.evalutation.infrastructure.TaskSubmissionDataModelRepository;
+import com.example.evaluation.infrastructure.CertificateDataModel;
+import com.example.evaluation.infrastructure.CertificateDataModelRepository;
+import com.example.evaluation.infrastructure.TaskDataModel;
+import com.example.evaluation.infrastructure.TaskDataModelRepository;
+import com.example.evaluation.infrastructure.TaskSubmissionDataModel;
+import com.example.evaluation.infrastructure.TaskSubmissionDataModelRepository;
 
 @SpringBootApplication
 public class EvaluationApplication {
@@ -49,6 +49,9 @@ public class EvaluationApplication {
 	CommandLineRunner testTaskSubmissionDataModelRepository(TaskSubmissionDataModelRepository tsdmr) {
 		return (args) -> {
 			Optional<TaskSubmissionDataModel> ts = tsdmr.findById("1");
+			if(ts.isPresent()) {
+				log.info("{} {} {} {} {} {}", ts.get().getSubmissionId(), ts.get().getTaskId(), ts.get().getStudentId(), ts.get().getFile(), ts.get().getDateSubmited(), ts.get().getScore());
+			}
 		};
 	}
 
