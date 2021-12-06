@@ -2,22 +2,23 @@ package com.example.evalutation.infrastructure;
 
 import java.time.LocalDate;
 
-import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Embeddable
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 public class TaskSubmissionDataModel {
-	private int studentId;
-	private String zipFile;
+	@Id
+	private String submissionId;
+	private String taskId;
+	private String studentId;
+	private String file;
 	private LocalDate dateSubmited;
 	private int score;
 }
