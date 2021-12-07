@@ -32,8 +32,9 @@ public class TaskSubmissionRepositoryImpl implements TaskSubmissionRepository {
 	}
 
 	@Override
-	public void save(TaskSubmission taskSubmission) {
-		taskSubmissionDMRepo.save(mapToTaskSubmissionDataModel(taskSubmission));
+	public TaskSubmission save(TaskSubmission taskSubmission) {
+		TaskSubmissionDataModel taskDM = taskSubmissionDMRepo.save(mapToTaskSubmissionDataModel(taskSubmission));
+		return mapToTaskSubmission(taskDM);
 	}
 
 	@Override

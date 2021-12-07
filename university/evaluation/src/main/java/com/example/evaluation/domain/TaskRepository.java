@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface TaskRepository {
 	Task findById(String taskId);
-	void save(Task task);
+	Task save(Task task);
 	List<Task> findByCourseId(String courseId);
 }

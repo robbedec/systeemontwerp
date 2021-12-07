@@ -1,7 +1,10 @@
 package com.example.evaluation.infrastructure;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +18,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CertificateDataModel {
 	@Id
+	@GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private String certificateId;
 	private String studentId;
-	private String courseId;
+	private String degreeId;
 }

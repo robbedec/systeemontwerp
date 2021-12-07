@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface CertificateRepository {
 	Certificate findById(String certificateId);
-	void save(Certificate certificate);
+	Certificate save(Certificate certificate);
 	List<Certificate> findByStudentId(String studentId);
-	List<Certificate> findByCourseId(String courseId);
+	List<Certificate> findByDegreeId(String degreeId);
 }
