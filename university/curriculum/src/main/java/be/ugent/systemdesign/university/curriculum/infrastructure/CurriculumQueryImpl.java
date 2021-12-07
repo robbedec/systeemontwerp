@@ -35,7 +35,8 @@ public class CurriculumQueryImpl implements CurriculumQuery {
 				.map(c -> new CourseReadModel(
 						c.getName(), 
 						c.getCredits()
-				)).collect(Collectors.toList())
+				)).collect(Collectors.toList()),
+			_c.getFacultyName()
 		);
 		
 		return crm;

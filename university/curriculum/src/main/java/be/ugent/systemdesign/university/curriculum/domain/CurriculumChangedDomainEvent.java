@@ -1,19 +1,21 @@
 package be.ugent.systemdesign.university.curriculum.domain;
 
-import java.util.List;
-
 import be.ugent.systemdesign.university.curriculum.domain.seedwork.DomainEvent;
 import lombok.Getter;
 
 @Getter
 public class CurriculumChangedDomainEvent extends DomainEvent {
 	
-	private String curriculumId;
-	private List<Course> courses;
+	private String studentId;
+	private String courseName;
+	private String courseCredits;
+	private String changeType;
 	
-	public CurriculumChangedDomainEvent(String _curriculumId, List<Course> _courses) {
+	public CurriculumChangedDomainEvent(String _studentId, String _courseName, Integer _courseCredits, FacultyCourseChangeType _changeType) {
 		super();
-		this.curriculumId = _curriculumId;
-		this.courses = _courses;
+		this.studentId = _studentId;
+		this.courseName = _courseName;
+		this.courseCredits = _courseCredits.toString();
+		this.changeType = _changeType.name();
 	}
 }

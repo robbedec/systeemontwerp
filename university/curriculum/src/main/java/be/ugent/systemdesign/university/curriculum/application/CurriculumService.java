@@ -1,11 +1,14 @@
 package be.ugent.systemdesign.university.curriculum.application;
 
+import java.util.List;
+
 import be.ugent.systemdesign.university.curriculum.application.event.FacultyCoursesChangedEvent;
+import be.ugent.systemdesign.university.curriculum.domain.Course;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCourseChangeType;
 
 public interface CurriculumService {
 
-	Response changeCurriculum(String curriculumId, String studentId);
+	Response changeCurriculum(String curriculumId, String studentId, List<Course> changedCourses);
 	Response acceptCurriculum(String curriculumId, String userId);
 	Response rejectCurriculum(String curriculumId, String userId);
 	

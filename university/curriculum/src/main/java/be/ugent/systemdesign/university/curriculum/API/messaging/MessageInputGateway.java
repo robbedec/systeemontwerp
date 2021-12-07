@@ -22,7 +22,7 @@ private static final Logger log = LoggerFactory.getLogger(MessageInputGateway.cl
 	
 	@StreamListener(Channels.FACULTY_EVENT)
 	public void consumeFacultyCoursesChangedEvent(FacultyCoursesChangedEvent event) {
-		log.info("{} ({} SP) was removed from {}", event.getCourseName(), event.getCourseCredits().toString(), event.getFacultyName());
+		log.info("{} ({} SP) was {} from {}", event.getCourseName(), event.getCourseCredits().toString(), event.getChangeType(), event.getFacultyName());
 		eventHandler.handleFacultyCoursesChanged(event);
 	}
 }

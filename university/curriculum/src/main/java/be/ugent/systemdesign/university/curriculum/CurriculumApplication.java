@@ -60,7 +60,7 @@ public class CurriculumApplication {
 	public CommandLineRunner populateDatabase(CurriculumDataModelRepository DMrepo, CurriculumRepository repo) {
 		return (args) -> {
 			DMrepo.deleteAll();
-			
+			/*
 			Curriculum c = new Curriculum("1");
 			
 			c.addCourse("Gevorderde algoritmen", 1);
@@ -68,7 +68,7 @@ public class CurriculumApplication {
 			c.addCourse("Signale & systemen", 5);
 			
 			repo.save(c);
-			
+			*/
 			//log.info("Saved new inpatient {}", cId);
 			log.info("Saved curriculum");
 		};

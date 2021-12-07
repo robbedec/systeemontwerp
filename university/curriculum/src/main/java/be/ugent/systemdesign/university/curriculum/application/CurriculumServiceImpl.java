@@ -1,17 +1,23 @@
 package be.ugent.systemdesign.university.curriculum.application;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import be.ugent.systemdesign.university.curriculum.application.event.FacultyCoursesChangedEvent;
+import be.ugent.systemdesign.university.curriculum.domain.Course;
+import be.ugent.systemdesign.university.curriculum.domain.CourseDIFF;
 import be.ugent.systemdesign.university.curriculum.domain.Curriculum;
 import be.ugent.systemdesign.university.curriculum.domain.CurriculumRepository;
+import be.ugent.systemdesign.university.curriculum.domain.CurriculumValidator;
 import be.ugent.systemdesign.university.curriculum.domain.Faculty;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCourseChangeType;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCoursesRepository;
+import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumInvalidException;
 import be.ugent.systemdesign.university.curriculum.infrastructure.CurriculumNotFoundException;
 import be.ugent.systemdesign.university.curriculum.infrastructure.FacultyNotFoundException;
 
@@ -26,14 +32,34 @@ public class CurriculumServiceImpl implements CurriculumService {
 	FacultyCoursesRepository facultyRepo;
 
 	@Override
-	public Response changeCurriculum(String curriculumId, String userId) {
+	public Response changeCurriculum(String curriculumId, String userId, List<Course> changedCourses) {
 		
 		try {
 			Curriculum c = curriculumRepo.findByCurriculumId(curriculumId);
-			c.changeCurriculum(new ArrayList<>(), userIsStudent(userId));
+			
+			// Changes made in the current courses are logged in a HashMap
+			// This map is used to dispatch the curriculum changed event
+			HashMap<Course, FacultyCourseChangeType> changes = new HashMap<>();
+			List<Course> updatedCourses = CourseDIFF.createDIFF(c.getCourses(), changedCourses, changes);
+			
+			Faculty facultyAssignedToCurriculum = facultyRepo.findByFacultyName(c.getFacultyName());
+			boolean isValid = CurriculumValidator.validateCurriculum(facultyAssignedToCurriculum.getAvailableCourses(), updatedCourses);
+			
+			if (isValid) {
+				c.changeCurriculum(updatedCourses, userIsStudent(userId), changes);
+			}
+			
+			curriculumRepo.save(c);
+			
+			
 		} catch (CurriculumNotFoundException e) {
 			return new Response(ResponseStatus.FAIL, "Could not find curriculum with id " + curriculumId);
+		} catch(CurriculumInvalidException e) {
+			return new Response(ResponseStatus.FAIL, "Invalid curriculum");
+		} catch (Exception e) {
+			return new Response(ResponseStatus.FAIL, "Unknown exception occured: " + e.getMessage());
 		}
+		
 		
 		return new Response(ResponseStatus.SUCCESS, "");
 	}
@@ -118,5 +144,5 @@ public class CurriculumServiceImpl implements CurriculumService {
 		} catch (CurriculumNotFoundException e) {
 			return false;
 		}
-	 }	
+	 }
 }

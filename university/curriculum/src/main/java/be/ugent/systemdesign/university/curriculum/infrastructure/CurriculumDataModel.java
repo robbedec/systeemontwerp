@@ -29,8 +29,9 @@ public class CurriculumDataModel {
 	private LocalDate dateLastChanged;
 	private Integer academicYear;
 	private List<CourseDataModel> courses;
+	private String facultyName;
 	
-	public CurriculumDataModel(String _curriculumId, String _studentId, CurriculumStatus _curriculumStatus, LocalDate _dateCreated, LocalDate _dateLastChanged, Year _academicYear, List<Course> _courses) {
+	public CurriculumDataModel(String _curriculumId, String _studentId, CurriculumStatus _curriculumStatus, LocalDate _dateCreated, LocalDate _dateLastChanged, Year _academicYear, List<Course> _courses, String _facultyName) {
 		this.curriculumId = _curriculumId;
 		this.studentId = _studentId;
 		this.curriculumStatus = _curriculumStatus.name();
@@ -38,5 +39,6 @@ public class CurriculumDataModel {
 		this.dateLastChanged = _dateLastChanged;
 		this.academicYear = _academicYear.getValue();
 		this.courses = _courses.stream().map(c -> new CourseDataModel(c.getName(), c.getCredits())).collect(Collectors.toList());
+		this.facultyName = _facultyName;
 	}
 }
