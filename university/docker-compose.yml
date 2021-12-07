@@ -34,7 +34,7 @@ services:
       - faculty_curriculum_db
       - kafka
     environment: 
-      - spring.cloud.stream.kafka.binder.brokers=kafka:9092
+      - spring.cloud.stream.kafka.binder.brokers=kafka
       - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
       - spring.data.mongodb.host=curriculum_db
       - spring.data.mongodb.host=faculty_curriculum_db
@@ -47,7 +47,7 @@ services:
     depends_on:
       - kafka
     environment:
-      - spring.cloud.stream.kafka.binder.brokers=kafka:9092
+      - spring.cloud.stream.kafka.binder.brokers=kafka
       - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
   api_gw:
     build: ./api_gateway
