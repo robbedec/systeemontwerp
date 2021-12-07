@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import be.ugent.systemdesign.university.curriculum.application.CurriculumService;
+import be.ugent.systemdesign.university.curriculum.application.Response;
+import be.ugent.systemdesign.university.curriculum.domain.FacultyCourseChangeType;
 
 @Service
 public class EventHandler {
@@ -16,8 +18,7 @@ public class EventHandler {
 	CurriculumService curriculumService;
 	
 	public void handleFacultyCoursesChanged(FacultyCoursesChangedEvent event) {
-		// todo: handle change in service
-		
-		log.info("-response status[{}] message[{}]", "", "");
+		Response resp = curriculumService.noteFacultyCoursesChanged(event.getFacultyName(), FacultyCourseChangeType.valueOf(event.getChangeType()), event.getCourseName(), event.getCourseCredits());
+		log.info("-response status[{}] message[{}]", resp.status, resp.message);
 	}
 }
