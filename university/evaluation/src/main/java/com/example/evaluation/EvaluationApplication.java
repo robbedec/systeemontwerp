@@ -10,6 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.example.evaluation.application.CertificateService;
+import com.example.evaluation.application.Response;
 import com.example.evaluation.infrastructure.CertificateDataModel;
 import com.example.evaluation.infrastructure.CertificateDataModelRepository;
 import com.example.evaluation.infrastructure.TaskDataModel;
@@ -30,7 +32,7 @@ public class EvaluationApplication {
 	CommandLineRunner testCertificateDataModelRespository(CertificateDataModelRepository cdmr) {
 		return (args) -> {
 			for(CertificateDataModel c : cdmr.findByStudentId("1")) {
-				log.info("{} {} {}\n", c.getCertificateId(), c.getStudentId(), c.getCourseId());
+				log.info("{} {} {}\n", c.getCertificateId(), c.getStudentId(), c.getDegreeId());
 			}
 		};
 	}
@@ -52,6 +54,20 @@ public class EvaluationApplication {
 			if(ts.isPresent()) {
 				log.info("{} {} {} {} {} {}", ts.get().getSubmissionId(), ts.get().getTaskId(), ts.get().getStudentId(), ts.get().getFile(), ts.get().getDateSubmited(), ts.get().getScore());
 			}
+		};
+	}
+	
+	@Bean
+	CommandLineRunner testCertificateService(CertificateService cs) {
+		return(args) -> {
+			log.info("createCertificate");
+			Response res = cs.createCertificate("1", "1");
+			log.info("{} {}", res.status, res.message);
+			String certificateId = res.message.split(" ")[1];
+			res = cs.verifyCertificate(certificateId);
+			log.info("{} {}", res.status, res.message);
+			res = cs.verifyCertificate("blablabla");
+			log.info("{} {}", res.status, res.message);
 		};
 	}
 

@@ -15,11 +15,11 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 	private CertificateDataModelRepository certificateDMRepo;
 	
 	private Certificate mapToCertificate(CertificateDataModel certificateDM) {
-		return new Certificate(certificateDM.getCertificateId(), certificateDM.getCourseId(), certificateDM.getStudentId());
+		return new Certificate(certificateDM.getCertificateId(), certificateDM.getDegreeId(), certificateDM.getStudentId());
 	}
 	
 	private CertificateDataModel mapToCertificateDataModel(Certificate certificate) {
-		return new CertificateDataModel(certificate.getCertificateId(), certificate.getCourseId(), certificate.getCertificateId());
+		return new CertificateDataModel(certificate.getCertificateId(), certificate.getDegreeId(), certificate.getCertificateId());
 	}
 
 	@Override
@@ -29,8 +29,9 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 	}
 
 	@Override
-	public void save(Certificate certificate) {
-		certificateDMRepo.save(mapToCertificateDataModel(certificate));
+	public Certificate save(Certificate certificate) {
+		CertificateDataModel certificateDM = certificateDMRepo.save(mapToCertificateDataModel(certificate));
+		return mapToCertificate(certificateDM);
 	}
 
 	@Override
@@ -40,8 +41,8 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 	}
 
 	@Override
-	public List<Certificate> findByCourseId(String courseId) {
-		return certificateDMRepo.findByCourseId(courseId).stream()
+	public List<Certificate> findByDegreeId(String degreeId) {
+		return certificateDMRepo.findByDegreeId(degreeId).stream()
 				.map(certificateDM -> mapToCertificate(certificateDM)).collect(Collectors.toList());
 	}
 

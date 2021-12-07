@@ -19,4 +19,14 @@ public class TaskSubmission {
 	private String file;
 	private LocalDate dateSubmited;
 	private int score;
+	
+	public boolean submitedBeforeDueDate(LocalDate dueDate) {
+		if(dueDate == null)
+			return true;
+		return dateSubmited.isBefore(dueDate);
+	}
+	
+	public boolean scoreIsAssigned() {
+		return score != -1;
+	}
 }

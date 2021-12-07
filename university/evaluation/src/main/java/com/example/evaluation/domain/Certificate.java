@@ -12,5 +12,5 @@ import lombok.Setter;
 public class Certificate {
 	private String certificateId;
 	private String studentId;
-	private String courseId;
+	private String degreeId;
 }

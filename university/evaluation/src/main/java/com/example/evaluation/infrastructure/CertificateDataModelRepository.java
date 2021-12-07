@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CertificateDataModelRepository extends JpaRepository<CertificateDataModel, String> {
-	List<CertificateDataModel> findByCourseId(String courseId);
+	List<CertificateDataModel> findByDegreeId(String degreeId);
 	List<CertificateDataModel> findByStudentId(String studentId);
 }

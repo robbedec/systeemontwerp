@@ -29,8 +29,9 @@ public class TaskRepositoryImpl implements TaskRepository {
 	}
 
 	@Override
-	public void save(Task task) {
-		taskDMRepo.save(mapToTaskDataModel(task));
+	public Task save(Task task) {
+		TaskDataModel taskDM = taskDMRepo.save(mapToTaskDataModel(task));
+		return mapToTask(taskDM);
 	}
 
 	@Override
