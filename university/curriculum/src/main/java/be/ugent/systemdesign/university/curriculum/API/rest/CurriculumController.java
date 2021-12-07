@@ -20,6 +20,8 @@ import be.ugent.systemdesign.university.curriculum.application.Response;
 import be.ugent.systemdesign.university.curriculum.application.ResponseStatus;
 import be.ugent.systemdesign.university.curriculum.application.query.CurriculumQuery;
 import be.ugent.systemdesign.university.curriculum.domain.Course;
+import be.ugent.systemdesign.university.curriculum.infrastructure.FacultyCoursesDataModelRepository;
+import be.ugent.systemdesign.university.curriculum.infrastructure.FacultyDataModel;
 
 @RestController
 @RequestMapping(path="api/curriculum/")
@@ -31,6 +33,14 @@ public class CurriculumController {
 	
 	@Autowired
 	CurriculumQuery curriculumQuery;
+	
+	@Autowired
+	FacultyCoursesDataModelRepository fdmrepo;
+	
+	@GetMapping("test")
+	public List<FacultyDataModel> test() {
+		return fdmrepo.findAll();
+	}
 	
 	@GetMapping
 	public List<CurriculumViewModel> findAll() {

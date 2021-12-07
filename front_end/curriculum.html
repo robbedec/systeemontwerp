@@ -1,0 +1,55 @@
+<html>
+  <label>Student ID:</label>
+  <input id="student_id_text" type="text" />
+  <input type="button" value="Fetch curriculum" onClick="displayCurriculum()" />
+  <form id="c_overview">
+    <input id="overview_button" type="hidden" value="Change curriculum" />
+  </form>
+</html>
+
+<script>
+
+  const base_url = "http://localhost/api/"
+  const faculty_url = base_url + "faculty/"
+  const curriculum_url = base_url + "curriculum/"
+
+  const facultyId = 1;
+
+  // Fetch all curriculi to get id for testing
+  fetch(curriculum_url).then(function(response) {
+    response.json().then(function(allCurr) {
+      console.log(allCurr);
+    })
+  })
+
+  async function displayCurriculum() {
+    const student_id = document.getElementById("student_id_text").value
+
+    console.log(student_id);
+    fetch(faculty_url + facultyId).then(function(response) {
+      response.json().then(function(faculty) {
+
+        const cboxes_node = document.getElementById("c_overview");
+
+        faculty.available_courses.forEach(course => {
+          
+          const label = document.createElement("label");
+          label.textContent = course.courseName;
+          
+          const checkbox = document.createElement("input");
+          checkbox.setAttribute("type", "checkbox");
+          checkbox.setAttribute("value", course.courseName);
+
+          label.appendChild(checkbox);
+          
+          cboxes_node.insertBefore(label, cboxes_node.overview_button);
+          cboxes_node.insertBefore(document.createElement("BR"), cboxes_node.overview_button);
+        });
+
+        document.getElementById("overview_button").type = "submit";
+        console.log(faculty);
+      })
+    })
+  }
+
+</script>
