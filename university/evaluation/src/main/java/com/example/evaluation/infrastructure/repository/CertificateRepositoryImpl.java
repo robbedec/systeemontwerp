@@ -1,4 +1,4 @@
-package com.example.evaluation.infrastructure;
+package com.example.evaluation.infrastructure.repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.example.evaluation.domain.Certificate;
-import com.example.evaluation.domain.CertificateRepository;
+import com.example.evaluation.domain.model.Certificate;
+import com.example.evaluation.domain.repository.CertificateRepository;
+import com.example.evaluation.infrastructure.data_model.CertificateDataModel;
+import com.example.evaluation.infrastructure.exception.CertificateNotFoundException;
 
 @Repository
 public class CertificateRepositoryImpl implements CertificateRepository {

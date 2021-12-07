@@ -1,4 +1,4 @@
-package com.example.evaluation.infrastructure;
+package com.example.evaluation.infrastructure.data_model;
 
 import java.time.LocalDate;
 

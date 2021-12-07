@@ -1,4 +1,4 @@
-package com.example.evaluation.infrastructure;
+package com.example.evaluation.infrastructure.repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.example.evaluation.domain.TaskSubmission;
-import com.example.evaluation.domain.TaskSubmissionRepository;
+import com.example.evaluation.domain.model.TaskSubmission;
+import com.example.evaluation.domain.repository.TaskSubmissionRepository;
+import com.example.evaluation.infrastructure.data_model.TaskSubmissionDataModel;
+import com.example.evaluation.infrastructure.exception.TaskSubmissionNotFoundException;
 
 @Repository
 public class TaskSubmissionRepositoryImpl implements TaskSubmissionRepository {
@@ -22,7 +24,7 @@ public class TaskSubmissionRepositoryImpl implements TaskSubmissionRepository {
 	
 	private TaskSubmissionDataModel mapToTaskSubmissionDataModel(TaskSubmission taskSubmission) {
 		return new TaskSubmissionDataModel(taskSubmission.getSubmissionId(), taskSubmission.getTaskId(), taskSubmission.getStudentId(), 
-				taskSubmission.getFile(), taskSubmission.getDateSubmited(), taskSubmission.getScore());
+				taskSubmission.getFile(), taskSubmission.getDateSubmitted(), taskSubmission.getScore());
 	}
 
 	@Override

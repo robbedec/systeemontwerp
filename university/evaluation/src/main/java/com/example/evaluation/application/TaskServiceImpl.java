@@ -7,12 +7,13 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.evaluation.domain.Task;
-import com.example.evaluation.domain.TaskRepository;
-import com.example.evaluation.domain.TaskSubmission;
-import com.example.evaluation.domain.TaskSubmissionRepository;
-import com.example.evaluation.infrastructure.TaskNotFoundException;
-import com.example.evaluation.infrastructure.TaskSubmissionNotFoundException;
+import com.example.evaluation.domain.exception.InvalidScoreException;
+import com.example.evaluation.domain.model.Task;
+import com.example.evaluation.domain.model.TaskSubmission;
+import com.example.evaluation.domain.repository.TaskRepository;
+import com.example.evaluation.domain.repository.TaskSubmissionRepository;
+import com.example.evaluation.infrastructure.exception.TaskNotFoundException;
+import com.example.evaluation.infrastructure.exception.TaskSubmissionNotFoundException;
 
 @Transactional
 @Service
@@ -40,7 +41,7 @@ public class TaskServiceImpl implements TaskService{
 		
 		try {
 			Task task = taskRepo.findById(taskId);
-			if(!taskSubmission.submitedBeforeDueDate(task.getDueDate())) {
+			if(!taskSubmission.submittedBeforeDueDate(task.getDueDate())) {
 				return new Response(ResponseStatus.FAIL, "Missed due date");
 			}
 			
@@ -54,19 +55,17 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public Response assignScore(String taskId, String studentId, int score) {
-		if(score < 0 || score > 20) {
-			return new Response(ResponseStatus.FAIL, "Invalid score");
-		}
-		
+	public Response assignScore(String taskSubmissionId, int score) {		
 		try {
-			TaskSubmission taskSubmission = taskSubmissionRepo.findByTaskIdAndStudentId(taskId, studentId);
-			taskSubmission.setScore(score);
+			TaskSubmission taskSubmission = taskSubmissionRepo.findById(taskSubmissionId);
+			taskSubmission.assignScore(score);
 			taskSubmissionRepo.save(taskSubmission);
 			return new Response(ResponseStatus.SUCCESS, "Updated score");
-		}catch(TaskSubmissionNotFoundException e) {
+		} catch(InvalidScoreException e) {
+			return new Response(ResponseStatus.FAIL, "Invalid score");
+		} catch(TaskSubmissionNotFoundException e) {
 			return new Response(ResponseStatus.FAIL, "Submission doesn't exists");
-		}catch(Exception e) {
+		} catch(Exception e) {
 			return new Response(ResponseStatus.FAIL, "Failed to persist");
 		}
 	}

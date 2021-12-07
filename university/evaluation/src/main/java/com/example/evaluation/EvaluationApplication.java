@@ -12,12 +12,12 @@ import org.springframework.context.annotation.Bean;
 
 import com.example.evaluation.application.CertificateService;
 import com.example.evaluation.application.Response;
-import com.example.evaluation.infrastructure.CertificateDataModel;
-import com.example.evaluation.infrastructure.CertificateDataModelRepository;
-import com.example.evaluation.infrastructure.TaskDataModel;
-import com.example.evaluation.infrastructure.TaskDataModelRepository;
-import com.example.evaluation.infrastructure.TaskSubmissionDataModel;
-import com.example.evaluation.infrastructure.TaskSubmissionDataModelRepository;
+import com.example.evaluation.infrastructure.data_model.CertificateDataModel;
+import com.example.evaluation.infrastructure.data_model.TaskDataModel;
+import com.example.evaluation.infrastructure.data_model.TaskSubmissionDataModel;
+import com.example.evaluation.infrastructure.repository.CertificateDataModelRepository;
+import com.example.evaluation.infrastructure.repository.TaskDataModelRepository;
+import com.example.evaluation.infrastructure.repository.TaskSubmissionDataModelRepository;
 
 @SpringBootApplication
 public class EvaluationApplication {

@@ -5,9 +5,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.evaluation.domain.Certificate;
-import com.example.evaluation.domain.CertificateRepository;
-import com.example.evaluation.infrastructure.CertificateNotFoundException;
+import com.example.evaluation.domain.model.Certificate;
+import com.example.evaluation.domain.repository.CertificateRepository;
+import com.example.evaluation.infrastructure.exception.CertificateNotFoundException;
 
 @Transactional
 @Service
@@ -16,7 +16,7 @@ public class CertificateServiceImpl implements CertificateService{
 	private CertificateRepository certificateRepo;
 
 	@Override
-	public Response createCertificate(String degreeId, String studentId) {
+	public Response generateCertificate(String degreeId, String studentId) {
 		// TODO Check if student passed all mandatory courses
 		Certificate certificate = new Certificate(null, degreeId, studentId);
 		try {
@@ -26,7 +26,8 @@ public class CertificateServiceImpl implements CertificateService{
 			return new Response(ResponseStatus.FAIL, "Persistence failed ");
 		}
 	}
-
+	
+	// TODO delete?
 	@Override
 	public Response verifyCertificate(String certificateId) {
 		try {

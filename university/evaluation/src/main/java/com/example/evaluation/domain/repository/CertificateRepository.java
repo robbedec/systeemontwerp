@@ -1,6 +1,8 @@
-package com.example.evaluation.domain;
+package com.example.evaluation.domain.repository;
 
 import java.util.List;
+
+import com.example.evaluation.domain.model.Certificate;
 
 public interface CertificateRepository {
 	Certificate findById(String certificateId);

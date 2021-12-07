@@ -1,4 +1,4 @@
-package com.example.evaluation.infrastructure;
+package com.example.evaluation.infrastructure.repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.example.evaluation.domain.Task;
-import com.example.evaluation.domain.TaskRepository;
+import com.example.evaluation.domain.model.Task;
+import com.example.evaluation.domain.repository.TaskRepository;
+import com.example.evaluation.infrastructure.data_model.TaskDataModel;
+import com.example.evaluation.infrastructure.exception.TaskNotFoundException;
 
 @Repository
 public class TaskRepositoryImpl implements TaskRepository {
