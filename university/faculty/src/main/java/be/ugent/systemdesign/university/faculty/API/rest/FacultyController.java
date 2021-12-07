@@ -38,6 +38,7 @@ public class FacultyController {
 	 * http://localhost/api/faculty/all?facultyName=Ingenieurswetenschappen+%26+architectuur
 	 * Voor encodings zie: https://www.w3schools.com/tags/ref_urlencode.asp
 	 */
+	
 	@GetMapping("all")
 	public FacultyViewModel findByFacultyName(@RequestParam("facultyName") String facultyName) {
 		Faculty f = repo.findByFacultyName(facultyName);

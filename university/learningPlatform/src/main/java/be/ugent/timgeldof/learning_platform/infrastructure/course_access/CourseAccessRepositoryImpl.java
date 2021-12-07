@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -60,6 +61,17 @@ public class CourseAccessRepositoryImpl implements CourseAccessRepository{
 	
 	public CourseAccessDataModel mapCourseAccessDomainModelToDataModel(CourseAccess ca) {
 		return new CourseAccessDataModel(ca.getStudentId(), ca.getCourseIds(), ca.isUndergoingPlagiarismProcedure(), ca.isInvoiceOpen());
+	}
+
+	@Override
+	public void removeCourse(Course c) {
+		List<CourseAccessDataModel> ca_list = repo.findAll();
+		ca_list = ca_list.stream().map(ca -> {
+			ca.getCourseIds().remove(c.getId());
+			return ca;
+		}).collect(Collectors.toList());
+		
+		this.repo.saveAll(ca_list);
 	}
 
 
