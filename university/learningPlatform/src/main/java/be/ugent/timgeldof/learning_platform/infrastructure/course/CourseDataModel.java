@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -24,7 +26,9 @@ import lombok.Setter;
 public class CourseDataModel {
 	private String name;
 	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer Id;
+	private Integer courseCredits;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<CourseAnnouncementDataModel> announcements;

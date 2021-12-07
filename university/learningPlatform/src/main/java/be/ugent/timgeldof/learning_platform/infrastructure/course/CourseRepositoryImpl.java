@@ -45,7 +45,8 @@ public class CourseRepositoryImpl implements CourseRepository{
 	public void save(Course c) {
 		CourseDataModel c_dm = new CourseDataModel(
 				c.getCourseName(), 
-				c.getId(), 
+				c.getId(),
+				c.getCourseCredits(),
 				mapCourseAnnouncementDomainModelToDataModel(c.getCourseAnnouncements(), c),
 				mapCourseMaterialDomainModelToDataModel(c.getCourseMaterial(), c)
 		);
@@ -54,6 +55,19 @@ public class CourseRepositoryImpl implements CourseRepository{
 		c.clearDomainEvents();
 	}
 	
+	@Override
+	public void remove(Course c) {
+		Optional<CourseDataModel> c_dm = this.repo.findByNameAndCourseCredits(c.getCourseName(), c.getCourseCredits());
+		if(c_dm.isPresent())
+			this.repo.delete(c_dm.get());
+		else 
+			throw new CourseNotFoundException();
+	}
+	
+	
+	
+	
+	
 	/*
 	 * Data model to domain model 
 	 */
@@ -61,13 +75,13 @@ public class CourseRepositoryImpl implements CourseRepository{
 		List<Course> new_list = new ArrayList<>();
 		if(list != null)
 			list.forEach(c_dm -> {
-				new_list.add(new Course(c_dm.getId(), c_dm.getName(), mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials)));
+				new_list.add(new Course(c_dm.getId(), c_dm.getName(),c_dm.getCourseCredits(), mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials)));
 			});
 		return new_list;
 	}
 	
 	public Course mapCourseDataModelToDomainModel(CourseDataModel c_dm){
-		return new Course(c_dm.getId(), c_dm.getName(), mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials));
+		return new Course(c_dm.getId(), c_dm.getName(),c_dm.getCourseCredits(), mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials));
 	}
 	
 	public List<CourseMaterial> mapCourseMaterialDataModelToDomainModel(List<CourseMaterialDataModel> list){
@@ -116,4 +130,6 @@ public class CourseRepositoryImpl implements CourseRepository{
 			});
 		return new_list;
 	}
+
+
 }

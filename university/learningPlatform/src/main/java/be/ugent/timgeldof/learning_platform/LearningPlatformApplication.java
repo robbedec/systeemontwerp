@@ -34,7 +34,8 @@ public class LearningPlatformApplication {
 		SpringApplication.run(LearningPlatformApplication.class, args);
 	}
 	
-	@Bean
+	/*
+	 @Bean
 	public CommandLineRunner populateDatabase(CourseRepository courseRepo, CourseAccessRepository accessRepo) {
 		return (args) -> {
 
@@ -85,5 +86,6 @@ public class LearningPlatformApplication {
 			courseRepo.save(c);
 		};
 	}
+	*/
 	
 }
