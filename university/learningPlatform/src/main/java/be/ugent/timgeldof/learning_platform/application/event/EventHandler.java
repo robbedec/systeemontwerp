@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import be.ugent.timgeldof.learning_platform.application.LearningPlatformService;
+import be.ugent.timgeldof.learning_platform.domain.course_access.CurriculumChangedDomainEvent;
 
 @Service
 public class EventHandler {
@@ -20,7 +21,17 @@ public class EventHandler {
 			s.addCourse(event.getCourseName(), event.getCourseCredits());
 		else
 			s.removeCourse(event.getCourseName(), event.getCourseCredits());
-		
-		log.info("-response status[{}] message[{}]", "", "");
+	}
+
+	public void handleCurriculumChanged(CurriculumChangedDomainEvent event) {
+		s.changeCurriculum(event.getChangeType(), event.getStudentId(), event.getCourseCredits(), event.getCourseName());
+	}
+
+	public void handleInvoicePaid(InvoicePaidEvent event) {
+		s.registerInvoicePaid(event.getStudentId());
+	}
+
+	public void handlePlagiarism(PlagiarismRegisteredEvent event) {
+		s.registerPlagiarism(event.getStudentId(), event.getChangeType());
 	}
 }
