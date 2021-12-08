@@ -13,4 +13,5 @@ public class CurriculumReadModel {
 	private String curriculumStatus;
 	private Integer academicYear;
 	private List<CourseReadModel> courses;
+	private String facultyName;
 }

@@ -1,0 +1,148 @@
+<html>
+	<p>Curriculum</p>
+	<a href="index.html">Home</a></br>
+ 	<label>Student ID:</label>
+	<select name="curriculums" id="student_ids" onChange="studentIdChanged()">
+		<option id="dropdown_placeholder" value="" disabled selected>Select a studentID</option>
+	</select>
+	<form id="c_overview">
+		<div id="c_boxes_list">
+    	</div>
+		<input onClick="sendChangeRequest()" id="overview_button" type="hidden" value="Change curriculum" />
+	</form>
+</html>
+
+<script>
+
+	const base_url = "http://localhost/api/"
+	const faculty_url = base_url + "faculty/"
+	const curriculum_url = base_url + "curriculum/"
+
+	async function fetchCurriculums() {
+    	const curriculumResponse = await fetch(curriculum_url); 
+		const curriculums = await curriculumResponse.json();
+    
+    	return curriculums;
+  	}
+
+ 	async function fetchCoursesForFaculty(faculty_name) {
+    	const facultyResponse = await fetch(faculty_url + "all?" + new URLSearchParams({
+      		facultyName: faculty_name, 
+    	})); 
+    	
+    	const faculty = await facultyResponse.json();
+    
+	return faculty;
+	}
+
+	// If the selected value in the dropdown menu changes, fetch the curriculum
+	// For the given ID
+	function studentIdChanged() {
+    	dropdown = document.getElementById("student_ids");
+
+
+    	fetchCurriculums().then(curriculums => {
+      	const dropdown_value = dropdown.options[dropdown.selectedIndex].value;
+      	const curriculum = curriculums.find(c => c.curriculumId === dropdown_value);
+
+      	return curriculum;
+
+	}).then(curriculum => {
+    	fetchCoursesForFaculty(curriculum.facultyName).then(faculty => {
+        	const cboxes_node = document.getElementById("c_overview");
+        	const cboxes_list = document.getElementById("c_boxes_list");
+
+        	// First step is to remove existing checkboxes before adding the new ones
+        	while (cboxes_list.firstChild) {
+          		cboxes_list.removeChild(cboxes_list.lastChild);
+        	}
+
+        	// Add checkbox for every course thaught in the faculty
+        	faculty.available_courses.forEach(course => {
+	          	const label = document.createElement("label");
+	
+	          	const paragraph = document.createElement("span");
+	          	paragraph.textContent = course.courseName;
+	          
+	          	const checkbox = document.createElement("input");
+	          	checkbox.type = "checkbox";
+	          	checkbox.value = course.courseCredits;
+	
+	          	// Make the checkbox selected if it exists in the curriculum
+	          	checkbox.checked = (curriculum.courses.filter(cc => cc.name === course.courseName && cc.credits === course.courseCredits).length != 0);          
+	
+	          	label.appendChild(paragraph);
+	          	label.appendChild(checkbox);
+	          
+	          	cboxes_list.appendChild(label);
+	          	cboxes_list.appendChild(document.createElement("BR"));
+        	});
+
+        	document.getElementById("overview_button").type = "button";
+      	});
+    });
+	}
+  
+	function sendChangeRequest() {
+    	dropdown = document.getElementById("student_ids");
+
+    	fetchCurriculums().then(curriculums => {
+      		// Get the selected studentID (curriculum) from the dropdown
+      		const dropdown_value = dropdown.options[dropdown.selectedIndex].value;
+      		const curriculum = curriculums.find(c => c.curriculumId === dropdown_value);
+
+      		return curriculum;
+
+	}).then(curriculum => {
+    	const check_list = document.getElementById("c_boxes_list");
+
+      	const changed_courses = [];
+      	for (const x of Array.from(check_list.children)) {
+        	if (x.nodeName != "LABEL") continue;
+
+        	const input_element = x.getElementsByTagName("input")[0];
+        	const span_course_name = x.getElementsByTagName("span")[0];
+        
+        	// Add courses that were changed
+        	if (input_element.checked && !(curriculum.courses.filter(cc => cc.name === input_element.value).length != 0)) {
+          		changed_courses.push({ name: span_course_name.innerHTML, credits: input_element.value });
+        	} else if (!input_element.checked && (curriculum.courses.filter(cc => cc.name === input_element.value).length != 0)) {
+          		changed_courses.push({ name: span_course_name.innerHTML, credits: input_element.value });
+        	}
+      	}
+      	
+      	// Send post request
+      	fetch(curriculum_url + curriculum.curriculumId + "/change?" + new URLSearchParams({
+      		accountId: 1, 
+    	}), {
+        	method: "PUT",
+        	headers: {"content-Type": "application/json"},      
+        	body: JSON.stringify({
+          		...curriculum,
+          		courses: changed_courses 
+        	})
+      	}).then(res => {
+        	console.log(res);
+		});
+    });  
+  }
+
+	// Add studentIDs (curriculums) to the dropdown
+  	fetchCurriculums().then(curriculums => {
+
+    	dropdown = document.getElementById("student_ids");
+
+    	curriculum_list = curriculums;
+
+    	curriculum_list.forEach(curr => {
+      		option = document.createElement("option"); 
+
+      		// TODO: change to studentid
+      		option.value = curr.curriculumId;
+      		option.label = curr.curriculumId;
+      		option.selected = false;
+
+      		dropdown.appendChild(option);
+    	});
+	});
+</script>

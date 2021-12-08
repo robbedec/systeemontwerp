@@ -1,6 +1,6 @@
 package be.ugent.systemdesign.university.faculty.domain;
 
-public enum FacultyCourseChanges {
+public enum FacultyCoursesChangeType {
 	ADDED,
 	REMOVED,
 }

@@ -12,9 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.Transactional;
+//import org.springframework.cloud.stream.annotation.EnableBinding;
 
+import be.ugent.systemdesign.university.faculty.API.messaging.Channels;
 import be.ugent.systemdesign.university.faculty.API.rest.CourseViewModel;
 import be.ugent.systemdesign.university.faculty.API.rest.FacultyViewModel;
 import be.ugent.systemdesign.university.faculty.application.FacultyService;
@@ -24,6 +28,8 @@ import be.ugent.systemdesign.university.faculty.domain.Faculty;
 import be.ugent.systemdesign.university.faculty.domain.FacultyRepository;
 import be.ugent.systemdesign.university.faculty.infrastructure.FacultyJPARepository;
 
+@EnableAsync
+@EnableBinding(Channels.class)
 @SpringBootApplication
 public class FacultyApplication {
 	
@@ -35,10 +41,25 @@ public class FacultyApplication {
 	
 	@Bean
 	CommandLineRunner seedDatabase(FacultyRepository repo){ 
-		return(args)->{//call methods of repo and log output};
-			logger.info("**SEEDING DATABASE**");
+		return(args)->{
+			logger.info("**ADD FACULTIES**");
 			
 			Faculty iw_fac = new Faculty("Ingenieurswetenschappen & architectuur");
+			Faculty wet_fac = new Faculty("Wetenschappen");
+			Faculty dier_fac = new Faculty("Dierengeneeskunde");
+			
+			for (Faculty f : Arrays.asList(iw_fac, wet_fac, dier_fac)) {
+				repo.save(f);
+			}
+		};
+	}
+	
+	@Bean
+	CommandLineRunner addCourseToFaculty(FacultyService service, FacultyRepository repo){ 
+		return(args)->{
+			logger.info("**ADD COURSES TRHOUGH SERVICE**");
+			
+			
 			Map<String, Integer> iw_courses = Map.ofEntries(
 					entry("Wiskunde 1", 6),
 					entry("Wiskunde 2", 6),
@@ -51,76 +72,10 @@ public class FacultyApplication {
 			for (Map.Entry<String, Integer> item : iw_courses.entrySet()) {
 				// Make sure to use the addCourse method so that domain events are created
 				// to update other services that are interested.
-				iw_fac.addCourse(new Course(item.getKey(), item.getValue(), iw_fac));
-			}
-			
-			repo.save(iw_fac);
-		};
-	}
-	
-	/*
-	@Bean
-	CommandLineRunner testRepository(FacultyJPARepository repo){ 
-		return(args)->{//call methods of repo and log output};
-			logger.info("**TESTING IF FACULTIES ARE IN DATABASE**");
-			for (Faculty faculty : repo.findAll()) {
-				logger.info("$" + faculty.getFacultyName());
+				service.addCourseToFaculty((long) 1, item.getKey(), item.getValue());
 			}
 		};
-	}
-	*/
-	
-	@Bean
-	CommandLineRunner addCourseToFaculty(FacultyService service, FacultyRepository repo){ 
-		return(args)->{//call methods of repo and log output};
-			logger.info("**ADD COURSE TRHOUGH SERVICE**");
-			
-			service.addCourseToFaculty((long) 1, "test", 5);
-		};
-	}
-	
-	
-	/*
-	@Bean
-	CommandLineRunner seedCoursesToDatabase(FacultyService service, FacultyJPARepository repo) {
-		return (args) -> {
-			logger.info("**ADDING COURSES TO FACULTIES**");
-			// The id's of different faculties can be found in sr/main/resources/facultiesandcourses.sql
-			
-			//Faculty iw_fac = repo.getById(1);
-			Response res;
-			Map<String, Integer> iw_courses = Map.ofEntries(
-				entry("Wiskunde 1", 6),
-				entry("Wiskunde 2", 6),
-				entry("Gegevensstructuren", 3),
-				entry("Systeemontwerp", 3),
-				entry("Algoritmen", 6),
-				entry("Gevorderde algoritment", 6)
-			);
-			
-			for (Map.Entry<String, Integer> item : iw_courses.entrySet()) {
-				res = service.addCourseToFaculty(1, item.getKey(), item.getValue());
-				//iw_fac.addCourse(new Course(item.getKey(), item.getValue()));
-			}
-			
-			repo.flush();
-			
-			//logFaculty(repo.getById(1));
-		};
-	}
-	*/
-	
-	/*
-	@Bean
-	CommandLineRunner readFaculty(FacultyRepository repo){ 
-		return(args)->{//call methods of repo and log output};
-			logger.info("**reading faculty**");
-			
-			Faculty f = repo.findByFacultyId(1);
-			logFaculty(f);
-		};
-	}*/
-	
+	}	
 	
 	@Bean
 	CommandLineRunner testFacultiesWithCourses(FacultyJPARepository repo){ 
@@ -137,8 +92,6 @@ public class FacultyApplication {
 		};
 	}
 	
-	//spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
-	
 	private void logFaculty(Faculty f) {
 		
 		StringBuilder sb = new StringBuilder();
@@ -152,35 +105,5 @@ public class FacultyApplication {
 		logger.info("--facultyId {};" +
 				" facultyName {},  {}, courses {}.",
 						f.getFacultyId(), f.getFacultyName(), sb.toString()); 
-	}
-	
-	public static List<FacultyViewModel> getData() {
-		List<FacultyViewModel> data = new ArrayList<>();
-		
-		Integer facultyIdCounter = 0;
-		Integer courseIdCounter = 0;
-		
-		/*
-		 * Faculteit Ingenieurswetenschappen
-		 */
-		
-		FacultyViewModel ingenieurswetenschappen = new FacultyViewModel(
-				(++facultyIdCounter).toString(), 
-				"Ingenieurswetenschappen & Architectuur",
-				List.of(
-					new CourseViewModel((++courseIdCounter).toString(), "Wiskunde 1", "6"),
-					new CourseViewModel((++courseIdCounter).toString(), "Wiskunde 2", "6"),
-					new CourseViewModel((++courseIdCounter).toString(), "Discrete Wiskunde", "3"),
-					new CourseViewModel((++courseIdCounter).toString(), "Algoritmen", "6"),
-					new CourseViewModel((++courseIdCounter).toString(), "Geavanceerde Algoritmen", "6"),
-					new CourseViewModel((++courseIdCounter).toString(), "Gegevensstructuren", "3"),
-					new CourseViewModel((++courseIdCounter).toString(), "Signalen & Systemen", "6"),
-					new CourseViewModel((++courseIdCounter).toString(), "Signalen & Systemen 2", "6")
-				)
-		);
-		
-		data.addAll(List.of(ingenieurswetenschappen));
-		
-		return data;
 	}
 }

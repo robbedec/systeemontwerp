@@ -4,5 +4,5 @@ import be.ugent.systemdesign.university.curriculum.domain.CurriculumChangedDomai
 
 public interface EventDispatcher {
 
-	void publishCurriculumEvent(CurriculumChangedDomainEvent event);
+	void publishCurriculumChangedEvent(CurriculumChangedDomainEvent event);
 }

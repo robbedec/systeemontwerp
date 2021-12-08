@@ -9,6 +9,6 @@ import be.ugent.systemdesign.university.curriculum.domain.CurriculumChangedDomai
 @MessagingGateway
 public interface MessageOutputGateway extends EventDispatcher {
 
-	@Gateway(requestChannel = Channels.CURRICULUM_EVENT)
-	void publishCurriculumEvent(CurriculumChangedDomainEvent event);
+	@Gateway(requestChannel = Channels.CURRICULUM_CHANGED_EVENT)
+	void publishCurriculumChangedEvent(CurriculumChangedDomainEvent event);
 }

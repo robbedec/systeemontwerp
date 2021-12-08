@@ -6,40 +6,25 @@ import java.util.stream.Collectors;
 import be.ugent.systemdesign.university.curriculum.application.query.CourseReadModel;
 import be.ugent.systemdesign.university.curriculum.application.query.CurriculumReadModel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class CurriculumViewModel {
 
 	private String curriculumId;
 	private String curriculumStatus;
 	private String academicYear;
 	private List<CourseViewModel> courses;
+	private String facultyName;
 	
 	public CurriculumViewModel(CurriculumReadModel _c) {
 		this.curriculumId = _c.getCurriculumId();
 		this.curriculumStatus = _c.getCurriculumStatus();
 		this.academicYear = _c.getAcademicYear().toString();
 		this.courses = _c.getCourses().stream().map(co -> new CourseViewModel(co)).collect(Collectors.toList());
-		
-		/*
-		StringBuilder sb = new StringBuilder();
-		sb.append("[");
-		
-		for (int i = 0; i < _c.getCourses().size(); ++i) {
-			sb.append("{");
-			sb.append("\"name\":\"");
-			sb.append(_c.getCourses().get(i).getName());
-			sb.append("\"}");
-			
-			if (i != _c.getCourses().size() - 1) {
-				sb.append(",");
-			}
-		}
-		
-		sb.append("]");
-		this.courses = sb.toString();
-		*/
-		
-		
+		this.facultyName = _c.getFacultyName();
 	}
 }

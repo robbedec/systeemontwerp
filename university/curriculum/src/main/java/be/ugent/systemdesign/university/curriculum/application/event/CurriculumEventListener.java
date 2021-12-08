@@ -21,24 +21,23 @@ public class CurriculumEventListener {
 	EventDispatcher eventDispatcher;
 	
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void handleInpatientHasLeftSync(CurriculumChangedDomainEvent event) {
-		log.info(">handle curriculumChanged Sync of event created at {}, with new status {}", event.getCreatedTime(), buildCourseLog(event));
+	public void handleCurriculumChangedSync(CurriculumChangedDomainEvent event) {
+		log.info(">handle curriculumChanged Sync of event created at {}, with new status {}", event.getCreatedTime(), buildLog(event));
 	}
 	
 	@Async
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void handleInpatientHasLeftAsync(CurriculumChangedDomainEvent event) {
-		log.info(">handle curriculumChanged Async of event created at {}, with new status {}", event.getCreatedTime(), buildCourseLog(event));
-		eventDispatcher.publishCurriculumEvent(event);
+	public void handleCurriculumChangedAsync(CurriculumChangedDomainEvent event) {
+		log.info(">handle curriculumChanged Async of event created at {}, with new status {}", event.getCreatedTime(), buildLog(event));
+		eventDispatcher.publishCurriculumChangedEvent(event);
 	}
 	
-	private String buildCourseLog(CurriculumChangedDomainEvent event) {
+	private String buildLog(CurriculumChangedDomainEvent event) {
 		StringBuilder sb = new StringBuilder();
-		event.getCourses().forEach(c -> sb
-				.append(c.getName())
-				.append(" (")
-				.append(c.getCredits())
-				.append("),"));
+		sb.append("Curriculum changed for student with id: ");
+		sb.append(event.getStudentId());
+		sb.append(" ").append(event.getCourseName()).append(" (").append(event.getCourseCredits()).append(" credits) ");
+		sb.append(event.getChangeType());
 		
 		return sb.toString();
 	}

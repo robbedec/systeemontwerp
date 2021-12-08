@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import be.ugent.systemdesign.university.faculty.domain.seedwork.AggregateRoot;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,11 +41,11 @@ public class Faculty extends AggregateRoot {
 	
 	public void addCourse(Course _course) {
 		availableCourses.add(_course);
-		addDomainEvent(new FacultyCourseAddedOrRemoved(FacultyCourseChanges.ADDED, facultyName, _course.getCourseName(), _course.getCourseCredits()));
+		addDomainEvent(new FacultyCoursesChangedDomainEvent(FacultyCoursesChangeType.ADDED, facultyName, _course.getCourseName(), _course.getCourseCredits()));
 	}
 	
 	public void removeCourse(Course _course) {
 		availableCourses.remove(_course);
-		addDomainEvent(new FacultyCourseAddedOrRemoved(FacultyCourseChanges.REMOVED, facultyName, _course.getCourseName(), _course.getCourseCredits()));
+		addDomainEvent(new FacultyCoursesChangedDomainEvent(FacultyCoursesChangeType.REMOVED, facultyName, _course.getCourseName(), _course.getCourseCredits()));
 	}
 }

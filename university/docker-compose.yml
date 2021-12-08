@@ -4,6 +4,9 @@ services:
   curriculum_db:
     image: mongo
     container_name: curriculum_db
+  faculty_curriculum_db:
+    image: mongo
+    container_name: faculty_curriculum_db
   zookeeper:
     image: confluentinc/cp-zookeeper
     environment:
@@ -18,7 +21,24 @@ services:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
 
-# ------------Dummy services---------------
+# ------------Core services----------------
+  curriculum:
+    build: ./curriculum
+    container_name: curriculum
+    links:
+      - curriculum_db
+      - faculty_curriculum_db
+      - kafka
+    depends_on:
+      - curriculum_db
+      - faculty_curriculum_db
+      - kafka
+    environment: 
+      - spring.cloud.stream.kafka.binder.brokers=kafka
+      - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
+      - spring.data.mongodb.host=curriculum_db
+      - spring.data.mongodb.host=faculty_curriculum_db
+      - spring.data.mongodb.port=27017
   faculty:
     build: ./faculty
     container_name: faculty
@@ -26,16 +46,9 @@ services:
       - kafka
     depends_on:
       - kafka
-# ------------Core services----------------
-  curriculum:
-    build: ./curriculum
-    container_name: curriculum
-    links:
-      - curriculum_db
-      - kafka
-    depends_on:
-      - curriculum_db
-      - kafka
+    environment:
+      - spring.cloud.stream.kafka.binder.brokers=kafka
+      - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
   api_gw:
     build: ./api_gateway
     volumes:

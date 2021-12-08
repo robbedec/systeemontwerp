@@ -61,14 +61,14 @@ public class CurriculumApplication {
 		return (args) -> {
 			DMrepo.deleteAll();
 			
-			Curriculum c = new Curriculum("1");
+			Curriculum c = new Curriculum("1", "Ingenieurswetenschappen & architectuur");
+			Curriculum c2 = new Curriculum("2", "Ingenieurswetenschappen & architectuur");
 			
-			c.addCourse("Gevorderde algoritmen", 1);
-			c.addCourse("Wiskunde 1", 10);
-			c.addCourse("Signale & systemen", 5);
+			c.addCourse("Gevorderde algoritmen", 6);
+			c.addCourse("Wiskunde 1", 6);
 			
 			repo.save(c);
-			
+			repo.save(c2);
 			//log.info("Saved new inpatient {}", cId);
 			log.info("Saved curriculum");
 		};
