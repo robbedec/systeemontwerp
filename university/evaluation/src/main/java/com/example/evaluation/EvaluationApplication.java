@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 
 import com.example.evaluation.application.CertificateService;
 import com.example.evaluation.application.Response;
+import com.example.evaluation.application.TaskService;
+import com.example.evaluation.application.TaskServiceImpl;
 import com.example.evaluation.infrastructure.data_model.CertificateDataModel;
 import com.example.evaluation.infrastructure.data_model.TaskDataModel;
 import com.example.evaluation.infrastructure.data_model.TaskSubmissionDataModel;
