@@ -2,8 +2,12 @@ package be.ugent.systemdesign.university.curriculum.API.rest;
 
 import be.ugent.systemdesign.university.curriculum.application.query.CourseReadModel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class CourseViewModel {
 	
 	private String name;

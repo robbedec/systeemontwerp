@@ -6,8 +6,12 @@ import java.util.stream.Collectors;
 import be.ugent.systemdesign.university.curriculum.application.query.CourseReadModel;
 import be.ugent.systemdesign.university.curriculum.application.query.CurriculumReadModel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class CurriculumViewModel {
 
 	private String curriculumId;

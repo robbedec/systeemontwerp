@@ -1,13 +1,13 @@
 <html>
-  <label>Student ID:</label>
-  <select name="curriculums" id="student_ids" onChange="studentIdChanged()">
-    <option id="dropdown_placeholder" value="" disabled selected>Select a studentID</option>
-  </select>
-  <form id="c_overview">
-    <div id="c_boxes_list">
-    </div>
-    <input onClick="sendChangeRequest()" id="overview_button" type="hidden" value="Change curriculum" />
-  </form>
+	<label>Student ID:</label>
+	<select name="curriculums" id="student_ids" onChange="studentIdChanged()">
+		<option id="dropdown_placeholder" value="" disabled selected>Select a studentID</option>
+	</select>
+	<form id="c_overview">
+		<div id="c_boxes_list">
+    	</div>
+		<input onClick="sendChangeRequest()" id="overview_button" type="hidden" value="Change curriculum" />
+	</form>
 </html>
 
 <script>
@@ -111,7 +111,9 @@
       }
       console.log(changed_courses);
       // Send post request
-      fetch(curriculum_url + curriculum.curriculumId + "/change", {
+      fetch(curriculum_url + curriculum.curriculumId + "/change?" + new URLSearchParams({
+      		accountId: 1, 
+    	}), {
         method: "PUT",
         headers: {"content-Type": "application/json"},      
         body: JSON.stringify({
