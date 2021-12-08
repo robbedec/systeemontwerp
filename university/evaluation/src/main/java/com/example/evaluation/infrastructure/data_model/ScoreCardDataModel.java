@@ -25,11 +25,11 @@ public class ScoreCardDataModel {
 	@Id
 	@GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-	String scoreCardId;
-	String studentId;
-	String degreeId;
+	private String scoreCardId;
+	private String studentId;
+	private String degreeId;
 	
 	@ElementCollection
 	@CollectionTable(name = "course_score_data_model", joinColumns = @JoinColumn(name = "score_card_id"))
-	List<CourseScoreDataModel> scores;
+	private List<CourseScoreDataModel> scores;
 }

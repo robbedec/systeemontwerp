@@ -13,6 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseScoreDataModel {
-	String courseId;
-	int score;
+	private String courseId;
+	private int score;
 }

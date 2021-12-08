@@ -12,8 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScoreCard {
-	String scoreCardId;
-	String studentId;
-	String degreeId;
-	List<CourseScore> scores;
+	private String scoreCardId;
+	private String studentId;
+	private String degreeId;
+	private List<CourseScore> scores;
 }

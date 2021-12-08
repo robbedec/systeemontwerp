@@ -12,6 +12,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseScore {
-	String courseId;
-	int score;
+	private String courseId;
+	private int score;
+	
+	public boolean passed() {
+		return score >= 10;
+	}
 }
