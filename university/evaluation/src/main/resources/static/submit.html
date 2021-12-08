@@ -1,0 +1,22 @@
+<!DOCYTPE html>
+
+<html>
+	<head>
+		<title>Submit Task</title>
+		<script>
+			function submitTask() {
+				req = {
+					studentId: sessionStorage.userId,
+					file: document.getElementById("file").value
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<ul id="tasks"></ul>
+		<div id="submit">
+			<textarea id="file" rows="4" cols="50"></textarea>
+			<button onclick="submitTask">submit</button>
+		</div>
+	</body>
+</html>

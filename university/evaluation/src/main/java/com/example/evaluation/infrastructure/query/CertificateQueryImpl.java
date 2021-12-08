@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import com.example.evaluation.application.query.CertificateQuery;
 import com.example.evaluation.application.query.CertificateVerificationReadModel;
-import com.example.evaluation.infrastructure.exception.CertificateNotFoundException;
 import com.example.evaluation.infrastructure.repository.CertificateDataModelRepository;
 
 @Component
@@ -19,7 +18,7 @@ public class CertificateQueryImpl implements CertificateQuery{
 		try {
 			certifcateDMRepo.findById(certificateId);
 			return new CertificateVerificationReadModel(true);
-		} catch (CertificateNotFoundException e) {
+		} catch (Exception e) {
 			return new CertificateVerificationReadModel(false);
 		}
 	}
