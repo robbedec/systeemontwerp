@@ -61,7 +61,7 @@ public class EvaluationApplication {
 	CommandLineRunner testCertificateService(CertificateService cs) {
 		return(args) -> {
 			log.info("createCertificate");
-			Response res = cs.createCertificate("1", "1");
+			Response res = cs.generateCertificate("1", "1");
 			log.info("{} {}", res.status, res.message);
 			String certificateId = res.message.split(" ")[1];
 			res = cs.verifyCertificate(certificateId);
