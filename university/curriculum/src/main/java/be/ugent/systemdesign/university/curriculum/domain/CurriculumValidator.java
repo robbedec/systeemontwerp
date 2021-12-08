@@ -8,7 +8,8 @@ public class CurriculumValidator {
 
 	public static boolean validateCurriculum(List<Course> facultyCourses, List<Course> curriculumCourses) {
 		
-		//if (!facultyCourses.containsAll(curriculumCourses)) throw new CurriculumInvalidException();
+		// Check if courses received from the front-end actually exist in the faculty database
+		if (!facultyCourses.containsAll(curriculumCourses)) throw new CurriculumInvalidException();
 		
 		return true;
 	}

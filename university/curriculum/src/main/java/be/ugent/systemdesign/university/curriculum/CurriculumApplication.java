@@ -3,6 +3,7 @@ package be.ugent.systemdesign.university.curriculum;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,8 +18,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import be.ugent.systemdesign.university.curriculum.API.messaging.Channels;
 import be.ugent.systemdesign.university.curriculum.application.CurriculumService;
 import be.ugent.systemdesign.university.curriculum.application.Response;
+import be.ugent.systemdesign.university.curriculum.domain.Course;
+import be.ugent.systemdesign.university.curriculum.domain.CourseDIFF;
 import be.ugent.systemdesign.university.curriculum.domain.Curriculum;
 import be.ugent.systemdesign.university.curriculum.domain.CurriculumRepository;
+import be.ugent.systemdesign.university.curriculum.domain.FacultyCourseChangeType;
 import be.ugent.systemdesign.university.curriculum.infrastructure.CourseDataModel;
 import be.ugent.systemdesign.university.curriculum.infrastructure.CurriculumDataModel;
 import be.ugent.systemdesign.university.curriculum.infrastructure.CurriculumDataModelRepository;
@@ -109,6 +113,27 @@ public class CurriculumApplication {
 		  return (args) -> { 
 			  //Response response = service.noteLeftAgainstMedicalAdvice("3"); logResponse(response);
 		  }; 
+	  }
+	  
+	  @Bean
+	  CommandLineRunner testDIFF() {
+		  return (args) -> {
+			 List<Course> old = new ArrayList<>(Arrays.asList(
+					 new Course("Wiskunde 1", 6),
+					 new Course("Systeemontwerp", 3),
+					 new Course("Algoritmen", 6)
+					 ));
+			 
+			 List<Course> newL = new ArrayList<>(Arrays.asList(
+					 new Course("Wiskunde 1", 6)
+					 ));
+			 
+			 List<Course> diff = CourseDIFF.createDIFF(old, newL, new HashMap<Course, FacultyCourseChangeType>());
+			 log.info("DIFF");
+			 for (Course c : diff) {
+				 log.info("Course: {} with credits: {}", c.getName(), c.getCredits());
+			 }
+		  };
 	  }
 	
 }

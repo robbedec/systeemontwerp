@@ -15,9 +15,10 @@ public class Course {
 	private String name;
 	private Integer credits;
 	
-	public boolean equals(Course obj) {
+	@Override
+	public boolean equals(Object obj) {
 		if (obj == null) return false;
-		return this.name == obj.getName() && this.credits == obj.getCredits();
+		return this.name.equals(((Course) obj).getName()) && this.credits == ((Course) obj).getCredits();
 	}
 	
 	@Override

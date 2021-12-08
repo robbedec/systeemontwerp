@@ -104,9 +104,9 @@
         	const span_course_name = x.getElementsByTagName("span")[0];
         
         	// Add courses that were changed
-        	if (input_element.checked && !(curriculum.courses.filter(cc => cc.name === input_element.value).length != 0)) {
+        	if (input_element.checked && !(curriculum.courses.filter(cc => cc.name === span_course_name.innerHTML).length != 0)) {
           		changed_courses.push({ name: span_course_name.innerHTML, credits: input_element.value });
-        	} else if (!input_element.checked && (curriculum.courses.filter(cc => cc.name === input_element.value).length != 0)) {
+        	} else if (!input_element.checked && (curriculum.courses.filter(cc => cc.name === span_course_name.innerHTML).length != 0)) {
           		changed_courses.push({ name: span_course_name.innerHTML, credits: input_element.value });
         	}
       	}

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumChangesByStudentDisabledException;
+import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumExceedsMaximumCreditsException;
+import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumLockedException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProvisionOrRejectedCurriculumCanBeProposedException;
 import be.ugent.systemdesign.university.curriculum.domain.seedwork.AggregateRoot;
 import lombok.AllArgsConstructor;
@@ -57,8 +59,22 @@ public class Curriculum extends AggregateRoot {
 	}
 	
 	public void changeCurriculum(List<Course> _courses, boolean changedByStudent, Map<Course, FacultyCourseChangeType> changes) {
+		
+		// A curriculum can not be changed by a student after it has been proposed or accepted
+		// Changes can still be made by university personnel (i.e. program counselor)
 		if ((this.curriculumStatus == CurriculumStatus.PROPOSED || this.curriculumStatus == CurriculumStatus.ACCEPTED) && changedByStudent) {
 			throw new CurriculumChangesByStudentDisabledException();
+		}
+		
+		// Credits of the curriculum should not exceed 60
+		if (_courses.stream().mapToInt(Course::getCredits).sum() > 60) {
+			throw new CurriculumExceedsMaximumCreditsException();
+		}
+		
+		// The student is allowed to make changes until three months after its initial creation date (start of the academic year)
+		// Program counselors are allowed to make changes for an additional month, for unforeseen events 
+		if ((this.dateCreated.plusMonths(2).isBefore(LocalDate.now()) && changedByStudent) || this.dateCreated.plusMonths(3).isBefore(LocalDate.now())) {
+			throw new CurriculumLockedException();
 		}
 		
 		changes.entrySet().stream().forEach(entry -> {
@@ -72,5 +88,6 @@ public class Curriculum extends AggregateRoot {
 		});
 		
 		this.courses = _courses;
+		this.dateLastChanged = LocalDate.now();
 	}
 }
