@@ -65,6 +65,19 @@ public class CurriculumController {
 		);
 	}
 	
+	@PutMapping("{id}/review")
+	public ResponseEntity<String> reviewCurriculumStatus(@PathVariable("id") String curriculumId, @RequestParam("verdict") String verdict, @RequestParam("userId") String userId) {
+		Response response = curriculumService.reviewCurriculumStatus(curriculumId, verdict, userId);
+		
+		return createResponseEntity(
+				response.status, 
+				response.message, 
+				HttpStatus.OK,
+				response.message,
+				HttpStatus.CONFLICT
+			);
+	}
+	
 	@PutMapping("{id}/change")
 	public ResponseEntity<String> changeCurriculumWithId(@RequestBody CurriculumViewModel curriculumVM, @PathVariable("id") String curriculumId, @RequestParam("accountId") String accountId) {
 		

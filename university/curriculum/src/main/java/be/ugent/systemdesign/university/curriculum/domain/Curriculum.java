@@ -9,6 +9,7 @@ import java.util.Map;
 import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumChangesByStudentDisabledException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumExceedsMaximumCreditsException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumLockedException;
+import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProposedCurriculumCanBeReviewedException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProvisionOrRejectedCurriculumCanBeProposedException;
 import be.ugent.systemdesign.university.curriculum.domain.seedwork.AggregateRoot;
 import lombok.AllArgsConstructor;
@@ -50,7 +51,7 @@ public class Curriculum extends AggregateRoot {
 		);
 	}
 	
-	public void markCurriculumAsProposed() {
+	public void markCurriculumAsProposed() throws OnlyProvisionOrRejectedCurriculumCanBeProposedException {
 		if (this.curriculumStatus == CurriculumStatus.PROPOSED || this.curriculumStatus == CurriculumStatus.ACCEPTED) {
 			throw new OnlyProvisionOrRejectedCurriculumCanBeProposedException();
 		}
@@ -58,7 +59,23 @@ public class Curriculum extends AggregateRoot {
 		this.curriculumStatus = CurriculumStatus.PROPOSED;
 	}
 	
-	public void changeCurriculum(List<Course> _courses, boolean changedByStudent, Map<Course, FacultyCourseChangeType> changes) {
+	public void reviewCurriculum(CurriculumStatus status, boolean calledByStudent) throws IllegalAccessException, OnlyProposedCurriculumCanBeReviewedException {
+		// A student can not review a curriculum
+		if (calledByStudent) {
+			throw new IllegalAccessException();
+		}
+		
+		if (this.curriculumStatus != CurriculumStatus.PROPOSED) {
+			throw new OnlyProposedCurriculumCanBeReviewedException();
+		}
+		
+		addDomainEvent(new CurriculumReviewedDomainEvent(this.studentId, status));
+		this.curriculumStatus = status;
+	}
+	
+	public void changeCurriculum(List<Course> _courses, boolean changedByStudent, Map<Course, FacultyCourseChangeType> changes) throws CurriculumExceedsMaximumCreditsException, CurriculumChangesByStudentDisabledException, CurriculumLockedException {
+		
+		if (this.curriculumStatus == CurriculumStatus.REJECTED) this.curriculumStatus = CurriculumStatus.PROVISIONAL;
 		
 		// A curriculum can not be changed by a student after it has been proposed or accepted
 		// Changes can still be made by university personnel (i.e. program counselor)

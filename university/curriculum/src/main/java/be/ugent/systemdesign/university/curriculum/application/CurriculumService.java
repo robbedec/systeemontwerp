@@ -9,8 +9,7 @@ import be.ugent.systemdesign.university.curriculum.domain.FacultyCourseChangeTyp
 public interface CurriculumService {
 
 	Response changeCurriculum(String curriculumId, String studentId, List<Course> changedCourses);
-	Response acceptCurriculum(String curriculumId, String userId);
-	Response rejectCurriculum(String curriculumId, String userId);
+	Response reviewCurriculumStatus(String curriculumId, String verdict, String userId);
 	
 	Response markCurriculumAsProposed(String curriculumId);
 	

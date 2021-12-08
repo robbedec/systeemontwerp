@@ -27,7 +27,6 @@ public class CourseDIFF {
 		List<Course> diff = new ArrayList<>(oldCourses);		
 		
 		for (Course c : newCourses) {
-			
 			if (oldCourses.contains(c)) {
 				log.info("REMOVING: {}", c.getName());
 				diff.remove(c);
@@ -37,7 +36,6 @@ public class CourseDIFF {
 				diff.add(c);
 				changes.put(c, FacultyCourseChangeType.ADDED);
 			}
-			
 		}
 		
 		return diff;

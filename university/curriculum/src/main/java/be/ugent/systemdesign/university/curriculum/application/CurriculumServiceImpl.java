@@ -13,11 +13,13 @@ import be.ugent.systemdesign.university.curriculum.domain.Course;
 import be.ugent.systemdesign.university.curriculum.domain.CourseDIFF;
 import be.ugent.systemdesign.university.curriculum.domain.Curriculum;
 import be.ugent.systemdesign.university.curriculum.domain.CurriculumRepository;
+import be.ugent.systemdesign.university.curriculum.domain.CurriculumStatus;
 import be.ugent.systemdesign.university.curriculum.domain.CurriculumValidator;
 import be.ugent.systemdesign.university.curriculum.domain.Faculty;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCourseChangeType;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCoursesRepository;
 import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumInvalidException;
+import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProposedCurriculumCanBeReviewedException;
 import be.ugent.systemdesign.university.curriculum.infrastructure.CurriculumNotFoundException;
 import be.ugent.systemdesign.university.curriculum.infrastructure.FacultyNotFoundException;
 
@@ -51,7 +53,6 @@ public class CurriculumServiceImpl implements CurriculumService {
 			
 			curriculumRepo.save(c);
 			
-			
 		} catch (CurriculumNotFoundException e) {
 			return new Response(ResponseStatus.FAIL, "Could not find curriculum with id " + curriculumId);
 		} catch(CurriculumInvalidException e) {
@@ -60,20 +61,31 @@ public class CurriculumServiceImpl implements CurriculumService {
 			return new Response(ResponseStatus.FAIL, "Unknown exception occured: " + e.getMessage());
 		}
 		
+		return new Response(ResponseStatus.SUCCESS, "Curriculum " + curriculumId + " succesfully changed");
+	}
+	
+	@Override
+	public Response reviewCurriculumStatus(String curriculumId, String verdict, String userId) {
+		// Check if verdict is a valid curriculumstatus
+		if (!verdict.equals(CurriculumStatus.ACCEPTED.name()) && !verdict.equals(CurriculumStatus.REJECTED.name())) {
+			return new Response(ResponseStatus.FAIL, "Unknown review status: " + verdict);
+		}
 		
-		return new Response(ResponseStatus.SUCCESS, "");
-	}
-
-	@Override
-	public Response acceptCurriculum(String curriculumId, String userId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response rejectCurriculum(String curriculumId, String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Curriculum c = curriculumRepo.findByCurriculumId(curriculumId);
+			c.reviewCurriculum(CurriculumStatus.valueOf(verdict), userIsStudent(userId));
+			
+			curriculumRepo.save(c);
+			
+		} catch(CurriculumNotFoundException e) {
+			return new Response(ResponseStatus.FAIL, "Could not find curriculum with id " + curriculumId);
+		} catch (IllegalAccessException e) {
+			return new Response(ResponseStatus.FAIL, "Curriculum can not be reviewed by a student");
+		} catch (OnlyProposedCurriculumCanBeReviewedException e) {
+			return new Response(ResponseStatus.FAIL, "Only proposed curriculi can be reviewed");
+		}
+		
+		return new Response(ResponseStatus.SUCCESS, "Curriculum " + curriculumId + " received new status: " + verdict);
 	}
 
 	@Override
