@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Repository;
 
 import com.example.evaluation.domain.model.TaskSubmission;
@@ -15,7 +16,10 @@ import com.example.evaluation.infrastructure.exception.TaskSubmissionNotFoundExc
 public class TaskSubmissionRepositoryImpl implements TaskSubmissionRepository {
 	
 	@Autowired
-	TaskSubmissionDataModelRepository taskSubmissionDMRepo;
+	private TaskSubmissionDataModelRepository taskSubmissionDMRepo;
+	
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
 	
 	private TaskSubmission mapToTaskSubmission(TaskSubmissionDataModel taskSubmissionDM) {
 		return new TaskSubmission(taskSubmissionDM.getSubmissionId(), taskSubmissionDM.getTaskId(), taskSubmissionDM.getStudentId(), 
@@ -36,6 +40,9 @@ public class TaskSubmissionRepositoryImpl implements TaskSubmissionRepository {
 	@Override
 	public TaskSubmission save(TaskSubmission taskSubmission) {
 		TaskSubmissionDataModel taskDM = taskSubmissionDMRepo.save(mapToTaskSubmissionDataModel(taskSubmission));
+		
+		taskSubmission.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
+		
 		return mapToTaskSubmission(taskDM);
 	}
 

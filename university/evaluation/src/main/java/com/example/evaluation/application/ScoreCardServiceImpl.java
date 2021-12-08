@@ -1,5 +1,11 @@
 package com.example.evaluation.application;
 
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
+@Transactional
+@Service
 public class ScoreCardServiceImpl implements ScoreCardService {
 
 	@Override

@@ -56,9 +56,16 @@ public class TaskController {
 		return taskQuery.getTaskSubmissions(taskId).stream().map(taskSubmissionRM -> new TaskSubmissionViewModel(taskSubmissionRM)).collect(Collectors.toList());
 	}
 	
+	@PostMapping("{id}/checkplagiarism")
+	public ResponseEntity<String> checkPlagiarism(@PathVariable String taskId) {
+		Response response = taskService.checkPlagiarism(taskId);
+		return createResponseEntity(response.status, "Tasks checked for plagiarism", HttpStatus.OK, "Failed to check for plagiarism", HttpStatus.CONFLICT);
+	}
+	
 	private ResponseEntity<String> createResponseEntity(ResponseStatus status, String successMsg, HttpStatus successStatus, String failMsg, HttpStatus failStatus) {
 		if(status == ResponseStatus.SUCCESS)
 			return new ResponseEntity<>(successMsg, successStatus);
 		return new ResponseEntity<>(failMsg, failStatus);
 	}
+	
 }

@@ -49,6 +49,16 @@ services:
     environment:
       - spring.cloud.stream.kafka.binder.brokers=kafka
       - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
+  notification:
+    build: ./notification
+    container_name: notification
+    links:
+      - kafka
+    depends_on:
+      - kafka
+    environment:
+      - spring.cloud.stream.kafka.binder.brokers=kafka
+      - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
   api_gw:
     build: ./api_gateway
     volumes:
