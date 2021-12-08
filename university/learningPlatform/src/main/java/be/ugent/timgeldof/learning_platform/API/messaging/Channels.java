@@ -10,6 +10,10 @@ public interface Channels {
 	public final static String NEW_ANNOUNCEMENT_EVENT = "new_announcement_event";
 	public final static String COURSE_MATERIAL_VISIBILITY_EVENT = "course_material_visibility_event";
 	public final static String FACULTY_EVENT = "faculty_event";
+	public final static String CURRICULUM_CHANGED_EVENT = "curriculum_changed_event";
+	public final static String INVOICE_PAID_EVENT = "invoice_paid_event";
+	public final static String PLAGIARISM_REGISTERED_EVENT = "plagiarism_registered_event";
+
 
 	@Output(NEW_ANNOUNCEMENT_EVENT)
 	MessageChannel announcementEvent();
@@ -19,4 +23,14 @@ public interface Channels {
 	
 	@Input(FACULTY_EVENT)
 	SubscribableChannel noteFacultyCoursesChange();
+	
+	@Input(CURRICULUM_CHANGED_EVENT)
+	SubscribableChannel noteCurriculumChange();
+	
+	@Input(INVOICE_PAID_EVENT)
+	SubscribableChannel noteInvoicePaid();
+	
+	@Input(PLAGIARISM_REGISTERED_EVENT)
+	SubscribableChannel notePlagiarismRegistered();
+	
 }

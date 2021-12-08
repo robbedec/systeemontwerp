@@ -64,11 +64,16 @@ public class CourseRepositoryImpl implements CourseRepository{
 			throw new CourseNotFoundException();
 	}
 	
+	@Override
+	public Course findByCourseNameAndCourseCredits(String courseName, String courseCredits) {
+		Optional<CourseDataModel> c_dm = this.repo.findByNameAndCourseCredits(courseName, Integer.parseInt(courseCredits));
+		if(c_dm.isPresent())
+			return(mapCourseDataModelToDomainModel(c_dm.get()));
+		else 
+			throw new CourseNotFoundException();	
+	}
 	
-	
-	
-	
-	/*
+		/*
 	 * Data model to domain model 
 	 */
 	public List<Course> mapCourseDataModelToDomainModel(List<CourseDataModel> list){
@@ -130,6 +135,8 @@ public class CourseRepositoryImpl implements CourseRepository{
 			});
 		return new_list;
 	}
+
+
 
 
 }
