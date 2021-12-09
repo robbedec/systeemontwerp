@@ -19,8 +19,13 @@ public class RegistrationQueryImpl implements RegistrationQuery {
 	public List<RegistrationReadModel> giveRegistrations(Boolean isAccepted) {
 		// TODO Auto-generated method stub
 		return repo.findAll().stream().map(el -> mapToRegistrationReadModel(el)).collect(Collectors.toList());
+	}	
+
+	@Override
+	public RegistrationReadModel getRegistration(String registrationId) {
+		return mapToRegistrationReadModel(repo.getById(Integer.parseInt(registrationId)));
 	}
-	
+
 	private RegistrationReadModel mapToRegistrationReadModel(RegistrationDataModel _r) {
 		RegistrationReadModel r = new RegistrationReadModel(
 				_r.getEmail(),
@@ -32,5 +37,4 @@ public class RegistrationQueryImpl implements RegistrationQuery {
 		);
 		return r;
 	}
-
 }

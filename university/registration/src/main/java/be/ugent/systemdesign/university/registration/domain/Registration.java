@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import be.ugent.systemdesign.university.registration.domain.seedwork.AggregateRoot;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Registration {
+public class Registration extends AggregateRoot{
 	
 	@Id	
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -41,5 +42,17 @@ public class Registration {
 		this.isAccepted = false;
 		this.payementStatus = PayementStatus.PENDING;
 	}
-
+	
+	public void accept () {
+		this.isAccepted = true;
+		//addDomainEvent();
+		//event versturen
+		//mail laten versturen
+		//account aanmaken
+	}
+	
+	public void reject() {
+		this.isAccepted = false; //mss veranderen naar ENUM?
+		//mail versturen;
+	}
 }

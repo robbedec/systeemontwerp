@@ -5,5 +5,9 @@ import java.util.Date;
 
 public interface RegistrationService {
 	
-	Response register(Date registrationDate, String email, String name, String firstName, LocalDate dateOfBirth, String course);
+	Response addRegistration(String email, String name, String firstName, LocalDate dateOfBirth, String course);
+	Response acceptRegistration(String registrationId);
+	Response rejectRegistration(String registrationId);	
+	Response removeRegistration(String registrationId);
+	
 }

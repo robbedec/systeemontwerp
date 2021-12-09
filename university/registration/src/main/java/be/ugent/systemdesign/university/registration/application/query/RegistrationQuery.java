@@ -5,4 +5,5 @@ import java.util.List;
 public interface RegistrationQuery {
 
 	public List<RegistrationReadModel> giveRegistrations(Boolean isAccepted);
+	public RegistrationReadModel getRegistration(String registrationId);
 }

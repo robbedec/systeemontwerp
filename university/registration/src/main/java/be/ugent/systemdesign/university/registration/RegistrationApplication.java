@@ -64,7 +64,7 @@ public class RegistrationApplication {
 			logger.info("$Testing RegistrationService."); 
 			Response response;
 			logger.info("Register new registration (success).");
-			response = service.register(new Date(), "new@mail.be", "Brum", "DuBleeckur", LocalDate.of(2001, 1, 1), "Burgie");
+			response = service.addRegistration("new@mail.be", "Brum", "DuBleeckur", LocalDate.of(2001, 1, 1), "Burgie");
 			logResponse(response);
 		};
 	}

@@ -1,6 +1,7 @@
 package be.ugent.systemdesign.university.registration.infrastructure;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Repository;
 
 import be.ugent.systemdesign.university.registration.domain.PayementStatus;
@@ -13,6 +14,9 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 	@Autowired
 	RegistrationDataModelRepository registrationRepo;
 	
+	@Autowired
+	ApplicationEventPublisher eventPublisher;
+	
 	@Override
 	public Registration findOne(Integer id) {		
 		RegistrationDataModel dataModel = registrationRepo.findById(id).orElseThrow(RegistrationNotFoundException::new);
@@ -24,7 +28,13 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 		RegistrationDataModel dataModel = mapToRegistrationDataModel(_r);
 		registrationRepo.save(dataModel);
 		
-	}	
+		_r.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
+		_r.clearDomainEvents();		
+	}
+	
+	public void removeRegistration(int registrationId) {
+		registrationRepo.deleteById(registrationId);
+	}
 	
 	private RegistrationDataModel mapToRegistrationDataModel(Registration _r) {
 		return new RegistrationDataModel(_r.getRegistrationId(), _r.getRegistrationDate(), _r.getEmail(), _r.getName(), _r.getFirstName(), _r.getDateOfBirth(), _r.getCourse(), _r.isAccepted(), _r.getPayementStatus());
@@ -44,6 +54,8 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 							.build();
 		return r;
 	}
+	
+	
 	
 	
 	

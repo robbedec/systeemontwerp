@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import be.ugent.systemdesign.university.registration.application.RegistrationService;
+import be.ugent.systemdesign.university.registration.application.Response;
 import be.ugent.systemdesign.university.registration.application.ResponseStatus;
 import be.ugent.systemdesign.university.registration.application.query.RegistrationQuery;
 
@@ -41,30 +43,38 @@ public class RegistrationController {
 	
 	@GetMapping("{id}")
 	public RegistrationViewModel GetRegistration(@PathVariable("id") String registrationId) {
-		return null;
+		return new RegistrationViewModel(registrationQuery.getRegistration(registrationId));
 	}
 	
 	@PutMapping("{id}/accept")
 	public ResponseEntity<String> acceptRegistration(@PathVariable("id") String registrationId) {
-		//return createResponseEntity(response.status, "Intake registered", HttpStatus.OK, response.message,HttpStatus.CONFLICT);
-		return null;
+		Response response = registrationService.acceptRegistration(registrationId);
+		return createResponseEntity(response.status, "Registration accepted", HttpStatus.OK, response.message,HttpStatus.CONFLICT);		
 	}
 	
 	@PutMapping("{id}/reject")
 	public ResponseEntity<String> rejectRegistration(@PathVariable("id") String registrationId) {
-		//return createResponseEntity(response.status, "Intake registered", HttpStatus.OK, response.message,HttpStatus.CONFLICT);
-		return null;
+		Response response = registrationService.rejectRegistration(registrationId);
+		return createResponseEntity(response.status, "Registration rejected", HttpStatus.OK, response.message,HttpStatus.CONFLICT);		
 	}
 	
 	@PostMapping
-	public ResponseEntity<String> createRegistration(){
-		//return createResponseEntity(response.status, "Intake registered", HttpStatus.OK, response.message,HttpStatus.CONFLICT);
-		return null;
+	public ResponseEntity<String> createRegistration(@RequestBody RegistrationViewModel r){
+		//nog validatie toevoegen
+		Response response = registrationService.addRegistration(
+				r.getEmail(), 
+				r.getName(), 
+				r.getFirstName(), 
+				r.getDateOfBirth(),
+				r.getCourse()
+		);
+		return createResponseEntity(response.status, "Registration confirmed", HttpStatus.OK, response.message,HttpStatus.CONFLICT);		
 	}
 	
-	@DeleteMapping
-	public void removeRegistration() {
-		
+	@DeleteMapping("{id}")
+	public ResponseEntity<String> removeRegistration(@PathVariable("id") String registrationId) {
+		Response response = registrationService.removeRegistration(registrationId);
+		return createResponseEntity(response.status, "Registration removed", HttpStatus.OK, response.message,HttpStatus.CONFLICT);
 	}
 	
 	private ResponseEntity<String> createResponseEntity(ResponseStatus status, String happyMessage, HttpStatus happyStatus, String sadMessage, HttpStatus sadStatus){
