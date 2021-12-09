@@ -37,7 +37,8 @@ public class CourseAccessRepositoryImpl implements CourseAccessRepository{
 	public CourseAccess findById(String id) {
 		Optional<CourseAccessDataModel> ca_o = repo.findById(id);
 		if(ca_o.isEmpty()) {
-			throw new CourseAccessNotFoundException();
+			// return new courseAccess object
+			return new CourseAccess();
 		}
 		return mapCourseAccessDataModelToDomainModel(ca_o.get());
 	}

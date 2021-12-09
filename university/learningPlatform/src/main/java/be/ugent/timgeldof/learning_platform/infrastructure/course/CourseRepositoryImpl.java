@@ -65,8 +65,8 @@ public class CourseRepositoryImpl implements CourseRepository{
 	}
 	
 	@Override
-	public Course findByCourseNameAndCourseCredits(String courseName, String courseCredits) {
-		Optional<CourseDataModel> c_dm = this.repo.findByNameAndCourseCredits(courseName, Integer.parseInt(courseCredits));
+	public Course findByCourseNameAndCourseCredits(String courseName, Integer courseCredits) {
+		Optional<CourseDataModel> c_dm = this.repo.findByNameAndCourseCredits(courseName, courseCredits);
 		if(c_dm.isPresent())
 			return(mapCourseDataModelToDomainModel(c_dm.get()));
 		else 

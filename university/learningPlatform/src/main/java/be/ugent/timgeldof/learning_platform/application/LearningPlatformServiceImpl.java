@@ -2,6 +2,7 @@ package be.ugent.timgeldof.learning_platform.application;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,7 +140,14 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
-			Integer courseId = this.courseRepo.findByCourseNameAndCourseCredits(courseName, courseCredits).getId();
+			if(ca.getStudentId() == null || ca.getStudentId().isEmpty()) {
+				// the student ID being empty means the repository a the Course Access Object needs to be completed
+				ca.setStudentId(studentId);
+				ca.setInvoiceOpen(true);
+				ca.setUndergoingPlagiarismProcedure(false);
+				ca.setCourseIds(new ArrayList<Integer>());
+			}
+			Integer courseId = this.courseRepo.findByCourseNameAndCourseCredits(courseName, Integer.parseInt(courseCredits)).getId();
 			if(changeType.equalsIgnoreCase("ADDED")) {
 				ca.addCourse(courseId);
 			} else {

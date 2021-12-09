@@ -33,39 +33,9 @@ public class LearningPlatformApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LearningPlatformApplication.class, args);
 	}
+
 	
 	/*
-	 @Bean
-	public CommandLineRunner populateDatabase(CourseRepository courseRepo, CourseAccessRepository accessRepo) {
-		return (args) -> {
-
-			List<CourseAnnouncement> announcements = new ArrayList<>(); 
-			announcements.add(new CourseAnnouncement(1, LocalDateTime.now(), "Het examen is ingepland op 19 januari"));
-			announcements.add(new CourseAnnouncement(2, LocalDateTime.now().minusHours(2), "Het examen zal pittig worden"));
-			Course sysi = courseRepo.findOne(1);
-			sysi.setCourseAnnouncements(announcements);
-			
-			List<CourseMaterial> materials = new ArrayList<>(); 
-
-			byte[] b = new byte[20];
-			new Random().nextBytes(b);
-			
-			materials.add(new CourseMaterial(1, LocalDateTime.now(), "cursus.pdf", b, false));
-			sysi.setCourseMaterial(materials);
-			courseRepo.save(sysi);
-
-			CourseAccess access1 = new CourseAccess();
-			access1.setStudentId("01611379");
-			access1.setInvoiceOpen(false);
-			access1.setUndergoingPlagiarismProcedure(false);
-			access1.setCourseIds(new ArrayList<Integer>());
-			access1.addCourse(1);
-			access1.addCourse(2);
-			access1.addCourse(3);
-			access1.addCourse(4);
-			accessRepo.save(access1);			
-		};
-	}
 	@Bean
 	public CommandLineRunner testCourseAnnouncements(CourseRepository courseRepo, CourseAccessRepository accessRepo) {
 		return (args) -> {

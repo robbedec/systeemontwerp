@@ -5,7 +5,7 @@ import java.util.List;
 public interface CourseRepository {
 	List<Course> findAll();
 	Course findOne(Integer id);
-	Course findByCourseNameAndCourseCredits(String courseName, String courseCredits);
+	Course findByCourseNameAndCourseCredits(String courseName, Integer courseCredits);
 	void save(Course c);
 	void remove(Course c);
 }

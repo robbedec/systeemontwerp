@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -33,6 +34,7 @@ public class CourseMaterialDataModel {
 	private CourseDataModel course;
 	private String name;
 	private LocalDateTime timestamp;
+    @Lob
 	private byte[] file; 
 	@Getter
 	private boolean isVisible;

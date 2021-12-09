@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CourseMaterialViewModel {
 	public String fileName;
-	public byte[] file;
+	public String fileBase64;
 }

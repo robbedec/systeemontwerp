@@ -1,5 +1,6 @@
 package be.ugent.timgeldof.learning_platform.API.rest;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +24,7 @@ import be.ugent.timgeldof.learning_platform.application.query.CourseQuery;
 import be.ugent.timgeldof.learning_platform.application.query.CourseViewModel;
 import be.ugent.timgeldof.learning_platform.application.query.CourseWithCourseAnnouncementsViewModel;
 import be.ugent.timgeldof.learning_platform.application.query.CourseWithCourseMaterialViewModel;
+import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccessDeniedException;
 import be.ugent.timgeldof.learning_platform.infrastructure.course.CourseQueryImpl;
 
 
@@ -57,8 +60,8 @@ public class LearningPlatformController {
 	
 	@PutMapping("course/{courseId}/materials/add")
 	public ResponseEntity<String> publishCourseMaterial(@RequestBody CourseMaterialViewModel courseMaterialViewModel, @PathVariable("courseId") String courseId) {
-				
-		Response response = s.publishCourseMaterial(Integer.parseInt(courseId), courseMaterialViewModel.getFile(), courseMaterialViewModel.getFileName());
+        byte[] file = Base64.getEncoder().encode(courseMaterialViewModel.getFileBase64().getBytes());	
+		Response response = s.publishCourseMaterial(Integer.parseInt(courseId), file, courseMaterialViewModel.getFileName());
 		
 		return createResponseEntity(
 				response.status, 
@@ -102,5 +105,12 @@ public class LearningPlatformController {
 			return new ResponseEntity<>(sadMessage, sadStatus);		
 		return new ResponseEntity<>(happyMessage,happyStatus);
 	}
+	
+	  @ExceptionHandler(CourseAccessDeniedException.class)
+	  public ResponseEntity<String> handleNoSuchElementFoundException(CourseAccessDeniedException exception) {
+	    return ResponseEntity
+	        .status(HttpStatus.UNAUTHORIZED)
+	        .body(exception.getMessage());
+	  }
 	
 }

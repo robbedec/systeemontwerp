@@ -17,7 +17,7 @@ import be.ugent.timgeldof.learning_platform.domain.course_access.CurriculumChang
 @Component
 public class MessageInputGateway {
 
-	private static final Logger log = LoggerFactory.getLogger(EventHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(MessageInputGateway.class);
 
 	
 	@Autowired
