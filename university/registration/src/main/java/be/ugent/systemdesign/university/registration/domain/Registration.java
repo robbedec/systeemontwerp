@@ -3,6 +3,7 @@ package be.ugent.systemdesign.university.registration.domain;
 import java.time.LocalDate;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,38 +22,46 @@ import lombok.Setter;
 public class Registration extends AggregateRoot{
 	
 	@Id	
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int registrationId;
+	@GeneratedValue(strategy = GenerationType.AUTO)	
+	private Integer registrationId;
+	
 	private Date registrationDate;
 	private String email;
 	private String name;
 	private String firstName;
 	private LocalDate dateOfBirth;
-	private String course;
-	private boolean isAccepted;
-	private PayementStatus payementStatus;
+	private String faculty;
+	private String degree;
+	private Status status;	
 	
-	public Registration(Date _registrationDate, String _email, String _name, String _firstName, LocalDate _dateOfBirth, String _course) {
-		this.registrationDate = _registrationDate;
-		this.email = _email;
+	
+	public Registration(Date _registrationDate, String _email, String _name, String _firstName, LocalDate _dateOfBirth, String _faculty, String _degree) {
+		this.registrationDate = _registrationDate;		
+		setEmail(_email);
 		this.name = _name;
 		this.firstName = _firstName;
 		this.dateOfBirth = _dateOfBirth;
-		this.course = _course;
-		this.isAccepted = false;
-		this.payementStatus = PayementStatus.PENDING;
+		this.faculty = _faculty;
+		this.degree = _degree;
+		this.status = Status.SUBMITTED;
 	}
 	
 	public void accept () {
-		this.isAccepted = true;
-		//addDomainEvent();
-		//event versturen
+		this.status = Status.ACCEPTED;
+		addDomainEvent(new RegistrationAcceptedEvent(registrationId.toString(), email, name, firstName, faculty, degree));		
 		//mail laten versturen
 		//account aanmaken
 	}
 	
 	public void reject() {
-		this.isAccepted = false; //mss veranderen naar ENUM?
-		//mail versturen;
+		this.status = Status.DENIED;		
+		//notification service aanspreken
+	}
+	
+	public void setEmail(String _email) {
+		if(!_email.contains("@")) {
+			throw new InvalidRegistrationException();
+		}
+		this.email = _email;
 	}
 }

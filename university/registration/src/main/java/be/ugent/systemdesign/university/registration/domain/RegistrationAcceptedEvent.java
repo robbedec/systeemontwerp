@@ -10,14 +10,16 @@ public class RegistrationAcceptedEvent extends DomainEvent {
 	private String email;
 	private String name;
 	private String firstName;
-	private String course;
+	private String faculty;
+	private String degree;
 	
-	public RegistrationAcceptedEvent(String registrationId, String email, String name, String firstName, String course) {
+	public RegistrationAcceptedEvent(String registrationId, String email, String name, String firstName, String faculty, String degree) {
 		super();
 		this.registrationId = registrationId;
 		this.email = email;
 		this.name = name;
 		this.firstName = firstName;
-		this.course = course;
+		this.faculty = faculty;
+		this.degree = degree;
 	}
 }

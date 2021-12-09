@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import be.ugent.systemdesign.university.registration.domain.InvalidRegistrationException;
 import be.ugent.systemdesign.university.registration.domain.Registration;
 import be.ugent.systemdesign.university.registration.domain.RegistrationRepository;
 
@@ -18,14 +19,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 	RegistrationRepository registrationRepo;
 
 	@Override
-	public Response addRegistration(String email, String name, String firstName,
-			LocalDate dateOfBirth, String course) {
-		Registration r;
+	public Response addRegistration(String email, String name, String firstName, LocalDate dateOfBirth, String faculty, String degree) {
+		Registration r;		
 		try {
-			r = new Registration(new Date(), email, name, firstName, dateOfBirth, course);
+			r = new Registration(new Date(), email, name, firstName, dateOfBirth, faculty, degree);			
 			registrationRepo.save(r);
+		} catch(InvalidRegistrationException ex) {
+			return new Response(ResponseStatus.FAIL, "The registration was invalid");
 		} catch(RuntimeException ex) {
-			return new Response(ResponseStatus.FAIL, "Registration could not be registered");
+			return new Response(ResponseStatus.FAIL, "Registration could not be registered"+" - "+ex.getMessage());
 		}		
 		return new Response(ResponseStatus.SUCCESS, "id:"+r.getRegistrationId());
 	}
@@ -45,7 +47,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public Response rejectRegistration(String registrationId) {
-		// TODO Auto-generated method stub
 		Registration r;
 		try {
 			r = registrationRepo.findOne(Integer.parseInt(registrationId));

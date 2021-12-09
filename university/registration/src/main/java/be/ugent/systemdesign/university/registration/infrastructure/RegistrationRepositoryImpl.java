@@ -1,12 +1,13 @@
 package be.ugent.systemdesign.university.registration.infrastructure;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Repository;
 
-import be.ugent.systemdesign.university.registration.domain.PayementStatus;
 import be.ugent.systemdesign.university.registration.domain.Registration;
 import be.ugent.systemdesign.university.registration.domain.RegistrationRepository;
+import be.ugent.systemdesign.university.registration.domain.Status;
 
 @Repository
 public class RegistrationRepositoryImpl implements RegistrationRepository {
@@ -25,7 +26,7 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 
 	@Override
 	public void save(Registration _r) {
-		RegistrationDataModel dataModel = mapToRegistrationDataModel(_r);
+		RegistrationDataModel dataModel = mapToRegistrationDataModel(_r);		
 		registrationRepo.save(dataModel);
 		
 		_r.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
@@ -37,7 +38,8 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 	}
 	
 	private RegistrationDataModel mapToRegistrationDataModel(Registration _r) {
-		return new RegistrationDataModel(_r.getRegistrationId(), _r.getRegistrationDate(), _r.getEmail(), _r.getName(), _r.getFirstName(), _r.getDateOfBirth(), _r.getCourse(), _r.isAccepted(), _r.getPayementStatus());
+		return new RegistrationDataModel(_r.getRegistrationId(), _r.getRegistrationDate(), 
+				_r.getEmail(), _r.getName(), _r.getFirstName(), _r.getDateOfBirth(), _r.getFaculty(), _r.getDegree(), _r.getStatus());
 	}
 	
 	private Registration mapToRegistration(RegistrationDataModel _rdm) {
@@ -46,17 +48,12 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 							.registrationDate(_rdm.getRegistrationDate())
 							.email(_rdm.getEmail())
 							.name(_rdm.getName())
-							.firstName(_rdm.getFirstName())
+							.firstName(_rdm.getFirstName())							
 							.dateOfBirth(_rdm.getDateOfBirth())
-							.course(_rdm.getCourse())
-							.isAccepted(_rdm.isAccepted())
-							.payementStatus(PayementStatus.valueOf(_rdm.getPayementStatus()))
+							.faculty(_rdm.getFaculty())
+							.degree(_rdm.getDegree())
+							.status(Status.valueOf(_rdm.getStatus()))							
 							.build();
 		return r;
-	}
-	
-	
-	
-	
-	
+	}	
 }

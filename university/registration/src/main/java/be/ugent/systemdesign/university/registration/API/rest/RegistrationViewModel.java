@@ -12,15 +12,17 @@ public class RegistrationViewModel {
 	private String name;
 	private String firstName;
 	private LocalDate dateOfBirth;
-	private String course;
-	private boolean isAccepted;
+	private String faculty;
+	private String degree;
+	private String status;
 	
 	public RegistrationViewModel(RegistrationReadModel r) {
 		email = r.getEmail();
 		name = r.getName();
 		firstName = r.getFirstName();
 		dateOfBirth = r.getDateOfBirth();
-		course = r.getCourse();
-		isAccepted = r.isAccepted();
+		faculty = r.getFaculty();
+		degree = r.getDegree();
+		status = r.getStatus();
 	}
 }

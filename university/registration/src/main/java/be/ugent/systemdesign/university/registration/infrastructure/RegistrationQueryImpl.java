@@ -16,9 +16,8 @@ public class RegistrationQueryImpl implements RegistrationQuery {
 	RegistrationDataModelRepository repo;
 	
 	@Override
-	public List<RegistrationReadModel> giveRegistrations(Boolean isAccepted) {
-		// TODO Auto-generated method stub
-		return repo.findAll().stream().map(el -> mapToRegistrationReadModel(el)).collect(Collectors.toList());
+	public List<RegistrationReadModel> giveRegistrations(String status) {		// 
+		return repo.findByStatus(status).stream().map(el -> mapToRegistrationReadModel(el)).collect(Collectors.toList());		
 	}	
 
 	@Override
@@ -32,8 +31,9 @@ public class RegistrationQueryImpl implements RegistrationQuery {
 				_r.getName(),
 				_r.getFirstName(),
 				_r.getDateOfBirth(),
-				_r.getCourse(),
-				_r.isAccepted()
+				_r.getFaculty(),
+				_r.getDegree(),
+				_r.getStatus()
 		);
 		return r;
 	}

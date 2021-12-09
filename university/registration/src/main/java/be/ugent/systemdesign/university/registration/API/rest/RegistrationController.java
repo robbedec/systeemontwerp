@@ -34,8 +34,8 @@ public class RegistrationController {
 	RegistrationQuery registrationQuery;
 	
 	@GetMapping
-	public List<RegistrationViewModel> getRegistrations(@RequestParam("isAccepted") boolean isAccepted){
-		return registrationQuery.giveRegistrations(isAccepted)
+	public List<RegistrationViewModel> getRegistrations(@RequestParam("status") String status){
+		return registrationQuery.giveRegistrations(status)
 				.stream()
 				.map(el -> new RegistrationViewModel(el))
 				.collect(Collectors.toList());
@@ -60,13 +60,13 @@ public class RegistrationController {
 	
 	@PostMapping
 	public ResponseEntity<String> createRegistration(@RequestBody RegistrationViewModel r){
-		//nog validatie toevoegen
 		Response response = registrationService.addRegistration(
 				r.getEmail(), 
 				r.getName(), 
-				r.getFirstName(), 
+				r.getFirstName(),			
 				r.getDateOfBirth(),
-				r.getCourse()
+				r.getFaculty(),
+				r.getDegree()
 		);
 		return createResponseEntity(response.status, "Registration confirmed", HttpStatus.OK, response.message,HttpStatus.CONFLICT);		
 	}

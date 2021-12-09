@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 
 import be.ugent.systemdesign.university.registration.application.RegistrationService;
 import be.ugent.systemdesign.university.registration.application.Response;
+import be.ugent.systemdesign.university.registration.application.query.RegistrationQuery;
+import be.ugent.systemdesign.university.registration.application.query.RegistrationReadModel;
 import be.ugent.systemdesign.university.registration.domain.Registration;
 import be.ugent.systemdesign.university.registration.domain.RegistrationRepository;
 import be.ugent.systemdesign.university.registration.infrastructure.RegistrationDataModelRepository;
@@ -59,13 +61,15 @@ public class RegistrationApplication {
   }
 	
 	@Bean
-	CommandLineRunner testRepository(RegistrationService service) {
+	CommandLineRunner testRepository(RegistrationService service, RegistrationQuery query) {
 		return (args) -> {			
 			logger.info("$Testing RegistrationService."); 
 			Response response;
 			logger.info("Register new registration (success).");
-			response = service.addRegistration("new@mail.be", "Brum", "DuBleeckur", LocalDate.of(2001, 1, 1), "Burgie");
+			response = service.addRegistration("new@mail.be", "Brum", "DuBleeckur", LocalDate.of(2001, 1, 1), "Geneeskunde", "Biomedische Wetenschappen");			
 			logResponse(response);
+			response = service.addRegistration("new@mail.be", "Brum2", "DuBleeckur2", LocalDate.of(2001, 1, 1), "Geneeskunde", "Biomedische Wetenschappen");
+			logResponse(response);			
 		};
 	}
 }
