@@ -32,18 +32,19 @@ public class Course {
 	private Integer courseCredits;
 	
 	@ManyToOne
-	@JoinColumn(name = "faculty_id")
-	private Faculty faculty;
+	@JoinColumn(name = "degree_id")
+	private DegreeProgramme degree;
 	
-	public Course(String _courseName, Integer _courseCredits, Faculty _faculty) {
+	public Course(String _courseName, Integer _courseCredits, DegreeProgramme _degree) {
 		this.courseName = _courseName;
 		this.courseCredits = _courseCredits;
-		this.faculty = _faculty;
+		this.degree = _degree;
 	}
 	
-	public boolean equals(Course obj) {
+	@Override
+	public boolean equals(Object obj) {
 		if (obj == null) return false;
-		return this.courseName == obj.getCourseName() && this.courseCredits == obj.getCourseCredits();
+		return this.courseName.equals(((Course) obj).getCourseName()) && this.courseCredits == ((Course) obj).getCourseCredits();
 	}
 	
 	@Override

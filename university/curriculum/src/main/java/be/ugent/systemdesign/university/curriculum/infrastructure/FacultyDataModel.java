@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import be.ugent.systemdesign.university.curriculum.domain.Course;
+import be.ugent.systemdesign.university.curriculum.domain.DegreeProgramme;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,11 +22,11 @@ public class FacultyDataModel {
 	@Id
 	private String facultyId;
 	private String facultyName;
-	private List<CourseDataModel> available_courses;
+	private List<DegreeProgrammeDataModel> degrees;
 	
-	public FacultyDataModel(String _facultyId, String _facultyName, List<Course> _availableCourses) {
+	public FacultyDataModel(String _facultyId, String _facultyName, List<DegreeProgramme> _degrees) {
 		this.facultyId = _facultyId;
 		this.facultyName = _facultyName;
-		this.available_courses = _availableCourses.stream().map(c -> new CourseDataModel(c.getName(), c.getCredits())).collect(Collectors.toList());
+		this.degrees = _degrees.stream().map(d -> new DegreeProgrammeDataModel(d.getDegreeName(), d.getAvailableCourses())).collect(Collectors.toList());
 	}
 }

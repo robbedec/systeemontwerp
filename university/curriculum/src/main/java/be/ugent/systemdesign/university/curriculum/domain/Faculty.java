@@ -20,22 +20,17 @@ public class Faculty {
 
 	private String facultyId;
 	private String facultyName;
-	private List<Course> availableCourses;
+	private List<DegreeProgramme> degrees;
 	
 	public Faculty(String facultyName) {
 		this.facultyName = facultyName;
-		this.availableCourses = new ArrayList<>();
+		this.degrees = new ArrayList<>();
 	}
 	
-	public void addCourse(String _name, Integer _credits) {
-		this.availableCourses.add(Course.builder()
-				.name(_name)
-				.credits(_credits)
+	public void addDegree(String _name) {
+		this.degrees.add(DegreeProgramme.builder()
+				.degreeName(_name)
 				.build()
 			);
-	}
-	
-	public void removeCourse(String _name, Integer _credits) {
-		this.availableCourses.remove(new Course(_name, _credits));
 	}
 }

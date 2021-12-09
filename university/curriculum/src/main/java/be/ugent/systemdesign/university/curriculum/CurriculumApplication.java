@@ -65,8 +65,8 @@ public class CurriculumApplication {
 		return (args) -> {
 			DMrepo.deleteAll();
 			
-			Curriculum c = new Curriculum("1", "Ingenieurswetenschappen & architectuur");
-			Curriculum c2 = new Curriculum("2", "Ingenieurswetenschappen & architectuur");
+			Curriculum c = new Curriculum("1", "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
+			Curriculum c2 = new Curriculum("2", "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
 			
 			c.addCourse("Gevorderde algoritmen", 6);
 			c.addCourse("Wiskunde 1", 6);

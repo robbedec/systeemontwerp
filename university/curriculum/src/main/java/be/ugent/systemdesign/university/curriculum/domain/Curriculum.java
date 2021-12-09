@@ -32,8 +32,9 @@ public class Curriculum extends AggregateRoot {
 	private Year academicYear;
 	private List<Course> courses;
 	private String facultyName;
+	private String degreeName;
 	
-	public Curriculum(String studentId, String facultyName) {
+	public Curriculum(String studentId, String facultyName, String degreeName) {
 		this.studentId = studentId;
 		this.curriculumStatus = CurriculumStatus.PROVISIONAL;
 		this.dateCreated = LocalDate.now();
@@ -41,6 +42,7 @@ public class Curriculum extends AggregateRoot {
 		this.courses = new ArrayList<>();
 		this.academicYear = Year.now();
 		this.facultyName = facultyName;
+		this.degreeName = degreeName;
 	}
 	
 	public void addCourse(String _name, Integer _credits) {

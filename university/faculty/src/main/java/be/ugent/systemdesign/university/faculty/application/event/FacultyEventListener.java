@@ -34,9 +34,10 @@ public class FacultyEventListener {
 	@Async
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void handleFacultyCoursesChangedAsync(FacultyCoursesChangedDomainEvent event) {
-		log.info(">handle FacultyCoursesChanged Async of event created at {}, for faculty: {}: {} with {} points ({})", 
+		log.info(">handle FacultyCoursesChanged Async of event created at {}, for faculty: {} ({}): {} with {} points ({})", 
 				event.getCreatedTime(), 
 				event.getFacultyName(), 
+				event.getDegreeName(),
 				event.getCourseName(),
 				event.getCourseCredits().toString(),
 				event.getChangeType().name()

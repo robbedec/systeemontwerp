@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import be.ugent.systemdesign.university.faculty.domain.Course;
+import be.ugent.systemdesign.university.faculty.domain.DegreeProgramme;
 import be.ugent.systemdesign.university.faculty.domain.Faculty;
 import be.ugent.systemdesign.university.faculty.domain.FacultyRepository;
 
@@ -16,11 +17,13 @@ public class FacultyServiceImpl implements FacultyService {
 	FacultyRepository facultyRepo;
 
 	@Override
-	public Response addCourseToFaculty(Long facultyId, String courseName, Integer courseCredits) {
+	public Response addCourseToFaculty(String facultyName, String degreeName, String courseName, Integer courseCredits) {
 		
 		try {
-			Faculty f = facultyRepo.findByFacultyId(facultyId);
-			f.addCourse(new Course(courseName, courseCredits, f));
+			Faculty f = facultyRepo.findByFacultyName(facultyName);
+			DegreeProgramme d = f.degrees.stream().filter(x -> x.getDegreeName().equals(degreeName)).findAny().orElse(null);
+			
+			d.addCourse(new Course(courseName, courseCredits, d));
 			facultyRepo.save(f);
 			
 		} catch (Exception e) {
@@ -31,10 +34,12 @@ public class FacultyServiceImpl implements FacultyService {
 	}
 
 	@Override
-	public Response removeCourseFromFaculty(Long facultyId, String courseName, Integer courseCredits) {
+	public Response removeCourseFromFaculty(Long facultyId, Long degreeId, String courseName, Integer courseCredits) {
 		try {
 			Faculty f = facultyRepo.findByFacultyId(facultyId);
-			f.removeCourse(new Course(courseName, courseCredits, f));
+			DegreeProgramme d = f.degrees.stream().filter(x -> x.getDegreeId() == degreeId).findAny().orElse(null);
+			
+			d.removeCourse(new Course(courseName, courseCredits, d));
 			facultyRepo.save(f);
 			
 		} catch (Exception e) {
@@ -43,7 +48,4 @@ public class FacultyServiceImpl implements FacultyService {
 		
 		return new Response(ResponseStatus.SUCCESS, "Course removed");
 	}
-	
-	
-
 }

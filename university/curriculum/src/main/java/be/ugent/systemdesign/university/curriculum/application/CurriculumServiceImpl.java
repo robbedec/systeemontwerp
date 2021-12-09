@@ -15,6 +15,7 @@ import be.ugent.systemdesign.university.curriculum.domain.Curriculum;
 import be.ugent.systemdesign.university.curriculum.domain.CurriculumRepository;
 import be.ugent.systemdesign.university.curriculum.domain.CurriculumStatus;
 import be.ugent.systemdesign.university.curriculum.domain.CurriculumValidator;
+import be.ugent.systemdesign.university.curriculum.domain.DegreeProgramme;
 import be.ugent.systemdesign.university.curriculum.domain.Faculty;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCourseChangeType;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCoursesRepository;
@@ -45,7 +46,9 @@ public class CurriculumServiceImpl implements CurriculumService {
 			List<Course> updatedCourses = CourseDIFF.createDIFF(c.getCourses(), changedCourses, changes);
 			
 			Faculty facultyAssignedToCurriculum = facultyRepo.findByFacultyName(c.getFacultyName());
-			boolean isValid = CurriculumValidator.validateCurriculum(facultyAssignedToCurriculum.getAvailableCourses(), updatedCourses);
+			DegreeProgramme degreeProgrammeAssignedToCurriculum = facultyAssignedToCurriculum.getDegrees().stream().filter(x -> x.getDegreeName().equals(c.getDegreeName())).findAny().orElseThrow(FacultyNotFoundException::new);
+			
+			boolean isValid = CurriculumValidator.validateCurriculum(degreeProgrammeAssignedToCurriculum.getAvailableCourses(), updatedCourses);
 			
 			if (isValid) {
 				c.changeCurriculum(updatedCourses, userIsStudent(userId), changes);
@@ -113,10 +116,11 @@ public class CurriculumServiceImpl implements CurriculumService {
 	}
 	
 	@Override
-	public Response noteFacultyCoursesChanged(String facultyName, FacultyCourseChangeType changeType,
+	public Response noteFacultyCoursesChanged(String facultyName, String degreeName, FacultyCourseChangeType changeType,
 			String courseName, Integer courseCredits) {
 		
 		Faculty faculty;
+		DegreeProgramme degree;
 		
 		try {
 			faculty = facultyRepo.findByFacultyName(facultyName);
@@ -125,13 +129,15 @@ public class CurriculumServiceImpl implements CurriculumService {
 			faculty = new Faculty(facultyName);
 		}
 		
+		degree = faculty.getDegrees().stream().filter(x -> x.getDegreeName().equals(degreeName)).findAny().orElse(new DegreeProgramme(degreeName));
+		
 		try {
 			switch (changeType) {
 				case ADDED:
-					faculty.addCourse(courseName, courseCredits);
+					degree.addCourse(courseName, courseCredits);
 					break;
 				case REMOVED:
-					faculty.removeCourse(courseName, courseCredits);
+					degree.removeCourse(courseName, courseCredits);
 					break;
 			}
 			

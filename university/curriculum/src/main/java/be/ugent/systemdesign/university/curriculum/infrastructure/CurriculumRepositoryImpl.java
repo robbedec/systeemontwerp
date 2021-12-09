@@ -52,7 +52,8 @@ public class CurriculumRepositoryImpl implements CurriculumRepository {
 			_c.getDateLastChanged(),
 			_c.getAcademicYear(),
 			_c.getCourses(),
-			_c.getFacultyName()
+			_c.getFacultyName(),
+			_c.getDegreeName()
 		);
 	}
 	
@@ -72,6 +73,7 @@ public class CurriculumRepositoryImpl implements CurriculumRepository {
 							.build())
 					.collect(Collectors.toList()))
 			.facultyName(_c.getFacultyName())
+			.degreeName(_c.getDegreeName())
 			.build();
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import be.ugent.systemdesign.university.curriculum.domain.Course;
+import be.ugent.systemdesign.university.curriculum.domain.DegreeProgramme;
 import be.ugent.systemdesign.university.curriculum.domain.Faculty;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCoursesRepository;
 
@@ -33,7 +34,7 @@ public class FacultyCoursesRepositoryImpl implements FacultyCoursesRepository {
 		return new FacultyDataModel(
 				f.getFacultyId(),
 				f.getFacultyName(),
-				f.getAvailableCourses()
+				f.getDegrees()
 		);
 	}
 	
@@ -41,14 +42,20 @@ public class FacultyCoursesRepositoryImpl implements FacultyCoursesRepository {
 		return Faculty.builder()
 				.facultyId(f.getFacultyId())
 				.facultyName(f.getFacultyName())
-				.availableCourses(f.getAvailable_courses()
+				.degrees(f.getDegrees()
 					.stream()
-					.map(t -> Course.builder()
-							.name(t.getName())
-							.credits(t.getCredits())
-							.build())
-					.collect(Collectors.toList()))
-				.build();
+					.map(d -> DegreeProgramme.builder()
+						.degreeName(d.getDegreeName())
+						.availableCourses(d.getAvailable_courses()
+							.stream()
+							.map(c -> Course.builder()
+								.name(c.getName())
+								.credits(c.getCredits())
+								.build()
+							).collect(Collectors.toList()))
+						.build()
+					).collect(Collectors.toList())
+				).build();
 	}
 
 }

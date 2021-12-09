@@ -9,9 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class FacultyViewModel {
+public class DegreeProgrammeViewModel {
 	
-	String facultyId;
-	String facultyName;
-	List<DegreeProgrammeViewModel> degrees;
+	String degreeName;
+	List<CourseViewModel> available_courses;
 }

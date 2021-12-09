@@ -12,6 +12,7 @@ public class FacultyCoursesChangedEvent {
 	
 	private String changeType;
 	private String facultyName;
+	private String degreeName;
 	private String courseName;
 	private Integer courseCredits;
 }

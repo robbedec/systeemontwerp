@@ -33,19 +33,13 @@ public class Faculty extends AggregateRoot {
 	private String facultyName;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "faculty", cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<Course> availableCourses = new ArrayList<>();
+	public List<DegreeProgramme> degrees = new ArrayList<>();
 	
 	public Faculty(String _name) {
 		this.facultyName = _name;
 	}
 	
-	public void addCourse(Course _course) {
-		availableCourses.add(_course);
-		addDomainEvent(new FacultyCoursesChangedDomainEvent(FacultyCoursesChangeType.ADDED, facultyName, _course.getCourseName(), _course.getCourseCredits()));
-	}
-	
-	public void removeCourse(Course _course) {
-		availableCourses.remove(_course);
-		addDomainEvent(new FacultyCoursesChangedDomainEvent(FacultyCoursesChangeType.REMOVED, facultyName, _course.getCourseName(), _course.getCourseCredits()));
+	public void addDegree(DegreeProgramme _d) {
+		this.degrees.add(_d);
 	}
 }

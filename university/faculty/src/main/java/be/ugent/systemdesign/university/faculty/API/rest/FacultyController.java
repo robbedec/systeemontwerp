@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import be.ugent.systemdesign.university.faculty.domain.Course;
+import be.ugent.systemdesign.university.faculty.domain.DegreeProgramme;
 import be.ugent.systemdesign.university.faculty.domain.Faculty;
 import be.ugent.systemdesign.university.faculty.infrastructure.FacultyJPARepository;
 
@@ -25,13 +26,13 @@ public class FacultyController {
 	
 	@GetMapping
 	public List<FacultyViewModel> findAll() {
-		return repo.findAll().stream().map(fac -> new FacultyViewModel(fac.getFacultyId().toString(), fac.getFacultyName(), mapCoursesToViewmodel(fac.getAvailableCourses()))).collect(Collectors.toList());
+		return repo.findAll().stream().map(fac -> new FacultyViewModel(fac.getFacultyId().toString(), fac.getFacultyName(), mapDegreesToViewModel(fac.getDegrees()))).collect(Collectors.toList());
 	}
 	
 	@GetMapping("{id}")
 	public FacultyViewModel findByFacultyId(@PathVariable("id") String facultyId) {
 		Faculty f = repo.getById(Long.parseLong(facultyId));
-		return new FacultyViewModel(f.getFacultyId().toString(), f.getFacultyName(), mapCoursesToViewmodel(f.getAvailableCourses()));
+		return new FacultyViewModel(f.getFacultyId().toString(), f.getFacultyName(), mapDegreesToViewModel(f.getDegrees()));
 	}
 	
 	/*
@@ -42,8 +43,15 @@ public class FacultyController {
 	@GetMapping("all")
 	public FacultyViewModel findByFacultyName(@RequestParam("facultyName") String facultyName) {
 		Faculty f = repo.findByFacultyName(facultyName);
-		return new FacultyViewModel(f.getFacultyId().toString(), f.getFacultyName(), mapCoursesToViewmodel(f.getAvailableCourses()));
+		return new FacultyViewModel(f.getFacultyId().toString(), f.getFacultyName(), mapDegreesToViewModel(f.getDegrees()));
 		
+	}
+	
+	private List<DegreeProgrammeViewModel> mapDegreesToViewModel(List<DegreeProgramme> dl) {
+		return dl.stream().map(d -> new DegreeProgrammeViewModel(
+					d.getDegreeName(),
+					mapCoursesToViewmodel(d.getAvailableCourses())
+				)).collect(Collectors.toList());
 	}
 	
 	private List<CourseViewModel> mapCoursesToViewmodel(List<Course> cl) {
