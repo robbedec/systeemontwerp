@@ -1,30 +1,31 @@
-i<html>
-	<p>Curriculum Front end - Go back to <a href="index.html">Home</a></p></br>
+<html>
+	<b><p>Curriculum Front end - Go back to <a href="index.html">Home</a></p></b></br>
 	<label>Execute actions with the following userId:</label>
-	<input id="user_id" type="text"</></br></br>
- 	<label>Student ID:</label>
+	<input id="user_id" type="text" value="1"</b></br></br>
+ 	<label>Student ID (curriculumId):</label>
 	<select name="curriculums" id="student_ids" onChange="studentIdChanged()">
 		<option id="dropdown_placeholder" value="" disabled selected>Select a studentID</option>
 	</select>
 	
 	</br>
 	
-	<label id="current_status">Current status: </label >
-	
-	<h3 display="none">Change Curriculum</h3 >
-	<form id="c_overview">
-		<div id="c_boxes_list">
-    	</div>
-    	</br>
-		<input onClick="sendChangeRequest()" id="overview_button" type="hidden" value="Change curriculum" />
-	</form>
-	
-	<h3 display="none">Mark as proposed</h3 >
-	<input id="mark_propose" onClick="proposeCurriculumRequest()" type="submit" value="Propose curriculum" />
-	<h3 display="none">Review Curriculum</h3 >
-	<p>Make sure to provide a userId</p>
-	<input id="review_accept" onClick="acceptCurriculumRequest()" type="submit" value="Accept curriculum" />
-	<input id="review_reject" onClick="rejectCurriculumRequest()" type="submit" value="Reject curriculum" />
+	<div id="hide_init" style="display:none">
+		<label id="current_status">Current status: </label >
+		
+		<h3 display="none">Change Curriculum</h3 >
+		<form id="c_overview">
+			<div id="c_boxes_list">
+	    	</div>
+	    	</br>
+			<input onClick="sendChangeRequest()" id="overview_button" type="hidden" value="Change curriculum" />
+		</form>
+		<h3 display="none">Mark as proposed</h3 >
+		<input id="mark_propose" onClick="proposeCurriculumRequest()" type="button" value="Propose curriculum" />
+		<h3 display="none">Review Curriculum</h3 >
+		<p>Make sure to provide a userId</p>
+		<input id="review_accept" onClick="acceptCurriculumRequest()" type="button" value="Accept curriculum" />
+		<input id="review_reject" onClick="rejectCurriculumRequest()" type="button" value="Reject curriculum" />
+	</div>
 </html>
 
 <script>
@@ -54,12 +55,14 @@ i<html>
 	// For the given ID
 	function studentIdChanged() {
     	dropdown = document.getElementById("student_ids");
-
+		
+		document.getElementById("hide_init").style.display = "block";
 
     	fetchCurriculums().then(curriculums => {
       	const dropdown_value = dropdown.options[dropdown.selectedIndex].value;
       	const curriculum = curriculums.find(c => c.curriculumId === dropdown_value);
 
+		console.log(curriculum)
       	return curriculum;
 
 		}).then(curriculum => {
@@ -70,15 +73,15 @@ i<html>
 	        	const currentstatus = document.getElementById("current_status");
 	        	
 	        	// Display currentStatus
-	        	currentstatus.innerText += curriculum.curriculumStatus; 
+	        	currentstatus.innerText = "Current Status: " + curriculum.curriculumStatus; 
 	
 	        	// First step is to remove existing checkboxes before adding the new ones
 	        	while (cboxes_list.firstChild) {
 	          		cboxes_list.removeChild(cboxes_list.lastChild);
 	        	}
-
+				console.log(faculty)
 	        	// Add checkbox for every course thaught in the faculty
-	        	faculty.available_courses.forEach(course => {
+	        	faculty.degrees.find(x => x.degreeName === curriculum.degreeName).available_courses.forEach(course => {
 		          	const label = document.createElement("label");
 		
 		          	const paragraph = document.createElement("span");
@@ -133,7 +136,7 @@ i<html>
       	
 	      	// Send post request
 	      	fetch(curriculum_url + curriculum.curriculumId + "/change?" + new URLSearchParams({
-	      		accountId: 1, 
+	      		userId: document.getElementById("user_id").value, 
 	    	}), {
 	        	method: "PUT",
 	        	headers: {"content-Type": "application/json"},      
@@ -159,7 +162,10 @@ i<html>
 			fetch(curriculum_url + curriculum.curriculumId + "/markproposed", {
 				method: "PUT",
 	        	headers: {"content-Type": "application/json"},    
-			}).then(res => console.log(res));
+			}).then(res => {
+				console.log(res);
+				location.reload();
+			});
 		});	
 	}
 	
@@ -174,11 +180,14 @@ i<html>
 		}).then(curriculum => {
 			fetch(curriculum_url + curriculum.curriculumId + "/review?" + new URLSearchParams({
 				verdict: "ACCEPTED",
-				accountId: 1,
+				userId: document.getElementById("user_id").value,
 			}), {
 				method: "PUT",
 				headers: {"content-Type": "application/json"}
-			}).then(res => console.log(res));
+			}).then(res => {
+				console.log(res)
+				location.reload();
+			});
 		});
 		
 	}
@@ -194,11 +203,14 @@ i<html>
 		}).then(curriculum => {
 			fetch(curriculum_url + curriculum.curriculumId + "/review?" + new URLSearchParams({
 				verdict: "REJECTED",
-				accountId: 1,
+				userId: document.getElementById("user_id").value,
 			}), {
 				method: "PUT",
 				headers: {"content-Type": "application/json"}
-			}).then(res => console.log(res));
+			}).then(res => {
+				console.log(res);
+				location.reload();
+			});
 		});
 	}
 
@@ -214,7 +226,7 @@ i<html>
 
       		// TODO: change to studentid
       		option.value = curr.curriculumId;
-      		option.label = curr.curriculumId;
+      		option.label = curr.studentId + " (" + curr.curriculumId + ")";
       		option.selected = false;
 
       		dropdown.appendChild(option);

@@ -30,6 +30,7 @@ public class Faculty {
 	public void addDegree(String _name) {
 		this.degrees.add(DegreeProgramme.builder()
 				.degreeName(_name)
+				.availableCourses(new ArrayList<>())
 				.build()
 			);
 	}

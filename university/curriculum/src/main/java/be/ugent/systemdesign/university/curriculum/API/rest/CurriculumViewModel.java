@@ -19,6 +19,8 @@ public class CurriculumViewModel {
 	private String academicYear;
 	private List<CourseViewModel> courses;
 	private String facultyName;
+	private String degreeName;
+	private String studentId;
 	
 	public CurriculumViewModel(CurriculumReadModel _c) {
 		this.curriculumId = _c.getCurriculumId();
@@ -26,5 +28,7 @@ public class CurriculumViewModel {
 		this.academicYear = _c.getAcademicYear().toString();
 		this.courses = _c.getCourses().stream().map(co -> new CourseViewModel(co)).collect(Collectors.toList());
 		this.facultyName = _c.getFacultyName();
+		this.degreeName = _c.getDegreeName();
+		this.studentId = _c.getStudentId();
 	}
 }

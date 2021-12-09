@@ -36,7 +36,9 @@ public class CurriculumQueryImpl implements CurriculumQuery {
 						c.getName(), 
 						c.getCredits()
 				)).collect(Collectors.toList()),
-			_c.getFacultyName()
+			_c.getFacultyName(),
+			_c.getDegreeName(),
+			_c.getStudentId()
 		);
 		
 		return crm;

@@ -79,7 +79,7 @@ public class CurriculumController {
 	}
 	
 	@PutMapping("{id}/change")
-	public ResponseEntity<String> changeCurriculumWithId(@RequestBody CurriculumViewModel curriculumVM, @PathVariable("id") String curriculumId, @RequestParam("accountId") String accountId) {
+	public ResponseEntity<String> changeCurriculumWithId(@RequestBody CurriculumViewModel curriculumVM, @PathVariable("id") String curriculumId, @RequestParam("userId") String accountId) {
 		
 		List<Course> requestCourses = curriculumVM.getCourses().stream().map(cvm -> new Course(cvm.getName(), Integer.valueOf(cvm.getCredits()))).collect(Collectors.toList());
 		

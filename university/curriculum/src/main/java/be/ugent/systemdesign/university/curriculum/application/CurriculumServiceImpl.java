@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import be.ugent.systemdesign.university.curriculum.CurriculumApplication;
 import be.ugent.systemdesign.university.curriculum.application.event.FacultyCoursesChangedEvent;
 import be.ugent.systemdesign.university.curriculum.domain.Course;
 import be.ugent.systemdesign.university.curriculum.domain.CourseDIFF;
@@ -20,13 +23,17 @@ import be.ugent.systemdesign.university.curriculum.domain.Faculty;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCourseChangeType;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCoursesRepository;
 import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumInvalidException;
+import be.ugent.systemdesign.university.curriculum.domain.exception.DuplicateCourseException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProposedCurriculumCanBeReviewedException;
+import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProvisionOrRejectedCurriculumCanBeProposedException;
 import be.ugent.systemdesign.university.curriculum.infrastructure.CurriculumNotFoundException;
 import be.ugent.systemdesign.university.curriculum.infrastructure.FacultyNotFoundException;
 
 @Service
 @Transactional
 public class CurriculumServiceImpl implements CurriculumService {
+	
+	private static final Logger log = LoggerFactory.getLogger(CurriculumServiceImpl.class);
 	
 	@Autowired
 	CurriculumRepository curriculumRepo;
@@ -96,7 +103,12 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 		try {
 			Curriculum c = curriculumRepo.findByCurriculumId(curriculumId);
-		} catch (RuntimeException e) {
+			c.markCurriculumAsProposed();
+			
+			curriculumRepo.save(c);
+		} catch (CurriculumNotFoundException e) {
+			return new Response(ResponseStatus.FAIL, "Could not find curriculum with id " + curriculumId);
+		} catch (OnlyProvisionOrRejectedCurriculumCanBeProposedException e) {
 			return new Response(ResponseStatus.FAIL, "Could not find curriculum with id " + curriculumId);
 		}
 		
@@ -122,16 +134,23 @@ public class CurriculumServiceImpl implements CurriculumService {
 		Faculty faculty;
 		DegreeProgramme degree;
 		
+		// After this try-catch block the faculty and degree should exist
 		try {
 			faculty = facultyRepo.findByFacultyName(facultyName);
-		} catch(FacultyNotFoundException e) {
+			
+			if (!faculty.getDegrees().stream().anyMatch(x -> x.getDegreeName().equals(degreeName))) {
+				faculty.addDegree(degreeName);
+			}
+			
+		} catch(Exception e) {
 			// Create a new faculty if it does not yet exist
 			faculty = new Faculty(facultyName);
+			faculty.addDegree(degreeName);
 		}
 		
-		degree = faculty.getDegrees().stream().filter(x -> x.getDegreeName().equals(degreeName)).findAny().orElse(new DegreeProgramme(degreeName));
-		
 		try {
+			degree = faculty.getDegrees().stream().filter(x -> x.getDegreeName().equals(degreeName)).findAny().orElseThrow(Exception::new);
+			
 			switch (changeType) {
 				case ADDED:
 					degree.addCourse(courseName, courseCredits);
@@ -141,11 +160,13 @@ public class CurriculumServiceImpl implements CurriculumService {
 					break;
 			}
 			
+			facultyRepo.save(faculty);
+			
+		} catch (DuplicateCourseException e) {
+			return new Response(ResponseStatus.SUCCESS, "Course is already present");
 		} catch (Exception e) {
 			return new Response(ResponseStatus.FAIL, e.getMessage());
 		}
-		
-		facultyRepo.save(faculty);
 		
 		return new Response(ResponseStatus.SUCCESS, "");
 	}
