@@ -60,7 +60,7 @@ public class CourseQueryImpl implements CourseQuery{
 		List<CourseMaterial> courseMaterials = courseAccessDomainService.getAccessibleCourseMaterials(studentId, courseId);
 		CourseWithCourseMaterialViewModel c_m = new CourseWithCourseMaterialViewModel();
 		c_m.setCourseName(courseName);
-		c_m.setCourseMaterials(courseMaterials.stream().map(c -> new CourseMaterialViewModel(c.getName(), c.getTimestamp(), c.getFile())).toList());
+		c_m.setCourseMaterials(courseMaterials.stream().map(c -> new CourseMaterialViewModel(c.getName(), c.getTimestamp(), c.getFile())).collect(Collectors.toList()));
 		return c_m;
 	}
 	

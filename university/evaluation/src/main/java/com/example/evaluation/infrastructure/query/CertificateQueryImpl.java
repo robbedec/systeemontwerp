@@ -8,8 +8,8 @@ import com.example.evaluation.application.query.CertificateVerificationReadModel
 import com.example.evaluation.infrastructure.repository.CertificateDataModelRepository;
 
 @Component
-public class CertificateQueryImpl implements CertificateQuery{
-	
+public class CertificateQueryImpl implements CertificateQuery {
+
 	@Autowired
 	CertificateDataModelRepository certifcateDMRepo;
 
@@ -22,5 +22,5 @@ public class CertificateQueryImpl implements CertificateQuery{
 			return new CertificateVerificationReadModel(false);
 		}
 	}
-	
+
 }

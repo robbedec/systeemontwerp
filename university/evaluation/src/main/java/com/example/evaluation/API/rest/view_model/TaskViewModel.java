@@ -7,4 +7,5 @@ public class TaskViewModel {
 	public final String courseId;
 	public final String description;
 	public final String dueDate;
+	public final String weight;
 }

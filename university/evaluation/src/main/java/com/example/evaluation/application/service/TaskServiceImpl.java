@@ -1,6 +1,6 @@
-package com.example.evaluation.application;
+package com.example.evaluation.application.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,10 +28,13 @@ public class TaskServiceImpl implements TaskService {
 	TaskSubmissionRepository taskSubmissionRepo;
 
 	@Override
-	public Response createTask(String courseId, String description, LocalDate dueDate) {
-		Task task = new Task(null, courseId, description, dueDate);
+	public Response createTask(String courseId, String description, LocalDateTime dueDate, double weight) {
+		Task task = new Task(null, courseId, description, dueDate, weight);
 		try {
 			task = taskRepo.save(task);
+			
+			// TODO create submission for every student
+			
 			return new Response(ResponseStatus.SUCCESS, "ID " + task.getTaskId());
 		} catch (Exception e) {
 			return new Response(ResponseStatus.FAIL, "Failed to create task");
@@ -40,11 +43,11 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public Response submitTask(String taskId, String studentId, String file) {
-		TaskSubmission taskSubmission = new TaskSubmission(null, taskId, studentId, file, LocalDate.now(), -1);
+		TaskSubmission taskSubmission = new TaskSubmission(null, taskId, studentId, file, LocalDateTime.now(), -1);
 
 		try {
 			Task task = taskRepo.findById(taskId);
-			if (!taskSubmission.submittedBeforeDueDate(task.getDueDate())) {
+			if (task.dueDatePassed()) {
 				return new Response(ResponseStatus.FAIL, "Missed due date");
 			}
 
@@ -77,25 +80,25 @@ public class TaskServiceImpl implements TaskService {
 	public Response checkPlagiarism(String taskId) {
 		List<TaskSubmission> taskSubmissions = taskSubmissionRepo.findByTaskId(taskId);
 		Set<String> plagiarismTasks = new HashSet<>();
-		
+
 		for (int i = 0; i < taskSubmissions.size(); i++) {
 			String file1 = taskSubmissions.get(i).getFile();
-			if(file1 == null || file1.length() == 0)
+			if (file1 == null || file1.length() == 0)
 				continue;
-			
+
 			for (int j = 0; j < taskSubmissions.size(); j++) {
 				String file2 = taskSubmissions.get(j).getFile();
-				if(file2 == null || file2.length() == 0)
+				if (file2 == null || file2.length() == 0)
 					continue;
-				
+
 				double similarity = longestCommonSubsequence(file1, file2) / Math.max(file1.length(), file2.length());
-				if(similarity > 0.5) {
-					if(!plagiarismTasks.contains(taskSubmissions.get(i).getSubmissionId())) {
+				if (similarity > 0.5) {
+					if (!plagiarismTasks.contains(taskSubmissions.get(i).getSubmissionId())) {
 						taskSubmissions.get(i).plagiarismDetected();
 						plagiarismTasks.add(taskSubmissions.get(i).getSubmissionId());
 						taskSubmissionRepo.save(taskSubmissions.get(i));
 					}
-					if(!plagiarismTasks.contains(taskSubmissions.get(j).getSubmissionId())) {
+					if (!plagiarismTasks.contains(taskSubmissions.get(j).getSubmissionId())) {
 						taskSubmissions.get(j).plagiarismDetected();
 						plagiarismTasks.add(taskSubmissions.get(j).getSubmissionId());
 						taskSubmissionRepo.save(taskSubmissions.get(j));

@@ -1,6 +1,6 @@
 package com.example.evaluation.infrastructure.data_model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,11 +21,11 @@ import lombok.Setter;
 public class TaskSubmissionDataModel {
 	@Id
 	@GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private String submissionId;
 	private String taskId;
 	private String studentId;
 	private String file;
-	private LocalDate dateSubmited;
+	private LocalDateTime dateSubmited;
 	private int score;
 }

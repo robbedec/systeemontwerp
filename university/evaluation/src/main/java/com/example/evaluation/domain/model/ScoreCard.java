@@ -16,4 +16,12 @@ public class ScoreCard {
 	private String studentId;
 	private String degreeId;
 	private List<CourseScore> scores;
+
+	public boolean passedAllCourses() {
+		for (CourseScore courseScore : scores) {
+			if (!courseScore.passed())
+				return false;
+		}
+		return true;
+	}
 }

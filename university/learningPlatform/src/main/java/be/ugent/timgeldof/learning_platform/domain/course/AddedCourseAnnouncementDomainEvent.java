@@ -1,7 +1,6 @@
 package be.ugent.timgeldof.learning_platform.domain.course;
 
 import java.util.List;
-
 import be.ugent.timgeldof.learning_platform.domain.seedwork.DomainEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

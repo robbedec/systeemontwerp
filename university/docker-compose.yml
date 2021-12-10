@@ -59,14 +59,26 @@ services:
     environment:
       - spring.cloud.stream.kafka.binder.brokers=kafka
       - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
+  learningplatform:
+    build: ./learningPlatform
+    container_name: learningPlatform
+    links:
+      - kafka
+    depends_on:
+      - kafka
+    environment:
+      - spring.cloud.stream.kafka.binder.brokers=kafka
+      - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
   api_gw:
     build: ./api_gateway
     volumes:
       - ./api_gateway/target:/app
     links:
       - curriculum
+      - learningplatform
     depends_on:
       - curriculum
+      - learningplatform
     ports:
       - 80:8080
     container_name: api_gateway

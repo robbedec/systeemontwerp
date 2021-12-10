@@ -18,6 +18,7 @@ public class ApiGatewayApplication {
 		return builder.routes()
 				.route(r -> r.host("*").and().path("/api/curriculum/**").uri("http://curriculum:2223/api/curriculum/"))
 				.route(r -> r.host("*").and().path("/api/faculty/**").uri("http://faculty:2224/api/faculty/"))
+				.route(r -> r.host("*").and().path("/api/learningplatform/**").uri("http://learningplatform:2229/api/learningplatform/"))
 				.build();
 	}
 }

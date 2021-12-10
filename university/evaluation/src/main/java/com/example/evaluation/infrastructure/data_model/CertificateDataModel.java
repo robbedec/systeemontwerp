@@ -19,7 +19,7 @@ import lombok.Setter;
 public class CertificateDataModel {
 	@Id
 	@GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private String certificateId;
 	private String studentId;
 	private String degreeId;

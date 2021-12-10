@@ -1,4 +1,4 @@
-package com.example.evaluation.application;
+package com.example.evaluation.application.service;
 
 public interface ScoreCardService {
 	Response generateScoreCards(String degreeId);
