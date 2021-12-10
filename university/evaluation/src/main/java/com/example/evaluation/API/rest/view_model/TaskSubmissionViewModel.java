@@ -12,8 +12,11 @@ public class TaskSubmissionViewModel {
 	public TaskSubmissionViewModel(TaskSubmissionReadModel taskSubmissionRM) {
 		studentId = taskSubmissionRM.studentId;
 		taskId = taskSubmissionRM.taskId;
-		file = taskSubmissionRM.file;
 		dateSubmitted = taskSubmissionRM.dateSubmitted.toString();
 		score = taskSubmissionRM.score == -1 ? "-/20" : taskSubmissionRM.score + "/20";
+		if(taskSubmissionRM.file != null && taskSubmissionRM.file.length() == 0)
+			file = taskSubmissionRM.file;
+		else
+			file = "Nothing submitted";
 	}
 }

@@ -15,4 +15,8 @@ public class Task {
 	private String description;
 	private LocalDateTime dueDate;
 	private double weight;
+	
+	public boolean dueDatePassed() {
+		return LocalDateTime.now().isAfter(dueDate);
+	}
 }

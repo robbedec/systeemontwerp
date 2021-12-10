@@ -21,12 +21,6 @@ public class TaskSubmission extends AggregateRoot {
 	private LocalDateTime dateSubmitted;
 	private int score;
 
-	public boolean submittedBeforeDueDate(LocalDateTime dueDate) {
-		if (dueDate == null)
-			return true;
-		return dateSubmitted.isBefore(dueDate);
-	}
-
 	public void assignScore(int score) {
 		if (score < 0 || score > 20)
 			throw new InvalidScoreException();
@@ -40,5 +34,9 @@ public class TaskSubmission extends AggregateRoot {
 	public void plagiarismDetected() {
 		score = 0;
 		addDomainEvent(new PlagiarismDetectedDomainEvent(taskId, studentId));
+	}
+	
+	public boolean passed() {
+		return score >= 10;
 	}
 }

@@ -44,7 +44,7 @@ public class TaskServiceImpl implements TaskService {
 
 		try {
 			Task task = taskRepo.findById(taskId);
-			if (!taskSubmission.submittedBeforeDueDate(task.getDueDate())) {
+			if (task.dueDatePassed()) {
 				return new Response(ResponseStatus.FAIL, "Missed due date");
 			}
 
