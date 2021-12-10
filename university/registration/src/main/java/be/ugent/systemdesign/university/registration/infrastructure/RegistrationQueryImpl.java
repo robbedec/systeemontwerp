@@ -27,6 +27,7 @@ public class RegistrationQueryImpl implements RegistrationQuery {
 
 	private RegistrationReadModel mapToRegistrationReadModel(RegistrationDataModel _r) {
 		RegistrationReadModel r = new RegistrationReadModel(
+				_r.getRegistrationId(),
 				_r.getEmail(),
 				_r.getName(),
 				_r.getFirstName(),

@@ -1,11 +1,14 @@
 package be.ugent.systemdesign.university.registration.application;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
 public class Response {
 	
-	final public String message;
-	final public ResponseStatus status;
-	Response(ResponseStatus status, String message){
-		this.status = status; 
-		this.message = message;
-	}
+	private final ResponseStatus status;
+	private final String message;	
 }

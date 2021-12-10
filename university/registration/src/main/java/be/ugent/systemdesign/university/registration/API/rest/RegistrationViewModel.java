@@ -8,10 +8,11 @@ import lombok.Getter;
 @Getter
 public class RegistrationViewModel {
 
+	private String registrationId;
 	private String email;
 	private String name;
 	private String firstName;
-	private LocalDate dateOfBirth;
+	private String dateOfBirth;
 	private String faculty;
 	private String degree;
 	private String status;
@@ -20,7 +21,7 @@ public class RegistrationViewModel {
 		email = r.getEmail();
 		name = r.getName();
 		firstName = r.getFirstName();
-		dateOfBirth = r.getDateOfBirth();
+		dateOfBirth = r.getDateOfBirth().toString();
 		faculty = r.getFaculty();
 		degree = r.getDegree();
 		status = r.getStatus();

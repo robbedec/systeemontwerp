@@ -28,12 +28,17 @@ public class EventHandler {
 	}
 	
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void handlePayementToLate(PayementToLateEvent event) {
+	public void handlePaymentToLate(PaymentToLateEvent event) {
 		
 	}
 	
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void handlePlagiarismViolation(PlagiarismViolationEvent event) {
+		
+	}
+	
+	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+	public void handleScoresPublished(ScoresPublishedEvent event) {
 		
 	}
 }

@@ -49,13 +49,13 @@ public class RegistrationController {
 	@PutMapping("{id}/accept")
 	public ResponseEntity<String> acceptRegistration(@PathVariable("id") String registrationId) {
 		Response response = registrationService.acceptRegistration(registrationId);
-		return createResponseEntity(response.status, "Registration accepted", HttpStatus.OK, response.message,HttpStatus.CONFLICT);		
+		return createResponseEntity(response.getStatus(), "Registration accepted", HttpStatus.OK, response.getMessage(),HttpStatus.CONFLICT);		
 	}
 	
 	@PutMapping("{id}/reject")
 	public ResponseEntity<String> rejectRegistration(@PathVariable("id") String registrationId) {
 		Response response = registrationService.rejectRegistration(registrationId);
-		return createResponseEntity(response.status, "Registration rejected", HttpStatus.OK, response.message,HttpStatus.CONFLICT);		
+		return createResponseEntity(response.getStatus(), "Registration rejected", HttpStatus.OK, response.getMessage(),HttpStatus.CONFLICT);		
 	}
 	
 	@PostMapping
@@ -68,13 +68,13 @@ public class RegistrationController {
 				r.getFaculty(),
 				r.getDegree()
 		);
-		return createResponseEntity(response.status, "Registration confirmed", HttpStatus.OK, response.message,HttpStatus.CONFLICT);		
+		return createResponseEntity(response.getStatus(), "Registration confirmed", HttpStatus.OK, response.getMessage(),HttpStatus.CONFLICT);		
 	}
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<String> removeRegistration(@PathVariable("id") String registrationId) {
 		Response response = registrationService.removeRegistration(registrationId);
-		return createResponseEntity(response.status, "Registration removed", HttpStatus.OK, response.message,HttpStatus.CONFLICT);
+		return createResponseEntity(response.getStatus(), "Registration removed", HttpStatus.OK, response.getMessage(),HttpStatus.CONFLICT);
 	}
 	
 	private ResponseEntity<String> createResponseEntity(ResponseStatus status, String happyMessage, HttpStatus happyStatus, String sadMessage, HttpStatus sadStatus){

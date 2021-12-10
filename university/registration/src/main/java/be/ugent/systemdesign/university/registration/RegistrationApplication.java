@@ -1,15 +1,19 @@
 package be.ugent.systemdesign.university.registration;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 
+import be.ugent.systemdesign.university.registration.API.messaging.Channels;
 import be.ugent.systemdesign.university.registration.application.RegistrationService;
 import be.ugent.systemdesign.university.registration.application.Response;
 import be.ugent.systemdesign.university.registration.application.query.RegistrationQuery;
@@ -19,6 +23,7 @@ import be.ugent.systemdesign.university.registration.domain.RegistrationReposito
 import be.ugent.systemdesign.university.registration.infrastructure.RegistrationDataModelRepository;
 import be.ugent.systemdesign.university.registration.infrastructure.RegistrationNotFoundException;
 
+@EnableBinding(Channels.class)
 @SpringBootApplication
 public class RegistrationApplication {
 	
@@ -56,8 +61,8 @@ public class RegistrationApplication {
 	}**/
 	
 	private static void logResponse(Response response) {
-		  logger.info("-response status[{}] message[{}]", response.status,
-		  response.message); 
+		  logger.info("-response status[{}] message[{}]", response.getStatus(),
+		  response.getMessage()); 
   }
 	
 	@Bean
@@ -66,10 +71,23 @@ public class RegistrationApplication {
 			logger.info("$Testing RegistrationService."); 
 			Response response;
 			logger.info("Register new registration (success).");
-			response = service.addRegistration("new@mail.be", "Brum", "DuBleeckur", LocalDate.of(2001, 1, 1), "Geneeskunde", "Biomedische Wetenschappen");			
+			response = service.addRegistration("new@mail.be", "De Bleecker", "Sam", "2001-01-01", "Geneeskunde", "Biomedische Wetenschappen");			
 			logResponse(response);
-			response = service.addRegistration("new@mail.be", "Brum2", "DuBleeckur2", LocalDate.of(2001, 1, 1), "Geneeskunde", "Biomedische Wetenschappen");
-			logResponse(response);			
+			response = service.addRegistration("new@mail.be", "Cool", "Bobby", "2001-01-01", "Architectuur", "Architect");
+			logResponse(response);		
+			List<RegistrationReadModel> list = query.giveRegistrations("SUBMITTED");
+			for(var x : list) {
+				logger.info("Registration:");
+				logger.info("   - id: "+x.getRegistrationId());
+				logger.info("	- mail: "+x.getEmail());
+				logger.info("   - firstname: "+x.getFirstName());
+				logger.info("   - lastname: "+x.getName());
+				logger.info("   - date of birth: "+x.getDateOfBirth());
+				logger.info("   - faculty: "+x.getFaculty());
+				logger.info("   - degree: "+x.getDegree());
+				logger.info("-----------------------");
+			}
+			
 		};
 	}
 }

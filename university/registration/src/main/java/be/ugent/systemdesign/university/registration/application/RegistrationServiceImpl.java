@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import be.ugent.systemdesign.university.registration.application.command.CommandDispatcher;
 import be.ugent.systemdesign.university.registration.domain.InvalidRegistrationException;
 import be.ugent.systemdesign.university.registration.domain.Registration;
 import be.ugent.systemdesign.university.registration.domain.RegistrationRepository;
@@ -17,12 +18,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	@Autowired
 	RegistrationRepository registrationRepo;
+	
+	@Autowired
+	CommandDispatcher commandDispatcher;
 
 	@Override
-	public Response addRegistration(String email, String name, String firstName, LocalDate dateOfBirth, String faculty, String degree) {
+	public Response addRegistration(String email, String name, String firstName, String dateOfBirth, String faculty, String degree) {
 		Registration r;		
 		try {
-			r = new Registration(new Date(), email, name, firstName, dateOfBirth, faculty, degree);			
+			r = new Registration(new Date(), email, name, firstName, LocalDate.parse(dateOfBirth), faculty, degree);			
 			registrationRepo.save(r);
 		} catch(InvalidRegistrationException ex) {
 			return new Response(ResponseStatus.FAIL, "The registration was invalid");
@@ -37,8 +41,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 		Registration r;
 		try {
 			r = registrationRepo.findOne(Integer.parseInt(registrationId));
+			//if(r.accountId == null){
+			//	commandDispatcher.sendCreateAccountCommand(r.getRegistrationId());
+			//} else {
 			r.accept();
 			registrationRepo.save(r);
+			//}
 		} catch(RuntimeException ex) {
 			return new Response(ResponseStatus.FAIL, "Registration could not be accepted");
 		}

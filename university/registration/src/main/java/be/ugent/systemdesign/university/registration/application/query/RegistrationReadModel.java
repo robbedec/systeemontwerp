@@ -9,6 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class RegistrationReadModel {
 	
+	private Integer registrationId;
 	private String email;
 	private String name;
 	private String firstName;
