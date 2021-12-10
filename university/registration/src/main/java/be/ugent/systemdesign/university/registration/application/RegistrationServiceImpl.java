@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import be.ugent.systemdesign.university.registration.application.command.CommandDispatcher;
+import be.ugent.systemdesign.university.registration.application.command.CreateAccountCommand;
 import be.ugent.systemdesign.university.registration.domain.InvalidRegistrationException;
 import be.ugent.systemdesign.university.registration.domain.Registration;
 import be.ugent.systemdesign.university.registration.domain.RegistrationRepository;
@@ -41,8 +42,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 		Registration r;
 		try {
 			r = registrationRepo.findOne(Integer.parseInt(registrationId));
-			//if(r.accountId == null){
-			//	commandDispatcher.sendCreateAccountCommand(r.getRegistrationId());
+			//if(r.getAccountId() == null){
+			//	commandDispatcher.sendCreateAccountCommand(new CreateAccountCommand(r.getEmail(), r.getName(), r.getFirstName(), r.getDateOfBirth()));
 			//} else {
 			r.accept();
 			registrationRepo.save(r);

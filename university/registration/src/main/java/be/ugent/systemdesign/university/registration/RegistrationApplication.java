@@ -79,7 +79,7 @@ public class RegistrationApplication {
 			for(var x : list) {
 				logger.info("Registration:");
 				logger.info("   - id: "+x.getRegistrationId());
-				logger.info("	- mail: "+x.getEmail());
+				logger.info("   - mail: "+x.getEmail());
 				logger.info("   - firstname: "+x.getFirstName());
 				logger.info("   - lastname: "+x.getName());
 				logger.info("   - date of birth: "+x.getDateOfBirth());
@@ -87,6 +87,8 @@ public class RegistrationApplication {
 				logger.info("   - degree: "+x.getDegree());
 				logger.info("-----------------------");
 			}
+			response = service.acceptRegistration("1");
+			logResponse(response);
 			
 		};
 	}

@@ -5,17 +5,17 @@ import lombok.Getter;
 
 @Getter
 public class RegistrationAcceptedEvent extends DomainEvent {
-	//studentid ?
-	private String registrationId;
+		
+	private String accountId;
 	private String email;
 	private String name;
 	private String firstName;
 	private String faculty;
 	private String degree;
 	
-	public RegistrationAcceptedEvent(String registrationId, String email, String name, String firstName, String faculty, String degree) {
+	public RegistrationAcceptedEvent(String accountId, String email, String name, String firstName, String faculty, String degree) {
 		super();
-		this.registrationId = registrationId;
+		this.accountId = accountId;
 		this.email = email;
 		this.name = name;
 		this.firstName = firstName;

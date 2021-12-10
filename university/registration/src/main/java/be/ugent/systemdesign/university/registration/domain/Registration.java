@@ -24,7 +24,7 @@ public class Registration extends AggregateRoot{
 	@Id	
 	@GeneratedValue(strategy = GenerationType.AUTO)	
 	private Integer registrationId;
-	
+	private String accountId;
 	private Date registrationDate;
 	private String email;
 	private String name;
@@ -48,9 +48,7 @@ public class Registration extends AggregateRoot{
 	
 	public void accept () {
 		this.status = Status.ACCEPTED;
-		addDomainEvent(new RegistrationAcceptedEvent(registrationId.toString(), email, name, firstName, faculty, degree));		
-		//mail laten versturen
-		//account aanmaken
+		addDomainEvent(new RegistrationAcceptedEvent(accountId, email, name, firstName, faculty, degree));
 	}
 	
 	public void reject() {

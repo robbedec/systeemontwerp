@@ -25,6 +25,7 @@ public class RegistrationDataModel {
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Integer registrationId;
 	
+	private String accountId;
 	private Date registrationDate;
 	private String email;
 	private String name;
@@ -34,9 +35,10 @@ public class RegistrationDataModel {
 	private String degree;
 	private String status;
 	
-	public RegistrationDataModel(Integer registrationId, Date registrationDate, String email, String name, String firstName, 
+	public RegistrationDataModel(Integer registrationId, String accountId, Date registrationDate, String email, String name, String firstName, 
 			LocalDate dateOfBirth, String faculty, String degree, Status status){		
 				this.registrationId = registrationId;
+				this.accountId = accountId;
 				this.registrationDate = registrationDate;
 				this.email = email;
 				this.name = name;

@@ -21,8 +21,8 @@ public class CommandHandler {
 		log.info("status {}, message {}, registrationId {}, accountId {}", response.getStatus(), response.getMessage(), response.getRegistrationId(), response.getAccountId());
 		try {
 			Registration r = repo.findOne(Integer.parseInt(response.getRegistrationId()));
-			//r.accountId = ...?
-			//repo.save(r);
+			r.setAccountId(response.getAccountId());
+			repo.save(r);			
 			if(response.getStatus() == ResponseStatus.SUCCESS) {				
 				r.accept();				
 			} else {

@@ -38,13 +38,14 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 	}
 	
 	private RegistrationDataModel mapToRegistrationDataModel(Registration _r) {
-		return new RegistrationDataModel(_r.getRegistrationId(), _r.getRegistrationDate(), 
+		return new RegistrationDataModel(_r.getRegistrationId(), _r.getAccountId(), _r.getRegistrationDate(), 
 				_r.getEmail(), _r.getName(), _r.getFirstName(), _r.getDateOfBirth(), _r.getFaculty(), _r.getDegree(), _r.getStatus());
 	}
 	
 	private Registration mapToRegistration(RegistrationDataModel _rdm) {
 		Registration r = Registration.builder()
 							.registrationId(_rdm.getRegistrationId())
+							.accountId(_rdm.getAccountId())
 							.registrationDate(_rdm.getRegistrationDate())
 							.email(_rdm.getEmail())
 							.name(_rdm.getName())
