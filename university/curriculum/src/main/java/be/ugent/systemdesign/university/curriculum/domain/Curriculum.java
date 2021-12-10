@@ -33,6 +33,7 @@ public class Curriculum extends AggregateRoot {
 	private List<Course> courses;
 	private String facultyName;
 	private String degreeName;
+	private List<Course> completedCourses;
 	
 	public Curriculum(String studentId, String facultyName, String degreeName) {
 		this.studentId = studentId;

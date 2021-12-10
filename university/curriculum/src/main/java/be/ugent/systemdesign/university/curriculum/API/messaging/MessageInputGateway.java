@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import be.ugent.systemdesign.university.curriculum.application.event.EventHandler;
 import be.ugent.systemdesign.university.curriculum.application.event.FacultyCoursesChangedEvent;
+import be.ugent.systemdesign.university.curriculum.application.event.NewRegistrationEvent;
 
 @Component
 public class MessageInputGateway {
@@ -22,7 +23,13 @@ private static final Logger log = LoggerFactory.getLogger(MessageInputGateway.cl
 	
 	@StreamListener(Channels.FACULTY_EVENT)
 	public void consumeFacultyCoursesChangedEvent(FacultyCoursesChangedEvent event) {
-		log.info("{} ({} SP) was {} from {}: {}", event.getCourseName(), event.getCourseCredits().toString(), event.getChangeType(), event.getFacultyName(), event.getDegreeName());
+		log.info("FACULTY COURSES CHANGED: {} ({} SP) {} in {} (fac. {})", event.getCourseName(), event.getCourseCredits(), event.getChangeType(), event.getDegreeName(), event.getFacultyName());
 		eventHandler.handleFacultyCoursesChanged(event);
+	}
+	
+	@StreamListener(Channels.NEW_REGISTRATION_EVENT)
+	public void consumeNewRegistrationEvent(NewRegistrationEvent event) {
+		log.info("NEW REGISTRATION: {} enrolled in {} (fac. {})", event.getStudentNumber(), event.getDegreeName(), event.getFacultyName());
+		eventHandler.handleNewEnrollment(event);
 	}
 }

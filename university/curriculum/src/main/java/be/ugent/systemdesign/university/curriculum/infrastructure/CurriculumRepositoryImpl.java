@@ -43,6 +43,21 @@ public class CurriculumRepositoryImpl implements CurriculumRepository {
 		c.clearDomainEvents();
 	}
 	
+	@Override
+	public Curriculum findByStudentIdAndFacultyNameAndDegreeName(String studentId, String facultyName,
+			String degreeName) {
+		List<CurriculumDataModel> cdms = curriculumDMRepo.findByStudentIdAndFacultyNameAndDegreeName(studentId, facultyName, degreeName);
+		
+		switch (cdms.size()) {
+			case 0:
+				throw new CurriculumNotFoundException();
+			case 1:
+				return mapToCurriculum(cdms.get(0));
+			default:
+				throw new UnsupportedOperationException();
+		}
+	}
+	
 	private CurriculumDataModel mapToCurriculumDataModel(Curriculum _c) {
 		return new CurriculumDataModel(
 			_c.getCurriculumId(),

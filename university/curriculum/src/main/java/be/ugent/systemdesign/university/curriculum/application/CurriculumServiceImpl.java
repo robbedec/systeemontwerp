@@ -116,9 +116,25 @@ public class CurriculumServiceImpl implements CurriculumService {
 	}
 
 	@Override
-	public Response noteNewRegistration(String studentId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Response noteNewRegistration(String studentId, String facultyName, String degreeName) {
+		Curriculum c;
+		
+		// Check if the student already has a curriculum in the given faculty / degree
+		try {
+			// Student already attended a previous year in the giver faculty / degree.
+			c = curriculumRepo.findByStudentIdAndFacultyNameAndDegreeName(studentId, facultyName, degreeName);
+		} catch (CurriculumNotFoundException e) {
+			// New student
+			c = new Curriculum(studentId, facultyName, degreeName);
+		} catch (UnsupportedOperationException e) {
+			// There exist multiple curricula for a student in the same faculty and degree.
+			// This should never happen if new registrations are handled in the correct manner. 
+			
+			return new Response(ResponseStatus.FAIL, "Internal system error: multiple curricula exist for " + studentId);
+		}
+		
+		curriculumRepo.save(c);
+		return new Response(ResponseStatus.SUCCESS, "");
 	}
 
 	@Override
@@ -136,12 +152,12 @@ public class CurriculumServiceImpl implements CurriculumService {
 		
 		// After this try-catch block the faculty and degree should exist
 		try {
-			faculty = facultyRepo.findByFacultyName(facultyName);
 			
+			faculty = facultyRepo.findByFacultyName(facultyName);
+			// Create new degree in the faculty if it does not yet exist
 			if (!faculty.getDegrees().stream().anyMatch(x -> x.getDegreeName().equals(degreeName))) {
 				faculty.addDegree(degreeName);
 			}
-			
 		} catch(Exception e) {
 			// Create a new faculty if it does not yet exist
 			faculty = new Faculty(facultyName);

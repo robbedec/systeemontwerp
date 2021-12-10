@@ -21,4 +21,9 @@ public class EventHandler {
 		Response resp = curriculumService.noteFacultyCoursesChanged(event.getFacultyName(), event.getDegreeName(), FacultyCourseChangeType.valueOf(event.getChangeType()), event.getCourseName(), event.getCourseCredits());
 		log.info("-response status[{}] message[{}]", resp.status, resp.message);
 	}
+	
+	public void handleNewEnrollment(NewRegistrationEvent event) {
+		Response resp = curriculumService.noteNewRegistration(event.getStudentNumber(), event.getFacultyName(), event.getDegreeName());
+		log.info("-response status[{}] message[{}]", resp.status, resp.message);
+	}
 }

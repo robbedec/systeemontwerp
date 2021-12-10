@@ -9,4 +9,5 @@ public interface CurriculumDataModelRepository extends MongoRepository<Curriculu
 
 	CurriculumDataModel findByCurriculumId(String curriculumId);
 	Optional<CurriculumDataModel> findByStudentId(String studenId);
+	List<CurriculumDataModel> findByStudentIdAndFacultyNameAndDegreeName(String studentId, String facultyName, String degreeName);
 }
