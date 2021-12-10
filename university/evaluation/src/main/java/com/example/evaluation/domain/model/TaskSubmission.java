@@ -38,6 +38,7 @@ public class TaskSubmission extends AggregateRoot {
 	}
 
 	public void plagiarismDetected() {
+		score = 0;
 		addDomainEvent(new PlagiarismDetectedDomainEvent(taskId, studentId));
 	}
 }

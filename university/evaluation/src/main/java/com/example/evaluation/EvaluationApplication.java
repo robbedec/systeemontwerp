@@ -8,8 +8,10 @@ import org.slf4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 
+import com.example.evaluation.API.messaging.Channels;
 import com.example.evaluation.application.CertificateService;
 import com.example.evaluation.application.Response;
 import com.example.evaluation.application.TaskService;
@@ -22,6 +24,7 @@ import com.example.evaluation.infrastructure.repository.TaskDataModelRepository;
 import com.example.evaluation.infrastructure.repository.TaskSubmissionDataModelRepository;
 
 @SpringBootApplication
+@EnableBinding(Channels.class)
 public class EvaluationApplication {
 	
 	private static final Logger log = LoggerFactory.getLogger(EvaluationApplication.class);
