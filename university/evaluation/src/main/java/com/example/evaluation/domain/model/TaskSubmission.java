@@ -1,6 +1,5 @@
 package com.example.evaluation.domain.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.example.evaluation.domain.event.PlagiarismDetectedDomainEvent;

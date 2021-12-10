@@ -8,7 +8,7 @@ public class TaskSubmissionViewModel {
 	public final String file;
 	public final String dateSubmitted;
 	public final String score;
-	
+
 	public TaskSubmissionViewModel(TaskSubmissionReadModel taskSubmissionRM) {
 		studentId = taskSubmissionRM.studentId;
 		taskId = taskSubmissionRM.taskId;

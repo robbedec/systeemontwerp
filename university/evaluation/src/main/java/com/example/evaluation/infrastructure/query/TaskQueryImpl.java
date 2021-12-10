@@ -15,15 +15,16 @@ import com.example.evaluation.infrastructure.repository.TaskSubmissionDataModelR
 public class TaskQueryImpl implements TaskQuery {
 	@Autowired
 	private TaskSubmissionDataModelRepository taskSubmissionDMRepo;
-	
+
 	private TaskSubmissionReadModel mapToTaskSubmissionReadModel(TaskSubmissionDataModel taskSubmissionDM) {
-		return new TaskSubmissionReadModel(taskSubmissionDM.getStudentId(), taskSubmissionDM.getTaskId(), taskSubmissionDM.getFile(), taskSubmissionDM.getDateSubmited(), taskSubmissionDM.getScore());
+		return new TaskSubmissionReadModel(taskSubmissionDM.getStudentId(), taskSubmissionDM.getTaskId(),
+				taskSubmissionDM.getFile(), taskSubmissionDM.getDateSubmited(), taskSubmissionDM.getScore());
 	}
-	
+
 	@Override
 	public List<TaskSubmissionReadModel> getTaskSubmissions(String taskId) {
-		return taskSubmissionDMRepo.findByTaskId(taskId).stream().map(taskSubmissionDM -> mapToTaskSubmissionReadModel(taskSubmissionDM))
-				.collect(Collectors.toList());
+		return taskSubmissionDMRepo.findByTaskId(taskId).stream()
+				.map(taskSubmissionDM -> mapToTaskSubmissionReadModel(taskSubmissionDM)).collect(Collectors.toList());
 	}
 
 }

@@ -1,6 +1,7 @@
-package com.example.evaluation.application;
+package com.example.evaluation.application.service;
 
 public interface CertificateService {
 	Response generateCertificate(String degreeId, String studentId);
+
 	Response verifyCertificate(String certificateId);
 }

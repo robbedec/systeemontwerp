@@ -1,4 +1,4 @@
-package com.example.evaluation.application;
+package com.example.evaluation.application.service;
 
 import java.util.ArrayList;
 

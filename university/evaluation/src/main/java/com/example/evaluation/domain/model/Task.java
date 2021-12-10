@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Task{
+public class Task {
 	private String taskId;
 	private String courseId;
 	private String description;

@@ -1,6 +1,5 @@
-package com.example.evaluation.application;
+package com.example.evaluation.application.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -78,25 +77,25 @@ public class TaskServiceImpl implements TaskService {
 	public Response checkPlagiarism(String taskId) {
 		List<TaskSubmission> taskSubmissions = taskSubmissionRepo.findByTaskId(taskId);
 		Set<String> plagiarismTasks = new HashSet<>();
-		
+
 		for (int i = 0; i < taskSubmissions.size(); i++) {
 			String file1 = taskSubmissions.get(i).getFile();
-			if(file1 == null || file1.length() == 0)
+			if (file1 == null || file1.length() == 0)
 				continue;
-			
+
 			for (int j = 0; j < taskSubmissions.size(); j++) {
 				String file2 = taskSubmissions.get(j).getFile();
-				if(file2 == null || file2.length() == 0)
+				if (file2 == null || file2.length() == 0)
 					continue;
-				
+
 				double similarity = longestCommonSubsequence(file1, file2) / Math.max(file1.length(), file2.length());
-				if(similarity > 0.5) {
-					if(!plagiarismTasks.contains(taskSubmissions.get(i).getSubmissionId())) {
+				if (similarity > 0.5) {
+					if (!plagiarismTasks.contains(taskSubmissions.get(i).getSubmissionId())) {
 						taskSubmissions.get(i).plagiarismDetected();
 						plagiarismTasks.add(taskSubmissions.get(i).getSubmissionId());
 						taskSubmissionRepo.save(taskSubmissions.get(i));
 					}
-					if(!plagiarismTasks.contains(taskSubmissions.get(j).getSubmissionId())) {
+					if (!plagiarismTasks.contains(taskSubmissions.get(j).getSubmissionId())) {
 						taskSubmissions.get(j).plagiarismDetected();
 						plagiarismTasks.add(taskSubmissions.get(j).getSubmissionId());
 						taskSubmissionRepo.save(taskSubmissions.get(j));

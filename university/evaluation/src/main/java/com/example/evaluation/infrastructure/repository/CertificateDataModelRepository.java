@@ -10,5 +10,6 @@ import com.example.evaluation.infrastructure.data_model.CertificateDataModel;
 @Repository
 public interface CertificateDataModelRepository extends JpaRepository<CertificateDataModel, String> {
 	List<CertificateDataModel> findByDegreeId(String degreeId);
+
 	List<CertificateDataModel> findByStudentId(String studentId);
 }

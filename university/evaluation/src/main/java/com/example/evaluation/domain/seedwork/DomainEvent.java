@@ -7,6 +7,8 @@ import lombok.Getter;
 public abstract class DomainEvent {
 	@Getter
 	private final LocalDateTime createdTime;
-	
-	public DomainEvent() { this.createdTime = LocalDateTime.now(); }
+
+	public DomainEvent() {
+		this.createdTime = LocalDateTime.now();
+	}
 }

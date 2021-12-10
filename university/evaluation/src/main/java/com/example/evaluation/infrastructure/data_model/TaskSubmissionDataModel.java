@@ -21,7 +21,7 @@ import lombok.Setter;
 public class TaskSubmissionDataModel {
 	@Id
 	@GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private String submissionId;
 	private String taskId;
 	private String studentId;
