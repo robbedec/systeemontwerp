@@ -29,7 +29,7 @@ import be.ugent.timgeldof.learning_platform.infrastructure.course.CourseQueryImp
 
 
 @RestController
-@RequestMapping(path="api/learning_platform/")
+@RequestMapping(path="api/learningplatform/")
 @CrossOrigin(origins="*")
 public class LearningPlatformController {
 
@@ -40,6 +40,10 @@ public class LearningPlatformController {
 	LearningPlatformService s;
 	
 	// GET 
+	@GetMapping("courses/")
+	public String testRestController(){
+		return "controller working";
+	}
 	
 	@GetMapping("courses/{studentId}")
 	public List<CourseViewModel> getAvailableCourses(@PathVariable("studentId") String studentId){
