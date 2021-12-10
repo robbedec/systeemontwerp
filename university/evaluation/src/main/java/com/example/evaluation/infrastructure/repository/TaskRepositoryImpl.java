@@ -17,13 +17,15 @@ public class TaskRepositoryImpl implements TaskRepository {
 	private TaskDataModelRepository taskDMRepo;
 
 	private Task mapToTask(TaskDataModel taskDM) {
-		return new Task(taskDM.getTaskId(), taskDM.getCourseId(),taskDM.getDescription() , taskDM.getDueDate());
+		return new Task(taskDM.getTaskId(), taskDM.getCourseId(), taskDM.getDescription(), taskDM.getDueDate(),
+				taskDM.getWeight());
 	}
-	
+
 	private TaskDataModel mapToTaskDataModel(Task task) {
-		return new TaskDataModel(task.getTaskId(), task.getCourseId(), task.getDescription(), task.getDueDate());
+		return new TaskDataModel(task.getTaskId(), task.getCourseId(), task.getDescription(), task.getDueDate(),
+				task.getWeight());
 	}
-	
+
 	@Override
 	public Task findById(String taskId) {
 		TaskDataModel taskDM = taskDMRepo.findById(taskId).orElseThrow(TaskNotFoundException::new);
@@ -38,8 +40,8 @@ public class TaskRepositoryImpl implements TaskRepository {
 
 	@Override
 	public List<Task> findByCourseId(String courseId) {
-		return taskDMRepo.findByCourseId(courseId).stream()
-				.map(taskDM -> mapToTask(taskDM)).collect(Collectors.toList());
+		return taskDMRepo.findByCourseId(courseId).stream().map(taskDM -> mapToTask(taskDM))
+				.collect(Collectors.toList());
 	}
 
 }

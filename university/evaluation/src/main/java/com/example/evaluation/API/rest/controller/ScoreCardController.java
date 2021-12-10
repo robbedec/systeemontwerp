@@ -11,34 +11,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evaluation.API.rest.view_model.ScoreCardViewModel;
-import com.example.evaluation.application.Response;
-import com.example.evaluation.application.ResponseStatus;
-import com.example.evaluation.application.ScoreCardService;
+import com.example.evaluation.application.service.Response;
+import com.example.evaluation.application.service.ResponseStatus;
+import com.example.evaluation.application.service.ScoreCardService;
 import com.example.evaluation.application.query.ScoreCardQuery;
 
 @RestController
-@RequestMapping(path="api/evaluation/scorecards/")
-@CrossOrigin(origins="*")
+@RequestMapping(path = "api/evaluation/scorecards/")
+@CrossOrigin(origins = "*")
 public class ScoreCardController {
 	@Autowired
 	ScoreCardQuery scoreCardQuery;
-	
+
 	@Autowired
 	ScoreCardService scoreCardService;
-	
+
 	@GetMapping("{id}")
 	public ScoreCardViewModel getScoreCard(@PathVariable String degreeId, String studentId) {
 		return new ScoreCardViewModel(scoreCardQuery.getScoreCard(studentId, degreeId));
 	}
-	
+
 	@PostMapping("{id}/generate")
 	public ResponseEntity<String> generateScoreCards(String degreeId) {
 		Response response = scoreCardService.generateScoreCards(degreeId);
-		return createResponseEntity(response.status, "Generated score cards", HttpStatus.OK, response.message, HttpStatus.CONFLICT);
+		return createResponseEntity(response.status, "Generated score cards", HttpStatus.OK, response.message,
+				HttpStatus.CONFLICT);
 	}
-	
-	private ResponseEntity<String> createResponseEntity(ResponseStatus status, String successMsg, HttpStatus successStatus, String failMsg, HttpStatus failStatus) {
-		if(status == ResponseStatus.SUCCESS)
+
+	private ResponseEntity<String> createResponseEntity(ResponseStatus status, String successMsg,
+			HttpStatus successStatus, String failMsg, HttpStatus failStatus) {
+		if (status == ResponseStatus.SUCCESS)
 			return new ResponseEntity<>(successMsg, successStatus);
 		return new ResponseEntity<>(failMsg, failStatus);
 	}

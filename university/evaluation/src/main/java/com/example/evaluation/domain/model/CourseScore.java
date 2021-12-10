@@ -1,7 +1,5 @@
 package com.example.evaluation.domain.model;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +12,7 @@ import lombok.Setter;
 public class CourseScore {
 	private String courseId;
 	private int score;
-	
+
 	public boolean passed() {
 		return score >= 10;
 	}

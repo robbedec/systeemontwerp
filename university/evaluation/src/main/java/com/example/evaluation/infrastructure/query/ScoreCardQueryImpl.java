@@ -16,16 +16,17 @@ import com.example.evaluation.infrastructure.repository.ScoreCardDataModelReposi
 public class ScoreCardQueryImpl implements ScoreCardQuery {
 	@Autowired
 	private ScoreCardDataModelRepository scoreCardDMRepo;
-	
+
 	private ScoreCardReadModel mapToScoreCardReadModel(ScoreCardDataModel scoreCardDM) {
-		return new ScoreCardReadModel(scoreCardDM.getDegreeId(), 
-				scoreCardDM.getScores().stream().map(courseScoreDM -> new CourseScoreReadModel(courseScoreDM.getCourseId(), courseScoreDM.getScore()))
-						.collect(Collectors.toList()));
+		return new ScoreCardReadModel(scoreCardDM.getDegreeId(), scoreCardDM.getScores().stream()
+				.map(courseScoreDM -> new CourseScoreReadModel(courseScoreDM.getCourseId(), courseScoreDM.getScore()))
+				.collect(Collectors.toList()));
 	}
 
 	@Override
 	public ScoreCardReadModel getScoreCard(String studentId, String degreeId) {
-		return mapToScoreCardReadModel(scoreCardDMRepo.findByStudentIdAndDegreeId(studentId, degreeId).orElseThrow(ScoreCardNotFoundException::new));
+		return mapToScoreCardReadModel(scoreCardDMRepo.findByStudentIdAndDegreeId(studentId, degreeId)
+				.orElseThrow(ScoreCardNotFoundException::new));
 	}
 
 }

@@ -15,18 +15,21 @@ import com.example.evaluation.infrastructure.exception.CertificateNotFoundExcept
 public class CertificateRepositoryImpl implements CertificateRepository {
 	@Autowired
 	private CertificateDataModelRepository certificateDMRepo;
-	
+
 	private Certificate mapToCertificate(CertificateDataModel certificateDM) {
-		return new Certificate(certificateDM.getCertificateId(), certificateDM.getDegreeId(), certificateDM.getStudentId());
+		return new Certificate(certificateDM.getCertificateId(), certificateDM.getDegreeId(),
+				certificateDM.getStudentId());
 	}
-	
+
 	private CertificateDataModel mapToCertificateDataModel(Certificate certificate) {
-		return new CertificateDataModel(certificate.getCertificateId(), certificate.getDegreeId(), certificate.getCertificateId());
+		return new CertificateDataModel(certificate.getCertificateId(), certificate.getDegreeId(),
+				certificate.getCertificateId());
 	}
 
 	@Override
 	public Certificate findById(String certificateId) {
-		CertificateDataModel certificateDM = certificateDMRepo.findById(certificateId).orElseThrow(CertificateNotFoundException::new);
+		CertificateDataModel certificateDM = certificateDMRepo.findById(certificateId)
+				.orElseThrow(CertificateNotFoundException::new);
 		return mapToCertificate(certificateDM);
 	}
 
@@ -44,8 +47,8 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 
 	@Override
 	public List<Certificate> findByDegreeId(String degreeId) {
-		return certificateDMRepo.findByDegreeId(degreeId).stream()
-				.map(certificateDM -> mapToCertificate(certificateDM)).collect(Collectors.toList());
+		return certificateDMRepo.findByDegreeId(degreeId).stream().map(certificateDM -> mapToCertificate(certificateDM))
+				.collect(Collectors.toList());
 	}
 
 }

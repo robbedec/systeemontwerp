@@ -1,6 +1,6 @@
 package com.example.evaluation.domain.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.example.evaluation.domain.event.PlagiarismDetectedDomainEvent;
 import com.example.evaluation.domain.exception.InvalidScoreException;
@@ -18,14 +18,8 @@ public class TaskSubmission extends AggregateRoot {
 	private String taskId;
 	private String studentId;
 	private String file;
-	private LocalDate dateSubmitted;
+	private LocalDateTime dateSubmitted;
 	private int score;
-
-	public boolean submittedBeforeDueDate(LocalDate dueDate) {
-		if (dueDate == null)
-			return true;
-		return dateSubmitted.isBefore(dueDate);
-	}
 
 	public void assignScore(int score) {
 		if (score < 0 || score > 20)
@@ -40,5 +34,9 @@ public class TaskSubmission extends AggregateRoot {
 	public void plagiarismDetected() {
 		score = 0;
 		addDomainEvent(new PlagiarismDetectedDomainEvent(taskId, studentId));
+	}
+	
+	public boolean passed() {
+		return score >= 10;
 	}
 }

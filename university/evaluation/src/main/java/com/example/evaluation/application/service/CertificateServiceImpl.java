@@ -1,4 +1,4 @@
-package com.example.evaluation.application;
+package com.example.evaluation.application.service;
 
 import javax.transaction.Transactional;
 
@@ -11,7 +11,7 @@ import com.example.evaluation.infrastructure.exception.CertificateNotFoundExcept
 
 @Transactional
 @Service
-public class CertificateServiceImpl implements CertificateService{
+public class CertificateServiceImpl implements CertificateService {
 	@Autowired
 	private CertificateRepository certificateRepo;
 
@@ -22,22 +22,22 @@ public class CertificateServiceImpl implements CertificateService{
 		try {
 			certificate = certificateRepo.save(certificate);
 			return new Response(ResponseStatus.SUCCESS, "ID " + certificate.getCertificateId());
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return new Response(ResponseStatus.FAIL, "Persistence failed ");
 		}
 	}
-	
+
 	// TODO delete?
 	@Override
 	public Response verifyCertificate(String certificateId) {
 		try {
 			certificateRepo.findById(certificateId);
 			return new Response(ResponseStatus.SUCCESS, "Valid certificate");
-		} catch(CertificateNotFoundException e) {
+		} catch (CertificateNotFoundException e) {
 			return new Response(ResponseStatus.SUCCESS, "Invalid certificate");
-		} catch(RuntimeException e) {
+		} catch (RuntimeException e) {
 			return new Response(ResponseStatus.FAIL, "Unable to verify certificate");
 		}
 	}
-	
+
 }

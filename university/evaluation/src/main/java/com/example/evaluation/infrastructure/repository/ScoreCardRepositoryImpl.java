@@ -38,7 +38,8 @@ public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 
 	@Override
 	public ScoreCard findByStudentIdAndDegreeId(String studentId, String degreeId) {
-		ScoreCardDataModel scoreCardDM = scoreCardDMRepo.findByStudentIdAndDegreeId(studentId, degreeId).orElseThrow(ScoreCardNotFoundException::new);
+		ScoreCardDataModel scoreCardDM = scoreCardDMRepo.findByStudentIdAndDegreeId(studentId, degreeId)
+				.orElseThrow(ScoreCardNotFoundException::new);
 		return mapToScoreCard(scoreCardDM);
 	}
 

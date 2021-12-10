@@ -1,6 +1,6 @@
 package com.example.evaluation.application.query;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 
@@ -9,6 +9,6 @@ public class TaskSubmissionReadModel {
 	public final String studentId;
 	public final String taskId;
 	public final String file;
-	public final LocalDate dateSubmitted;
+	public final LocalDateTime dateSubmitted;
 	public final int score;
 }
