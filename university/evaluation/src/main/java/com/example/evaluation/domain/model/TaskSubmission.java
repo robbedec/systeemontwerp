@@ -1,6 +1,7 @@
 package com.example.evaluation.domain.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.example.evaluation.domain.event.PlagiarismDetectedDomainEvent;
 import com.example.evaluation.domain.exception.InvalidScoreException;
@@ -18,10 +19,10 @@ public class TaskSubmission extends AggregateRoot {
 	private String taskId;
 	private String studentId;
 	private String file;
-	private LocalDate dateSubmitted;
+	private LocalDateTime dateSubmitted;
 	private int score;
 
-	public boolean submittedBeforeDueDate(LocalDate dueDate) {
+	public boolean submittedBeforeDueDate(LocalDateTime dueDate) {
 		if (dueDate == null)
 			return true;
 		return dateSubmitted.isBefore(dueDate);

@@ -1,6 +1,7 @@
 package com.example.evaluation.application;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,8 +29,8 @@ public class TaskServiceImpl implements TaskService {
 	TaskSubmissionRepository taskSubmissionRepo;
 
 	@Override
-	public Response createTask(String courseId, String description, LocalDate dueDate) {
-		Task task = new Task(null, courseId, description, dueDate);
+	public Response createTask(String courseId, String description, LocalDateTime dueDate, double weight) {
+		Task task = new Task(null, courseId, description, dueDate, weight);
 		try {
 			task = taskRepo.save(task);
 			return new Response(ResponseStatus.SUCCESS, "ID " + task.getTaskId());
@@ -40,7 +41,7 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public Response submitTask(String taskId, String studentId, String file) {
-		TaskSubmission taskSubmission = new TaskSubmission(null, taskId, studentId, file, LocalDate.now(), -1);
+		TaskSubmission taskSubmission = new TaskSubmission(null, taskId, studentId, file, LocalDateTime.now(), -1);
 
 		try {
 			Task task = taskRepo.findById(taskId);

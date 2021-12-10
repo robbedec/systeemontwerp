@@ -1,6 +1,7 @@
 package com.example.evaluation.infrastructure.data_model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,5 +26,6 @@ public class TaskDataModel {
 	private String taskId;
 	private String courseId;
 	private String description;
-	private LocalDate dueDate;
+	private LocalDateTime dueDate;
+	private double weight;
 }

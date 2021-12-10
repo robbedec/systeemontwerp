@@ -1,6 +1,6 @@
 package com.example.evaluation.API.rest.controller;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +35,8 @@ public class TaskController {
 	
 	@PostMapping
 	public ResponseEntity<String> createTask(@RequestBody TaskViewModel taskVM) {
-		Response response = taskService.createTask(taskVM.courseId, taskVM.description, LocalDate.parse(taskVM.dueDate));
+		double weight = (double) Integer.parseInt(taskVM.weight.replace("%", "")) / 100;
+		Response response = taskService.createTask(taskVM.courseId, taskVM.description, LocalDateTime.parse(taskVM.dueDate), weight);
 		return createResponseEntity(response.status, "Task created", HttpStatus.CREATED, response.message, HttpStatus.CONFLICT);
 	}
 	

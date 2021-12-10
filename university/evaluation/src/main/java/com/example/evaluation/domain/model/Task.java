@@ -1,6 +1,6 @@
 package com.example.evaluation.domain.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,5 +13,6 @@ public class Task{
 	private String taskId;
 	private String courseId;
 	private String description;
-	private LocalDate dueDate;
+	private LocalDateTime dueDate;
+	private double weight;
 }

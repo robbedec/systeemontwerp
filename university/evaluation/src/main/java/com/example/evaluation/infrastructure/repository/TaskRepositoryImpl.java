@@ -17,11 +17,11 @@ public class TaskRepositoryImpl implements TaskRepository {
 	private TaskDataModelRepository taskDMRepo;
 
 	private Task mapToTask(TaskDataModel taskDM) {
-		return new Task(taskDM.getTaskId(), taskDM.getCourseId(),taskDM.getDescription() , taskDM.getDueDate());
+		return new Task(taskDM.getTaskId(), taskDM.getCourseId(),taskDM.getDescription() , taskDM.getDueDate(), taskDM.getWeight());
 	}
 	
 	private TaskDataModel mapToTaskDataModel(Task task) {
-		return new TaskDataModel(task.getTaskId(), task.getCourseId(), task.getDescription(), task.getDueDate());
+		return new TaskDataModel(task.getTaskId(), task.getCourseId(), task.getDescription(), task.getDueDate(), task.getWeight());
 	}
 	
 	@Override
