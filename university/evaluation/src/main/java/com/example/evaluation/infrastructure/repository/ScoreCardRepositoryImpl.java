@@ -3,6 +3,7 @@ package com.example.evaluation.infrastructure.repository;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.example.evaluation.domain.model.CourseScore;
 import com.example.evaluation.domain.model.ScoreCard;
@@ -11,6 +12,7 @@ import com.example.evaluation.infrastructure.data_model.CourseScoreDataModel;
 import com.example.evaluation.infrastructure.data_model.ScoreCardDataModel;
 import com.example.evaluation.infrastructure.exception.ScoreCardNotFoundException;
 
+@Repository
 public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 
 	@Autowired

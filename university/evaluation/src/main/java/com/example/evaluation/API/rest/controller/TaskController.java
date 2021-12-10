@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,14 @@ import com.example.evaluation.application.service.Response;
 import com.example.evaluation.application.service.ResponseStatus;
 import com.example.evaluation.application.service.TaskService;
 
+import org.slf4j.Logger;
+
 @RestController
-@RequestMapping("api/evaluation/tasks/")
+@RequestMapping("api/evaluation/tasks")
 @CrossOrigin(origins = "*")
 public class TaskController {
+	private static final Logger log = LoggerFactory.getLogger(TaskController.class);
+	
 	@Autowired
 	private TaskQuery taskQuery;
 
@@ -35,6 +40,7 @@ public class TaskController {
 
 	@PostMapping
 	public ResponseEntity<String> createTask(@RequestBody TaskViewModel taskVM) {
+		log.info("{} {} {}",taskVM.description, taskVM.dueDate, taskVM.weight);
 		double weight = (double) Integer.parseInt(taskVM.weight.replace("%", "")) / 100;
 		Response response = taskService.createTask(taskVM.courseId, taskVM.description,
 				LocalDateTime.parse(taskVM.dueDate), weight);

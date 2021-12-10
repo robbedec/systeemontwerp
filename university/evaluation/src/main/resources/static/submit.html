@@ -9,6 +9,15 @@
 					studentId: sessionStorage.userId,
 					file: document.getElementById("file").value
 				}
+				
+				fetch("http://localhost:8080/api/evaluation/tasks/submission", {
+					method: "POST",
+					mode: "cors",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.parse(req)
+				}).then(res => res.json()).then(res => document.getElementById("result").innerText = res).catch(err => console.error(err));
 			}
 		</script>
 	</head>
@@ -16,7 +25,8 @@
 		<ul id="tasks"></ul>
 		<div id="submit">
 			<textarea id="file" rows="4" cols="50"></textarea>
-			<button onclick="submitTask">submit</button>
+			<button onclick="submitTask()">submit</button>
+			<p id="result"></p>
 		</div>
 	</body>
 </html>

@@ -17,7 +17,7 @@ import com.example.evaluation.application.service.ScoreCardService;
 import com.example.evaluation.application.query.ScoreCardQuery;
 
 @RestController
-@RequestMapping(path = "api/evaluation/scorecards/")
+@RequestMapping(path = "api/evaluation/scorecards")
 @CrossOrigin(origins = "*")
 public class ScoreCardController {
 	@Autowired

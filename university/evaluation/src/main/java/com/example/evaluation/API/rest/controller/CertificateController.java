@@ -19,7 +19,7 @@ import com.example.evaluation.application.service.ResponseStatus;
 import com.example.evaluation.application.query.CertificateQuery;
 
 @RestController
-@RequestMapping(path = "api/evaluation/certificates/")
+@RequestMapping(path = "api/evaluation/certificates")
 @CrossOrigin(origins = "*")
 public class CertificateController {
 

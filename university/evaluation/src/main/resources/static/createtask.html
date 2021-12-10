@@ -1,27 +1,63 @@
 <!DOCTYPE html>
 
 <html>
-	<head>
-		<title>Create Task</title>
-	</head>
-	<body>
-		<table>
-			<tr>
-				<td>
-					<label for="description">Description: </label>
-				</td>
-				<td>
-					<input type="text" name="description" id="description" placeholder="description" />
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="due">Due date: </p>
-				</td>
-				<td>
-					<input type="date" name="due" id="due" />
-				</td>
-			</tr>
-		</table>
-	</body>
+
+<head>
+	<title>Create Task</title>
+	<script>
+		function createTask() {
+			req = {
+				description: document.getElementById("description").value,
+				dueDate: document.getElementById("dueDate").value + " " + document.getElementById("dueTime").value,
+				weight: document.getElementById("weight") + "%"
+			};
+
+			fetch("http://localhost:8080/api/evaluation/tasks/", {
+				method: "POST",
+				mode: "cors",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(req)
+			}).then(res => res.json()).then(res => document.getElementById("msg").innerText = res).catch(err => console.error(err));
+		}
+	</script>
+</head>
+
+<body>
+	<table>
+		<tr>
+			<td>
+				<label for="description">Description: </label>
+			</td>
+			<td>
+				<input type="text" name="description" id="description" placeholder="description" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="dueDate">Due date: </p>
+			</td>
+			<td>
+				<input type="date" name="dueDate" id="dueDate" />
+				<input type="time" name="dueTime" id="dueTime" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="weight">Weight (%): </p>
+			</td>
+			<td>
+				<input type="number" name="weight" id="weight" placeholder="weight" min="1" max="100" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<button onclick="createTask()">Create Task</button>
+			</td>
+		</tr>
+	</table>
+	<p id="msg"></p>
+</body>
+
 </html>

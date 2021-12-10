@@ -11,7 +11,7 @@ import com.example.evaluation.API.messaging.Channels;
 
 @SuppressWarnings("deprecation")
 @SpringBootApplication
-@EnableBinding(Channels.class)
+//@EnableBinding(Channels.class)
 public class EvaluationApplication {
 
 	private static final Logger log = LoggerFactory.getLogger(EvaluationApplication.class);

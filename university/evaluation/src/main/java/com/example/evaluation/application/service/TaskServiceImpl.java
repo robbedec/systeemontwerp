@@ -32,6 +32,9 @@ public class TaskServiceImpl implements TaskService {
 		Task task = new Task(null, courseId, description, dueDate, weight);
 		try {
 			task = taskRepo.save(task);
+			
+			// TODO create submission for every student
+			
 			return new Response(ResponseStatus.SUCCESS, "ID " + task.getTaskId());
 		} catch (Exception e) {
 			return new Response(ResponseStatus.FAIL, "Failed to create task");
