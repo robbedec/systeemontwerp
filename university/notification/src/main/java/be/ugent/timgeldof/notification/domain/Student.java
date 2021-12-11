@@ -17,13 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Student {
 	@Id
-	private String studentId;
-	private String emailAddress;
-	private String firstName;
-	private String lastName;
-	
-	public String getFullName(){
-		return this.firstName + " " + this.lastName;
-	}
-
+	private Integer studentId;
+	private String email;
+	private String degree;
 }

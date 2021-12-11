@@ -15,7 +15,7 @@ public class StudentRepositoryImpl implements StudentRepository{
 	StudentJPARepository studentJpaRepository;
 	
 	@Override
-	public Student findOne(String id) throws StudentNotFoundException {
+	public Student findOne(Integer id) throws StudentNotFoundException {
 		Optional<Student> s = this.studentJpaRepository.findById(id);
 		if(s.isEmpty())
 			throw new StudentNotFoundException();
@@ -28,10 +28,10 @@ public class StudentRepositoryImpl implements StudentRepository{
 	}
 
 	@Override
-	public Student findByEmailAddress(String emailAddress) {
-		Optional<Student> s = this.studentJpaRepository.findByEmailAddress(emailAddress);
+	public Student findByEmail(String email) {
+		Optional<Student> s = this.studentJpaRepository.findByEmailAddress(email);
 		if(s.isEmpty())
 			throw new StudentNotFoundException();
-		return s.get();
+		return s.get();	
 	}
 }

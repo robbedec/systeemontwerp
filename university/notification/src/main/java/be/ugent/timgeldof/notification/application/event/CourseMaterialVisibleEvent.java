@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CourseMaterialVisibleEvent {
-	public String accountId;
+	public Integer accountId;
 	public String courseName;
 	public String fileName;
 }

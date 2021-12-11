@@ -9,5 +9,8 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NewRegistrationEvent {
-	public String studentId;
+	public Integer accountId;
+	public String email;
+	public String degree;
+	public String faculty;
 }
