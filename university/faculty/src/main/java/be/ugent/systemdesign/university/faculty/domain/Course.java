@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import be.ugent.systemdesign.university.faculty.FacultyApplication;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,19 +27,22 @@ import lombok.Setter;
 public class Course {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	//@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	private String courseName;
 	private Integer courseCredits;
+	private Integer teacherId;
 	
 	@ManyToOne
 	@JoinColumn(name = "degree_id")
 	private DegreeProgramme degree;
 	
-	public Course(String _courseName, Integer _courseCredits, DegreeProgramme _degree) {
+	public Course(String _courseName, Integer _courseCredits, DegreeProgramme _degree, Integer teacherId) {
+		this.id = FacultyApplication.courseIdCounter++;
 		this.courseName = _courseName;
 		this.courseCredits = _courseCredits;
 		this.degree = _degree;
+		this.teacherId = teacherId;
 	}
 	
 	@Override

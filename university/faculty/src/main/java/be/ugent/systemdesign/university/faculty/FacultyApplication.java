@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -26,9 +27,12 @@ import be.ugent.systemdesign.university.faculty.API.rest.CourseViewModel;
 import be.ugent.systemdesign.university.faculty.API.rest.FacultyViewModel;
 import be.ugent.systemdesign.university.faculty.application.FacultyService;
 import be.ugent.systemdesign.university.faculty.application.Response;
+import be.ugent.systemdesign.university.faculty.application.event.EventDispatcher;
 import be.ugent.systemdesign.university.faculty.domain.Course;
 import be.ugent.systemdesign.university.faculty.domain.DegreeProgramme;
 import be.ugent.systemdesign.university.faculty.domain.Faculty;
+import be.ugent.systemdesign.university.faculty.domain.FacultyCoursesChangeType;
+import be.ugent.systemdesign.university.faculty.domain.FacultyCoursesChangedDomainEvent;
 import be.ugent.systemdesign.university.faculty.domain.FacultyRepository;
 import be.ugent.systemdesign.university.faculty.infrastructure.FacultyJPARepository;
 
@@ -38,6 +42,8 @@ import be.ugent.systemdesign.university.faculty.infrastructure.FacultyJPAReposit
 public class FacultyApplication {
 	
 	Logger logger = LoggerFactory.getLogger(FacultyApplication.class);
+	
+	public static Long courseIdCounter = (long) 1;
 
 	public static void main(String[] args) {
 		SpringApplication.run(FacultyApplication.class, args);
@@ -67,7 +73,7 @@ public class FacultyApplication {
 	}
 	
 	@Bean
-	CommandLineRunner addCourseToFaculty(FacultyService service, FacultyRepository repo){ 
+	CommandLineRunner addCourseToFaculty(FacultyService service, FacultyRepository repo, EventDispatcher eventDispatcher){ 
 		return(args)->{
 			logger.info("**ADD COURSES TRHOUGH SERVICE**");
 			
@@ -137,35 +143,37 @@ public class FacultyApplication {
 					entry("Celbiologie en algemene weefselleer", 7)
 				);
 			
+			Random rnd = new Random();
+			
 			for (Map.Entry<String, Integer> item : ind_ing.entrySet()) {
 				// Make sure to use the addCourse method so that domain events are created
 				// to update other services that are interested.
-				service.addCourseToFaculty("Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur", item.getKey(), item.getValue());
+				service.addCourseToFaculty("Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur", item.getKey(), item.getValue(), rnd.nextInt(8) + 1);
 			}
 			
 			for (Map.Entry<String, Integer> item : burg_ing.entrySet()) {
 				// Make sure to use the addCourse method so that domain events are created
 				// to update other services that are interested.
 				
-				service.addCourseToFaculty("Ingenieurswetenschappen & architectuur", "Burgerlijk Ingenieur", item.getKey(), item.getValue());
+				service.addCourseToFaculty("Ingenieurswetenschappen & architectuur", "Burgerlijk Ingenieur", item.getKey(), item.getValue(), rnd.nextInt(8) + 1);
 			}
 			
 			for (Map.Entry<String, Integer> item : fysica.entrySet()) {
 				// Make sure to use the addCourse method so that domain events are created
 				// to update other services that are interested.
-				service.addCourseToFaculty("Wetenschappen", "Fysica & Sterrenkunde", item.getKey(), item.getValue());
+				service.addCourseToFaculty("Wetenschappen", "Fysica & Sterrenkunde", item.getKey(), item.getValue(), rnd.nextInt(8) + 1);
 			}
 			
 			for (Map.Entry<String, Integer> item : wiskunde.entrySet()) {
 				// Make sure to use the addCourse method so that domain events are created
 				// to update other services that are interested.
-				service.addCourseToFaculty("Wetenschappen", "Wiskunde", item.getKey(), item.getValue());
+				service.addCourseToFaculty("Wetenschappen", "Wiskunde", item.getKey(), item.getValue(), rnd.nextInt(8) + 1);
 			}
 			
 			for (Map.Entry<String, Integer> item : dierg.entrySet()) {
 				// Make sure to use the addCourse method so that domain events are created
 				// to update other services that are interested.
-				service.addCourseToFaculty("Dierengeneeskunde", "Dierengeneeskunde", item.getKey(), item.getValue());
+				service.addCourseToFaculty("Dierengeneeskunde", "Dierengeneeskunde", item.getKey(), item.getValue(), rnd.nextInt(8) + 1);
 			}
 		};
 	}	
