@@ -21,6 +21,7 @@ public class Course extends AggregateRoot{
 	private Integer id;
 	private String courseName;
 	private Integer courseCredits;
+	private Integer teacherId;
 	
 	private List<CourseAnnouncement> courseAnnouncements;
 	private List<CourseMaterial> courseMaterial;

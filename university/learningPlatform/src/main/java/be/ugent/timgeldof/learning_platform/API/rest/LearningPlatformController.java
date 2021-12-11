@@ -46,26 +46,26 @@ public class LearningPlatformController {
 	}
 	
 	@GetMapping("courses/{studentId}")
-	public List<CourseViewModel> getAvailableCourses(@PathVariable("studentId") String studentId){
+	public List<CourseViewModel> getAvailableCourses(@PathVariable("studentId") Integer studentId){
 		return q.getAvailableCourses(studentId);
 	}
 	
 	@GetMapping("course/{courseId}/materials/{studentId}")
-	public CourseWithCourseMaterialViewModel getCourseMaterial(@PathVariable("studentId") String studentId, @PathVariable("courseId") int courseId){
+	public CourseWithCourseMaterialViewModel getCourseMaterial(@PathVariable("studentId") Integer studentId, @PathVariable("courseId") Integer courseId){
 		return q.getCourseMaterial(studentId, courseId);
 	}
 	
 	@GetMapping("course/{courseId}/announcements/{studentId}")
-	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(@PathVariable("studentId") String studentId, @PathVariable("courseId") int courseId){
+	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(@PathVariable("studentId") Integer studentId, @PathVariable("courseId") Integer courseId){
 		return q.getCourseAnnouncements(studentId, courseId);
 	}
 	
 	// PUT
 	
 	@PutMapping("course/{courseId}/materials/add")
-	public ResponseEntity<String> publishCourseMaterial(@RequestBody CourseMaterialViewModel courseMaterialViewModel, @PathVariable("courseId") String courseId) {
+	public ResponseEntity<String> publishCourseMaterial(@RequestBody CourseMaterialViewModel courseMaterialViewModel, @PathVariable("courseId") Integer courseId) {
         byte[] file = Base64.getEncoder().encode(courseMaterialViewModel.getFileBase64().getBytes());	
-		Response response = s.publishCourseMaterial(Integer.parseInt(courseId), file, courseMaterialViewModel.getFileName());
+		Response response = s.publishCourseMaterial(courseId, file, courseMaterialViewModel.getFileName());
 		
 		return createResponseEntity(
 				response.status, 

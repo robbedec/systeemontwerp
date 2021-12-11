@@ -22,26 +22,9 @@ services:
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
 
 # ------------Core services----------------
-  curriculum:
-    build: ./curriculum
-    container_name: curriculum
-    links:
-      - curriculum_db
-      - faculty_curriculum_db
-      - kafka
-    depends_on:
-      - curriculum_db
-      - faculty_curriculum_db
-      - kafka
-    environment: 
-      - spring.cloud.stream.kafka.binder.brokers=kafka
-      - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
-      - spring.data.mongodb.host=curriculum_db
-      - spring.data.mongodb.host=faculty_curriculum_db
-      - spring.data.mongodb.port=27017
-  faculty:
-    build: ./faculty
-    container_name: faculty
+  learningplatform:
+    build: ./learningPlatform
+    container_name: learningplatform
     links:
       - kafka
     depends_on:
@@ -59,13 +42,32 @@ services:
     environment:
       - spring.cloud.stream.kafka.binder.brokers=kafka
       - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
-  learningplatform:
-    build: ./learningPlatform
-    container_name: learningPlatform
+  curriculum:
+    build: ./curriculum
+    container_name: curriculum
+    links:
+      - curriculum_db
+      - faculty_curriculum_db
+      - kafka
+    depends_on:
+      - curriculum_db
+      - faculty_curriculum_db
+      - kafka
+      - learningplatform
+    environment: 
+      - spring.cloud.stream.kafka.binder.brokers=kafka
+      - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
+      - spring.data.mongodb.host=curriculum_db
+      - spring.data.mongodb.host=faculty_curriculum_db
+      - spring.data.mongodb.port=27017
+  faculty:
+    build: ./faculty
+    container_name: faculty
     links:
       - kafka
     depends_on:
       - kafka
+      - learningplatform
     environment:
       - spring.cloud.stream.kafka.binder.brokers=kafka
       - spring.cloud.stream.kafka.binder.zkNodes=zookeeper

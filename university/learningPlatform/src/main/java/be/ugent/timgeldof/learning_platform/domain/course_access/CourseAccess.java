@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseAccess extends AggregateRoot {
-	private String studentId;
+	private Integer studentId;
 	private List<Integer> courseIds;
 	private boolean undergoingPlagiarismProcedure;
 	private boolean invoiceOpen;

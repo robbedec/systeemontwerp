@@ -34,7 +34,7 @@ public class CourseAccessRepositoryImpl implements CourseAccessRepository{
 	}
 
 	@Override
-	public CourseAccess findById(String id) {
+	public CourseAccess findById(Integer id) {
 		Optional<CourseAccessDataModel> ca_o = repo.findById(id);
 		if(ca_o.isEmpty()) {
 			// return new courseAccess object

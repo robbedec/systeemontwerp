@@ -13,6 +13,6 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlagiarismRegisteredEvent {
-	public String studentId;
+	public Integer studentId;
 	public String changeType;
 }

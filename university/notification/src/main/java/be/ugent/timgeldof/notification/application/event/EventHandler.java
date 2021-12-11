@@ -23,7 +23,7 @@ public class EventHandler {
 	}
 
 	public void handleCourseMaterialVisibilityEvent(CourseMaterialVisibleEvent event) {
-		Response r = service.notifyStudentCourseMaterialVisibility(event.getStudentId(), event.getCourseName(), event.getFileName());		
+		Response r = service.notifyStudentCourseMaterialVisibility(event.getAccountId(), event.getCourseName(), event.getFileName());		
 		log.info(r.getMessage());
 	}
 

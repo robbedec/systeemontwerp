@@ -13,5 +13,5 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoicePaidEvent {
-	public String studentId;
+	public Integer studentId;
 }

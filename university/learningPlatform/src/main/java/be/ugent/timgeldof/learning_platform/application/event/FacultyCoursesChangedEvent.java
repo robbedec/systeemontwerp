@@ -14,4 +14,5 @@ public class FacultyCoursesChangedEvent {
 	private String facultyName;
 	private String courseName;
 	private Integer courseCredits;
+	private Integer teacherId;
 }

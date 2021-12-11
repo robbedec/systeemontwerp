@@ -34,7 +34,7 @@ public class CourseQueryImpl implements CourseQuery{
 	private CourseRepository courseRepo;
 
 	@Override
-	public List<CourseViewModel> getAvailableCourses(String studentId) {
+	public List<CourseViewModel> getAvailableCourses(Integer studentId) {
 		return courseAccessDomainService.getAccessibleCourses(studentId)
 				.stream()
 				.map(c ->{
@@ -45,7 +45,7 @@ public class CourseQueryImpl implements CourseQuery{
 	}
 
 	@Override
-	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(String studentId, int courseId) {
+	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(Integer studentId, Integer courseId) {
 		String courseName = courseRepo.findOne(courseId).getCourseName();
 		List<CourseAnnouncement> courseAnnouncements = courseAccessDomainService.getAccessibleCourseAnnouncements(studentId, courseId);
 		CourseWithCourseAnnouncementsViewModel c_a = new CourseWithCourseAnnouncementsViewModel();
@@ -55,7 +55,7 @@ public class CourseQueryImpl implements CourseQuery{
 	}
 
 	@Override
-	public CourseWithCourseMaterialViewModel getCourseMaterial(String studentId, int courseId) {
+	public CourseWithCourseMaterialViewModel getCourseMaterial(Integer studentId, Integer courseId) {
 		String courseName = courseRepo.findOne(courseId).getCourseName();
 		List<CourseMaterial> courseMaterials = courseAccessDomainService.getAccessibleCourseMaterials(studentId, courseId);
 		CourseWithCourseMaterialViewModel c_m = new CourseWithCourseMaterialViewModel();

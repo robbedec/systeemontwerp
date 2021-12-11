@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
 
-import be.ugent.timgeldof.learning_platform.application.command.CommandHandler;
 import be.ugent.timgeldof.learning_platform.application.event.EventHandler;
 import be.ugent.timgeldof.learning_platform.application.event.FacultyCoursesChangedEvent;
 import be.ugent.timgeldof.learning_platform.application.event.InvoicePaidEvent;

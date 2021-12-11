@@ -23,7 +23,7 @@ import lombok.Setter;
 @Table(name = "course_access")
 public class CourseAccessDataModel {
 	@Id
-	private String studentId;
+	private Integer studentId;
     @ElementCollection  
 	private List<Integer> courseIds;
 	private boolean undergoingPlagiarismProcedure;

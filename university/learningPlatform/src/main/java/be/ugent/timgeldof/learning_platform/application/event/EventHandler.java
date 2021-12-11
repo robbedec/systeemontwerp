@@ -18,7 +18,7 @@ public class EventHandler {
 	
 	public void handleFacultyCoursesChanged(FacultyCoursesChangedEvent event) {
 		if(event.getChangeType().equalsIgnoreCase("ADDED"))
-			s.addCourse(event.getCourseName(), event.getCourseCredits());
+			s.addCourse(event.getCourseName(), event.getCourseCredits(), event.getTeacherId());
 		else
 			s.removeCourse(event.getCourseName(), event.getCourseCredits());
 	}

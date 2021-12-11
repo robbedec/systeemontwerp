@@ -77,11 +77,12 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response addCourse(String courseName, Integer courseCredits) {
+	public Response addCourse(String courseName, Integer courseCredits, Integer teacherId) {
 		try {
 			Course c = new Course();
 			c.setCourseName(courseName);
 			c.setCourseCredits(courseCredits);
+			c.setTeacherId(teacherId);
 			
 			this.courseRepo.save(c);
 			log.info(courseName + " was successfully added");
@@ -109,7 +110,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response registerInvoicePaid(String studentId) {
+	public Response registerInvoicePaid(Integer studentId) {
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
 			ca.setInvoiceOpen(false);
@@ -122,7 +123,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response registerPlagiarism(String studentId, String changeType) {
+	public Response registerPlagiarism(Integer studentId, String changeType) {
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
 			// TODO : see if changetype is implemented
@@ -136,12 +137,12 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response changeCurriculum(String changeType, String studentId, String courseCredits, String courseName) {
+	public Response changeCurriculum(String changeType, Integer studentId, String courseCredits, String courseName) {
 
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
-			if(ca.getStudentId() == null || ca.getStudentId().isEmpty()) {
-				// the student ID being empty means the repository a the Course Access Object needs to be completed
+			if(ca.getStudentId() == 0) {
+				// the student ID being zerp means the repository a the Course Access Object needs to be completed
 				ca.setStudentId(studentId);
 				ca.setInvoiceOpen(true);
 				ca.setUndergoingPlagiarismProcedure(false);

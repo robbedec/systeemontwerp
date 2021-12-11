@@ -47,6 +47,7 @@ public class CourseRepositoryImpl implements CourseRepository{
 				c.getCourseName(), 
 				c.getId(),
 				c.getCourseCredits(),
+				c.getTeacherId(),
 				mapCourseAnnouncementDomainModelToDataModel(c.getCourseAnnouncements(), c),
 				mapCourseMaterialDomainModelToDataModel(c.getCourseMaterial(), c)
 		);
@@ -80,13 +81,13 @@ public class CourseRepositoryImpl implements CourseRepository{
 		List<Course> new_list = new ArrayList<>();
 		if(list != null)
 			list.forEach(c_dm -> {
-				new_list.add(new Course(c_dm.getId(), c_dm.getName(),c_dm.getCourseCredits(), mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials)));
+				new_list.add(new Course(c_dm.getId(), c_dm.getName(),c_dm.getCourseCredits(), c_dm.getTeacherId(), mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials)));
 			});
 		return new_list;
 	}
 	
 	public Course mapCourseDataModelToDomainModel(CourseDataModel c_dm){
-		return new Course(c_dm.getId(), c_dm.getName(),c_dm.getCourseCredits(), mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials));
+		return new Course(c_dm.getId(), c_dm.getName(),c_dm.getCourseCredits(), c_dm.getTeacherId(),mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials));
 	}
 	
 	public List<CourseMaterial> mapCourseMaterialDataModelToDomainModel(List<CourseMaterialDataModel> list){
