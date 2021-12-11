@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Repository;
 
 import be.ugent.systemdesign.university.invoice.domain.Invoice;
@@ -14,6 +15,9 @@ public class InvoiceRepositoryImpl implements InvoiceRepository{
 	
 	@Autowired
 	InvoiceJPARepository repo;
+	
+	@Autowired
+	ApplicationEventPublisher eventPublisher;
 
 	@Override
 	public Invoice findOne(Integer id) {
@@ -24,6 +28,9 @@ public class InvoiceRepositoryImpl implements InvoiceRepository{
 	@Override
 	public void save(Invoice _i) {
 		repo.save(_i);		
+		
+		_i.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
+		_i.clearDomainEvents();
 	}
 
 	@Override

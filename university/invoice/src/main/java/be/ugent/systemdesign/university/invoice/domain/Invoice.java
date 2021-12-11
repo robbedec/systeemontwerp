@@ -7,8 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import be.ugent.systemdesign.university.invoice.domain.seedwork.AggregateRoot;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Invoice {
+public class Invoice extends AggregateRoot {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -28,7 +27,7 @@ public class Invoice {
 	private String studentFirstName;
 	private String studentLastName;
 	private String studentNumber;
-	
+
 	private Double amount;
 	private LocalDate dueDate;
 	private String description;
@@ -43,7 +42,8 @@ public class Invoice {
 	}
 
 	public void isPaid() {
-		this.isPaid = true;
+		this.isPaid = true;	
+		addDomainEvent(new InvoicePaidEvent(studentNumber, amount));
 	}
 	
 	public void calculateAmount(String faculty) {
