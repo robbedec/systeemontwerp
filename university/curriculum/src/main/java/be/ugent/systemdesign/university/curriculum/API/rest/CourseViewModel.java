@@ -15,6 +15,7 @@ public class CourseViewModel {
 	private String credits;
 	
 	public CourseViewModel(CourseReadModel _crm) {
+		this.courseId = _crm.getCourseId();
 		this.name = _crm.getName();
 		this.credits = _crm.getCredits().toString();
 	}

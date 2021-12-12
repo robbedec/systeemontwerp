@@ -33,6 +33,7 @@ public class CurriculumQueryImpl implements CurriculumQuery {
 			_c.getAcademicYear(), 
 			_c.getCourses().stream()
 				.map(c -> new CourseReadModel(
+						c.getCourseId(),
 						c.getName(), 
 						c.getCredits()
 				)).collect(Collectors.toList()),

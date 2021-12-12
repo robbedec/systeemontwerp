@@ -18,12 +18,17 @@ public class EventHandler {
 	CurriculumService curriculumService;
 	
 	public void handleFacultyCoursesChanged(FacultyCoursesChangedEvent event) {
-		Response resp = curriculumService.noteFacultyCoursesChanged(event.getFacultyName(), event.getDegreeName(), FacultyCourseChangeType.valueOf(event.getChangeType()), event.getCourseId(), event.getCourseName(), event.getCourseCredits());
+		Response resp = curriculumService.noteFacultyCoursesChanged(event.getFacultyName(), event.getDegreeName(), FacultyCourseChangeType.valueOf(event.getChangeType()), Integer.valueOf(event.getCourseId()), event.getCourseName(), event.getCourseCredits());
 		log.info("-response status[{}] message[{}]", resp.status, resp.message);
 	}
 	
 	public void handleNewEnrollment(NewRegistrationEvent event) {
 		Response resp = curriculumService.noteNewRegistration(event.getStudentNumber(), event.getFacultyName(), event.getDegreeName());
+		log.info("-response status[{}] message[{}]", resp.status, resp.message);
+	}
+	
+	public void handleDisenrollment(DisenrollmentEvent event) {
+		Response resp = curriculumService.noteDisenrollment(event.getStudentId());
 		log.info("-response status[{}] message[{}]", resp.status, resp.message);
 	}
 }

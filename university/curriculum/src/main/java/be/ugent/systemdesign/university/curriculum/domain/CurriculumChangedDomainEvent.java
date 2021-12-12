@@ -7,7 +7,7 @@ import lombok.Getter;
 public class CurriculumChangedDomainEvent extends DomainEvent {
 	
 	private String studentId;
-	private Integer courseId;
+	private String courseId;
 	private String courseName;
 	private String courseCredits;
 	private String changeType;
@@ -15,7 +15,7 @@ public class CurriculumChangedDomainEvent extends DomainEvent {
 	public CurriculumChangedDomainEvent(String _studentId, Integer _courseId, String _courseName, Integer _courseCredits, FacultyCourseChangeType _changeType) {
 		super();
 		this.studentId = _studentId;
-		this.courseId = _courseId;
+		this.courseId = _courseId.toString();
 		this.courseName = _courseName;
 		this.courseCredits = _courseCredits.toString();
 		this.changeType = _changeType.name();

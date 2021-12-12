@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CourseReadModel {
 	
+	private Integer courseId;
 	private String name;
 	private Integer credits;
 }

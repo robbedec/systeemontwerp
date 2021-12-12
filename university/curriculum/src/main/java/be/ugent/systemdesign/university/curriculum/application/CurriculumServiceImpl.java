@@ -23,6 +23,7 @@ import be.ugent.systemdesign.university.curriculum.domain.Faculty;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCourseChangeType;
 import be.ugent.systemdesign.university.curriculum.domain.FacultyCoursesRepository;
 import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumInvalidException;
+import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumRemovedException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.DuplicateCourseException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProposedCurriculumCanBeReviewedException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProvisionOrRejectedCurriculumCanBeProposedException;
@@ -65,6 +66,8 @@ public class CurriculumServiceImpl implements CurriculumService {
 			
 		} catch (CurriculumNotFoundException e) {
 			return new Response(ResponseStatus.FAIL, "Could not find curriculum with id " + curriculumId);
+		} catch (CurriculumRemovedException e) {
+			return new Response(ResponseStatus.FAIL, "Curriculum was previously removed");
 		} catch(CurriculumInvalidException e) {
 			return new Response(ResponseStatus.FAIL, "Invalid curriculum");
 		} catch (Exception e) {
@@ -89,6 +92,8 @@ public class CurriculumServiceImpl implements CurriculumService {
 			
 		} catch(CurriculumNotFoundException e) {
 			return new Response(ResponseStatus.FAIL, "Could not find curriculum with id " + curriculumId);
+		} catch (CurriculumRemovedException e) {
+			return new Response(ResponseStatus.FAIL, "Curriculum was previously removed");
 		} catch (IllegalAccessException e) {
 			return new Response(ResponseStatus.FAIL, "Curriculum can not be reviewed by a student");
 		} catch (OnlyProposedCurriculumCanBeReviewedException e) {
@@ -108,8 +113,10 @@ public class CurriculumServiceImpl implements CurriculumService {
 			curriculumRepo.save(c);
 		} catch (CurriculumNotFoundException e) {
 			return new Response(ResponseStatus.FAIL, "Could not find curriculum with id " + curriculumId);
+		} catch (CurriculumRemovedException e) {
+			return new Response(ResponseStatus.FAIL, "Curriculum was previously removed");
 		} catch (OnlyProvisionOrRejectedCurriculumCanBeProposedException e) {
-			return new Response(ResponseStatus.FAIL, "Could not find curriculum with id " + curriculumId);
+			return new Response(ResponseStatus.FAIL, "Invalid operation");
 		}
 		
 		return new Response(ResponseStatus.SUCCESS, "");
@@ -123,9 +130,12 @@ public class CurriculumServiceImpl implements CurriculumService {
 		try {
 			// Student already attended a previous year in the giver faculty / degree.
 			c = curriculumRepo.findByStudentIdAndFacultyNameAndDegreeName(studentId, facultyName, degreeName);
+			c.transferHistory();
 		} catch (CurriculumNotFoundException e) {
 			// New student
 			c = new Curriculum(studentId, facultyName, degreeName);
+		} catch (CurriculumRemovedException e) {
+			return new Response(ResponseStatus.FAIL, "Curriculum was previously removed");
 		} catch (UnsupportedOperationException e) {
 			// There exist multiple curricula for a student in the same faculty and degree.
 			// This should never happen if new registrations are handled in the correct manner. 
@@ -139,8 +149,18 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 	@Override
 	public Response noteDisenrollment(String studentId) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Curriculum c = curriculumRepo.findByStudentId(studentId);
+			
+			// We chose to soft delete a curriculum to preserve history
+			c.setDeleted(true);
+			curriculumRepo.save(c);
+			
+		} catch(CurriculumNotFoundException e) {
+			return new Response(ResponseStatus.FAIL, "Could not find curriculum with id " + studentId);
+		}
+		
+		return new Response(ResponseStatus.SUCCESS, "");
 	}
 	
 	@Override
@@ -169,7 +189,6 @@ public class CurriculumServiceImpl implements CurriculumService {
 			
 			switch (changeType) {
 				case ADDED:
-					log.info("TEST {}", courseId);
 					degree.addCourse(courseId, courseName, courseCredits);
 					break;
 				case REMOVED:
