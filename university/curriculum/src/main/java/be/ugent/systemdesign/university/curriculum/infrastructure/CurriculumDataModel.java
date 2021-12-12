@@ -39,7 +39,7 @@ public class CurriculumDataModel {
 		this.dateCreated = _dateCreated;
 		this.dateLastChanged = _dateLastChanged;
 		this.academicYear = _academicYear.getValue();
-		this.courses = _courses.stream().map(c -> new CourseDataModel(c.getName(), c.getCredits())).collect(Collectors.toList());
+		this.courses = _courses.stream().map(c -> new CourseDataModel(c.getCourseId(), c.getName(), c.getCredits())).collect(Collectors.toList());
 		this.facultyName = _facultyName;
 		this.degreeName = _degreeName;
 	}

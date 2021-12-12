@@ -18,7 +18,7 @@ public class EventHandler {
 	CurriculumService curriculumService;
 	
 	public void handleFacultyCoursesChanged(FacultyCoursesChangedEvent event) {
-		Response resp = curriculumService.noteFacultyCoursesChanged(event.getFacultyName(), event.getDegreeName(), FacultyCourseChangeType.valueOf(event.getChangeType()), event.getCourseName(), event.getCourseCredits());
+		Response resp = curriculumService.noteFacultyCoursesChanged(event.getFacultyName(), event.getDegreeName(), FacultyCourseChangeType.valueOf(event.getChangeType()), event.getCourseId(), event.getCourseName(), event.getCourseCredits());
 		log.info("-response status[{}] message[{}]", resp.status, resp.message);
 	}
 	

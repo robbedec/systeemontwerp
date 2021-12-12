@@ -145,7 +145,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 	
 	@Override
 	public Response noteFacultyCoursesChanged(String facultyName, String degreeName, FacultyCourseChangeType changeType,
-			String courseName, Integer courseCredits) {
+			Integer courseId, String courseName, Integer courseCredits) {
 		
 		Faculty faculty;
 		DegreeProgramme degree;
@@ -169,10 +169,11 @@ public class CurriculumServiceImpl implements CurriculumService {
 			
 			switch (changeType) {
 				case ADDED:
-					degree.addCourse(courseName, courseCredits);
+					log.info("TEST {}", courseId);
+					degree.addCourse(courseId, courseName, courseCredits);
 					break;
 				case REMOVED:
-					degree.removeCourse(courseName, courseCredits);
+					degree.removeCourse(courseId, courseName, courseCredits);
 					break;
 			}
 			

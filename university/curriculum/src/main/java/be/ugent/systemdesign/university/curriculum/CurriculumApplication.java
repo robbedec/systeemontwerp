@@ -118,14 +118,16 @@ public class CurriculumApplication {
 	  @Bean
 	  CommandLineRunner testDIFF() {
 		  return (args) -> {
+			 int courseCounter = 1;
+			 
 			 List<Course> old = new ArrayList<>(Arrays.asList(
-					 new Course("Wiskunde 1", 6),
-					 new Course("Systeemontwerp", 3),
-					 new Course("Algoritmen", 6)
+					 new Course(courseCounter++, "Wiskunde 1", 6),
+					 new Course(courseCounter++, "Systeemontwerp", 3),
+					 new Course(courseCounter++, "Algoritmen", 6)
 					 ));
 			 
 			 List<Course> newL = new ArrayList<>(Arrays.asList(
-					 new Course("Wiskunde 1", 6)
+					 new Course(courseCounter++, "Wiskunde 1", 6)
 					 ));
 			 
 			 List<Course> diff = CourseDIFF.createDIFF(old, newL, new HashMap<Course, FacultyCourseChangeType>());

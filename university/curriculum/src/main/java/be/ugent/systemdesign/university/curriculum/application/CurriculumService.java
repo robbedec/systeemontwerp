@@ -15,5 +15,5 @@ public interface CurriculumService {
 	
 	Response noteNewRegistration(String studentId, String facultyName, String degreeName);
 	Response noteDisenrollment(String studentId);
-	Response noteFacultyCoursesChanged(String facultyName, String degreeName, FacultyCourseChangeType changeType, String courseName, Integer courseCredits);
+	Response noteFacultyCoursesChanged(String facultyName, String degreeName, FacultyCourseChangeType changeType, Integer courseId, String courseName, Integer courseCredits);
 }

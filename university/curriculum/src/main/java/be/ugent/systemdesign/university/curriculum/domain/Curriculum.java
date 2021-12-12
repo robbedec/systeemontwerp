@@ -100,6 +100,7 @@ public class Curriculum extends AggregateRoot {
 		changes.entrySet().stream().forEach(entry -> {
 			addDomainEvent(new CurriculumChangedDomainEvent(
 					this.studentId,
+					entry.getKey().getCourseId(),
 					entry.getKey().getName(),
 					entry.getKey().getCredits(),
 					entry.getValue()

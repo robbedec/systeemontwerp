@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CourseViewModel {
 	
+	private Integer courseId;
 	private String name;
 	private String credits;
 	

@@ -22,6 +22,6 @@ public class DegreeProgrammeDataModel {
 	
 	public DegreeProgrammeDataModel(String _name, List<Course> _courses) {
 		this.degreeName = _name;
-		this.available_courses = _courses.stream().map(c -> new CourseDataModel(c.getName(), c.getCredits())).collect(Collectors.toList());
+		this.available_courses = _courses.stream().map(c -> new CourseDataModel(c.getCourseId(), c.getName(), c.getCredits())).collect(Collectors.toList());
 	}
 }
