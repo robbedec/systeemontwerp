@@ -41,8 +41,8 @@ public class LearningPlatformController {
 	
 	// GET 
 	@GetMapping("courses/")
-	public String testRestController(){
-		return "controller working";
+	public  List<CourseViewModel> testRestController(){
+		return q.getAllCourses();
 	}
 	
 	@GetMapping("courses/{studentId}")

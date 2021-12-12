@@ -63,6 +63,18 @@ public class CourseQueryImpl implements CourseQuery{
 		c_m.setCourseMaterials(courseMaterials.stream().map(c -> new CourseMaterialViewModel(c.getName(), c.getTimestamp(), c.getFile())).collect(Collectors.toList()));
 		return c_m;
 	}
+
+	
+	// method for testing purposes
+	@Override
+	public List<CourseViewModel> getAllCourses() {
+		
+		return courseRepo.findAll().stream()
+				.map(c ->{
+					return new CourseViewModel(c.getCourseName());
+				 })
+				.collect(Collectors.toList());
+	}
 	
 
 }

@@ -77,9 +77,10 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response addCourse(String courseName, Integer courseCredits, Integer teacherId) {
+	public Response addCourse(Integer courseId, String courseName, Integer courseCredits, Integer teacherId) {
 		try {
 			Course c = new Course();
+			c.setId(teacherId);
 			c.setCourseName(courseName);
 			c.setCourseCredits(courseCredits);
 			c.setTeacherId(teacherId);
@@ -94,14 +95,12 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response removeCourse(String courseName, Integer courseCredits) {
+	public Response removeCourse(Integer courseId) {
 		try {
-			Course c = new Course();
-			c.setCourseName(courseName);
-			c.setCourseCredits(courseCredits);
+			Course c = this.courseRepo.findOne(courseId);
 			this.courseRepo.remove(c);
 			this.courseAccessRepo.removeCourse(c);
-			log.info(courseName + " was successfully deleted");
+			log.info(c.getCourseName() + " was successfully deleted");
 			return new Response(ResponseStatus.SUCCESS,"course removed: " + c.getCourseName());
 		}
 		catch (RuntimeException e) {
@@ -123,7 +122,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response registerPlagiarism(Integer studentId, String changeType) {
+	public Response registerPlagiarism(Integer studentId) {
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
 			// TODO : see if changetype is implemented

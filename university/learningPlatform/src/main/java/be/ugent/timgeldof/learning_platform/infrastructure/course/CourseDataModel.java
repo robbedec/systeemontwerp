@@ -29,7 +29,6 @@ import lombok.Setter;
 public class CourseDataModel {
 	private String name;
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer Id;
 	private Integer courseCredits;
 	private Integer teacherId;

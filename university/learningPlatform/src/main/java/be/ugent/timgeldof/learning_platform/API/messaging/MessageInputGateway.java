@@ -42,7 +42,7 @@ public class MessageInputGateway {
 	
 	@StreamListener(Channels.PLAGIARISM_REGISTERED_EVENT)
 	public void consumePlagiarismRegisteredEvent(PlagiarismRegisteredEvent event) {
-		log.info("Message input gateway received facultyCourseChangedEvent of type " + event.getChangeType());
+		log.info("Message input gateway received facultyCourseChangedEvent for student with id: " + event.getStudentId().toString());
 		eventHandler.handlePlagiarism(event);
 	}
 	
