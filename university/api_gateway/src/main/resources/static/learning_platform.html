@@ -1,0 +1,47 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Learning platform</title>
+  <meta name="description" content="A simple frontend for the learning platform service">
+  <meta name="author" content="tim geldof">
+
+  <link rel="stylesheet" href="css/learningplatform.css"">
+
+</head>
+
+<body>
+<h1>Learning platform</h1>
+<h2>Student interaction</h2>
+
+
+<div class="block">
+	<a id="getStudentCoursesButton" href="#" class="myButton">Get courses of student</a>
+	<br>
+	<br>
+	<label for="studentId"> Student ID: </label> 
+	<input type="text" name="studentId" id="studentIdInput" />
+	<div class="overflowDiv" id="myCoursesDiv"></div>
+</div>
+
+<div class="block" >
+	<div class="overflowDiv" id="courseContent"></div>
+</div>
+
+<h2>Teacher interaction</h2>
+<div class="block">
+	<a id="getTeacherCoursesButton" href="#" class="myButton">Get courses of teacher</a>
+	<br>
+	<br>
+	<label for="teacherID"> Student ID: </label> 
+	<input type="text" name="teacherId" id="teacherIdInput" />
+	<div class="overflowDiv" id="teacherCoursesDiv"></div>
+</div>
+
+
+  <script src="js/learningplatform.js"></script>
+</body>
+</html>

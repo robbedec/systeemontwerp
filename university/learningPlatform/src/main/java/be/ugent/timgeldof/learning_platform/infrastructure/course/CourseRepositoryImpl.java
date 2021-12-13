@@ -8,10 +8,13 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Repository;
 
+import be.ugent.timgeldof.learning_platform.application.LearningPlatformServiceImpl;
 import be.ugent.timgeldof.learning_platform.domain.course.Course;
 import be.ugent.timgeldof.learning_platform.domain.course.CourseAnnouncement;
 import be.ugent.timgeldof.learning_platform.domain.course.CourseMaterial;
@@ -22,6 +25,9 @@ import be.ugent.timgeldof.learning_platform.domain.course.CourseRepository;
 @Transactional
 public class CourseRepositoryImpl implements CourseRepository{
 
+	private static final Logger log = LoggerFactory.getLogger(CourseRepositoryImpl.class);
+
+	
 	@Autowired
 	CourseDataModelRepository repo;
 	
@@ -34,7 +40,7 @@ public class CourseRepositoryImpl implements CourseRepository{
 	}
 
 	@Override
-	public Course findOne(Integer id) {
+	public Course findOne(String id) {
 		Optional<CourseDataModel> c = repo.findById(id);
 		if(c.isEmpty())
 			throw new CourseNotFoundException();
@@ -47,10 +53,12 @@ public class CourseRepositoryImpl implements CourseRepository{
 				c.getCourseName(), 
 				c.getId(),
 				c.getCourseCredits(),
+				c.getTeacherId(),
 				mapCourseAnnouncementDomainModelToDataModel(c.getCourseAnnouncements(), c),
 				mapCourseMaterialDomainModelToDataModel(c.getCourseMaterial(), c)
 		);
-		repo.save(c_dm);
+		c_dm = repo.save(c_dm);
+		log.info("REPO HAS SAVED THE COURSE {} with ID {}", c_dm.getName(), c_dm.getId());
 		c.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
 		c.clearDomainEvents();
 	}
@@ -80,13 +88,13 @@ public class CourseRepositoryImpl implements CourseRepository{
 		List<Course> new_list = new ArrayList<>();
 		if(list != null)
 			list.forEach(c_dm -> {
-				new_list.add(new Course(c_dm.getId(), c_dm.getName(),c_dm.getCourseCredits(), mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials)));
+				new_list.add(new Course(c_dm.getId(), c_dm.getName(),c_dm.getCourseCredits(), c_dm.getTeacherId(), mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials)));
 			});
 		return new_list;
 	}
 	
 	public Course mapCourseDataModelToDomainModel(CourseDataModel c_dm){
-		return new Course(c_dm.getId(), c_dm.getName(),c_dm.getCourseCredits(), mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials));
+		return new Course(c_dm.getId(), c_dm.getName(),c_dm.getCourseCredits(), c_dm.getTeacherId(),mapCourseAnnouncementDataModelToDomainModel(c_dm.announcements), mapCourseMaterialDataModelToDomainModel(c_dm.coursematerials));
 	}
 	
 	public List<CourseMaterial> mapCourseMaterialDataModelToDomainModel(List<CourseMaterialDataModel> list){

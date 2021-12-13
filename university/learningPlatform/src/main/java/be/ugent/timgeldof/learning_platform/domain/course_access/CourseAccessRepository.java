@@ -6,7 +6,7 @@ import be.ugent.timgeldof.learning_platform.domain.course.Course;
 
 public interface CourseAccessRepository {
 	List<CourseAccess> findAll();
-	CourseAccess findById(String id);
+	CourseAccess findById(String id) throws StudentNotFoundException;
 	void save(CourseAccess c);
 	void removeCourse(Course c);
 }

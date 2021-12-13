@@ -18,16 +18,6 @@ public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 	@Autowired
 	ScoreCardDataModelRepository scoreCardDMRepo;
 
-	private ScoreCard mapToScoreCard(ScoreCardDataModel scoreCardDM) {
-		return new ScoreCard(scoreCardDM.getScoreCardId(), scoreCardDM.getStudentId(), scoreCardDM.getDegreeId(),
-				scoreCardDM.getScores().stream().map(courseScoreDM -> mapToCourseScore(courseScoreDM))
-						.collect(Collectors.toList()));
-	}
-
-	private CourseScore mapToCourseScore(CourseScoreDataModel courseScoreDM) {
-		return new CourseScore(courseScoreDM.getCourseId(), courseScoreDM.getScore());
-	}
-
 	private ScoreCardDataModel mapToScoreCardDataModel(ScoreCard scoreCard) {
 		return new ScoreCardDataModel(scoreCard.getScoreCardId(), scoreCard.getStudentId(), scoreCard.getDegreeId(),
 				scoreCard.getScores().stream().map(courseScore -> mapToCourseScoreDataModel(courseScore))
@@ -49,6 +39,17 @@ public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 	public ScoreCard save(ScoreCard scoreCard) {
 		ScoreCardDataModel scoreCardDM = scoreCardDMRepo.save(mapToScoreCardDataModel(scoreCard));
 		return mapToScoreCard(scoreCardDM);
+	}
+	
+	// Mappings from domain model <-> data model
+	private ScoreCard mapToScoreCard(ScoreCardDataModel scoreCardDM) {
+		return new ScoreCard(scoreCardDM.getScoreCardId(), scoreCardDM.getStudentId(), scoreCardDM.getDegreeId(),
+				scoreCardDM.getScores().stream().map(courseScoreDM -> mapToCourseScore(courseScoreDM))
+						.collect(Collectors.toList()));
+	}
+
+	private CourseScore mapToCourseScore(CourseScoreDataModel courseScoreDM) {
+		return new CourseScore(courseScoreDM.getCourseId(), courseScoreDM.getScore());
 	}
 
 }

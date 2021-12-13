@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
 
+import be.ugent.systemdesign.university.curriculum.application.event.DisenrollmentEvent;
 import be.ugent.systemdesign.university.curriculum.application.event.EventHandler;
 import be.ugent.systemdesign.university.curriculum.application.event.FacultyCoursesChangedEvent;
 import be.ugent.systemdesign.university.curriculum.application.event.NewRegistrationEvent;
@@ -23,7 +24,7 @@ private static final Logger log = LoggerFactory.getLogger(MessageInputGateway.cl
 	
 	@StreamListener(Channels.FACULTY_EVENT)
 	public void consumeFacultyCoursesChangedEvent(FacultyCoursesChangedEvent event) {
-		log.info("FACULTY COURSES CHANGED: {} ({} SP) {} in {} (fac. {})", event.getCourseName(), event.getCourseCredits(), event.getChangeType(), event.getDegreeName(), event.getFacultyName());
+		log.info("FACULTY COURSES CHANGED: {} ({} SP with id {}) {} in {} (fac. {}) resp. teacher: {}", event.getCourseName(), event.getCourseCredits(), event.getCourseId(), event.getChangeType(), event.getDegreeName(), event.getFacultyName(), event.getTeacherId());
 		eventHandler.handleFacultyCoursesChanged(event);
 	}
 	
@@ -31,5 +32,11 @@ private static final Logger log = LoggerFactory.getLogger(MessageInputGateway.cl
 	public void consumeNewRegistrationEvent(NewRegistrationEvent event) {
 		log.info("NEW REGISTRATION: {} enrolled in {} (fac. {})", event.getStudentNumber(), event.getDegreeName(), event.getFacultyName());
 		eventHandler.handleNewEnrollment(event);
+	}
+	
+	@StreamListener(Channels.DISENROLLMENT_EVENT)
+	public void consumeDisenrollment(DisenrollmentEvent event) {
+		log.info("DISENROLLMENT: with studentId {}", event.getStudentId());
+		eventHandler.handleDisenrollment(event);
 	}
 }

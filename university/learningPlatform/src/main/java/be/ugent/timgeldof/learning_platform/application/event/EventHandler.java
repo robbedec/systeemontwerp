@@ -17,14 +17,15 @@ public class EventHandler {
 	LearningPlatformService s;
 	
 	public void handleFacultyCoursesChanged(FacultyCoursesChangedEvent event) {
+		log.info("GOT course {} with id {}",event.getCourseName(), event.getCourseId());
 		if(event.getChangeType().equalsIgnoreCase("ADDED"))
-			s.addCourse(event.getCourseName(), event.getCourseCredits());
+			s.addCourse(event.getCourseId(), event.getCourseName(), event.getCourseCredits(), event.getTeacherId());
 		else
-			s.removeCourse(event.getCourseName(), event.getCourseCredits());
+			s.removeCourse(event.getCourseId());
 	}
 
 	public void handleCurriculumChanged(CurriculumChangedDomainEvent event) {
-		s.changeCurriculum(event.getChangeType(), event.getStudentId(), event.getCourseCredits(), event.getCourseName());
+		s.changeCurriculum(event.getChangeType(), event.getStudentId(), event.getCourseId());
 	}
 
 	public void handleInvoicePaid(InvoicePaidEvent event) {
@@ -32,6 +33,6 @@ public class EventHandler {
 	}
 
 	public void handlePlagiarism(PlagiarismRegisteredEvent event) {
-		s.registerPlagiarism(event.getStudentId(), event.getChangeType());
+		s.registerPlagiarism(event.getStudentId());
 	}
 }

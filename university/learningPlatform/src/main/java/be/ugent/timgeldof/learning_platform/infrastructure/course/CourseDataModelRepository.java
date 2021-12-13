@@ -7,8 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import be.ugent.timgeldof.learning_platform.domain.course.Course;
 
-public interface CourseDataModelRepository extends JpaRepository<CourseDataModel, Integer> {
+public interface CourseDataModelRepository extends JpaRepository<CourseDataModel, String> {
 	List<CourseDataModel> findAll();
-	Optional<CourseDataModel> findByName(String name);
 	Optional<CourseDataModel> findByNameAndCourseCredits(String name, Integer courseCredits);
 }

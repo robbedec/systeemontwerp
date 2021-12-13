@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
-
-import be.ugent.timgeldof.notification.application.command.GetStudentInformationCommand;
-import be.ugent.timgeldof.notification.application.command.GetStudentInformationResponse;
 import be.ugent.timgeldof.notification.application.event.CourseMaterialVisibleEvent;
 import be.ugent.timgeldof.notification.application.event.CurriculumChangedEvent;
 import be.ugent.timgeldof.notification.application.event.EventHandler;
@@ -34,14 +31,8 @@ public class MessageInputGateway{
 	}
 	
 	@StreamListener(Channels.NEW_REGISTRATION_EVENT)
-	@SendTo(Channels.STUDENT_INFORMATION_REQUEST)
-	public GetStudentInformationCommand consumeNewRegistrationEvent(NewRegistrationEvent event) {
-		return new GetStudentInformationCommand(event.getStudentId());
+	public void consumeNewRegistrationEvent(NewRegistrationEvent event) {
+		eventHandler.handleNewRegistrationEvent(event);
 	}
-	
-	@StreamListener(Channels.STUDENT_INFORMATION_RESPONSE)
-	public void consumeStudentInformationResponse(GetStudentInformationResponse response) {
-		eventHandler.handleStudentInformationResponse(response);
-	}
-	
+
 }

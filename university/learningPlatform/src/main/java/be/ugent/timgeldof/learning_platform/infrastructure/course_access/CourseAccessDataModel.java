@@ -25,7 +25,7 @@ public class CourseAccessDataModel {
 	@Id
 	private String studentId;
     @ElementCollection  
-	private List<Integer> courseIds;
+	private List<String> courseIds;
 	private boolean undergoingPlagiarismProcedure;
 	private boolean invoiceOpen;
 }

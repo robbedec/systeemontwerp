@@ -9,6 +9,7 @@ import java.util.Map;
 import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumChangesByStudentDisabledException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumExceedsMaximumCreditsException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumLockedException;
+import be.ugent.systemdesign.university.curriculum.domain.exception.CurriculumRemovedException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProposedCurriculumCanBeReviewedException;
 import be.ugent.systemdesign.university.curriculum.domain.exception.OnlyProvisionOrRejectedCurriculumCanBeProposedException;
 import be.ugent.systemdesign.university.curriculum.domain.seedwork.AggregateRoot;
@@ -33,17 +34,21 @@ public class Curriculum extends AggregateRoot {
 	private List<Course> courses;
 	private String facultyName;
 	private String degreeName;
-	private List<Course> completedCourses;
+	private List<CompletedCourseLine> completedCourses;
+	private boolean isDeleted;
 	
 	public Curriculum(String studentId, String facultyName, String degreeName) {
 		this.studentId = studentId;
+		this.facultyName = facultyName;
+		this.degreeName = degreeName;
+		
 		this.curriculumStatus = CurriculumStatus.PROVISIONAL;
 		this.dateCreated = LocalDate.now();
 		this.dateLastChanged = dateCreated;
 		this.courses = new ArrayList<>();
+		this.completedCourses = new ArrayList<>();
 		this.academicYear = Year.now();
-		this.facultyName = facultyName;
-		this.degreeName = degreeName;
+		this.isDeleted = false;
 	}
 	
 	public void addCourse(String _name, Integer _credits) {
@@ -54,7 +59,9 @@ public class Curriculum extends AggregateRoot {
 		);
 	}
 	
-	public void markCurriculumAsProposed() throws OnlyProvisionOrRejectedCurriculumCanBeProposedException {
+	public void markCurriculumAsProposed() throws OnlyProvisionOrRejectedCurriculumCanBeProposedException, CurriculumRemovedException {
+		if (this.isDeleted) throw new CurriculumRemovedException();
+		
 		if (this.curriculumStatus == CurriculumStatus.PROPOSED || this.curriculumStatus == CurriculumStatus.ACCEPTED) {
 			throw new OnlyProvisionOrRejectedCurriculumCanBeProposedException();
 		}
@@ -62,7 +69,9 @@ public class Curriculum extends AggregateRoot {
 		this.curriculumStatus = CurriculumStatus.PROPOSED;
 	}
 	
-	public void reviewCurriculum(CurriculumStatus status, boolean calledByStudent) throws IllegalAccessException, OnlyProposedCurriculumCanBeReviewedException {
+	public void reviewCurriculum(CurriculumStatus status, boolean calledByStudent) throws IllegalAccessException, OnlyProposedCurriculumCanBeReviewedException, CurriculumRemovedException {
+		if (this.isDeleted) throw new CurriculumRemovedException();
+		
 		// A student can not review a curriculum
 		if (calledByStudent) {
 			throw new IllegalAccessException();
@@ -76,7 +85,8 @@ public class Curriculum extends AggregateRoot {
 		this.curriculumStatus = status;
 	}
 	
-	public void changeCurriculum(List<Course> _courses, boolean changedByStudent, Map<Course, FacultyCourseChangeType> changes) throws CurriculumExceedsMaximumCreditsException, CurriculumChangesByStudentDisabledException, CurriculumLockedException {
+	public void changeCurriculum(List<Course> _courses, boolean changedByStudent, Map<Course, FacultyCourseChangeType> changes) throws CurriculumExceedsMaximumCreditsException, CurriculumChangesByStudentDisabledException, CurriculumLockedException, CurriculumRemovedException {
+		if (this.isDeleted) throw new CurriculumRemovedException();
 		
 		if (this.curriculumStatus == CurriculumStatus.REJECTED) this.curriculumStatus = CurriculumStatus.PROVISIONAL;
 		
@@ -100,6 +110,7 @@ public class Curriculum extends AggregateRoot {
 		changes.entrySet().stream().forEach(entry -> {
 			addDomainEvent(new CurriculumChangedDomainEvent(
 					this.studentId,
+					entry.getKey().getCourseId(),
 					entry.getKey().getName(),
 					entry.getKey().getCredits(),
 					entry.getValue()
@@ -109,5 +120,21 @@ public class Curriculum extends AggregateRoot {
 		
 		this.courses = _courses;
 		this.dateLastChanged = LocalDate.now();
+	}
+	
+	/*
+	 * This is used to transfer data from an old curriculum.
+	 * This scenario happens when a student re-registers (i.e. for the second year of the degree)
+	 * and where history is tracked.
+	 */	
+	public void transferHistory() throws CurriculumRemovedException {
+		if (this.isDeleted) throw new CurriculumRemovedException();
+		
+		this.courses.forEach(course -> this.completedCourses.add(new CompletedCourseLine(course.getCourseId(), this.academicYear.getValue())));
+		this.courses.clear();
+		
+		this.academicYear = Year.now();
+		this.curriculumStatus = CurriculumStatus.PROVISIONAL;
+		this.dateCreated = LocalDate.now();
 	}
 }

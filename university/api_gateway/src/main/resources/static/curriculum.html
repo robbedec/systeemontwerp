@@ -30,7 +30,8 @@
 
 <script>
 
-	const base_url = "http://localhost/api/"
+	//const base_url = "http://localhost/api/"
+	const base_url = "/api/";
 	const faculty_url = base_url + "faculty/"
 	const curriculum_url = base_url + "curriculum/"
 
@@ -86,6 +87,10 @@
 		
 		          	const paragraph = document.createElement("span");
 		          	paragraph.textContent = course.courseName;
+		          	
+		          	const invis = document.createElement("span");
+		          	invis.textContent = course.courseId;
+		          	invis.hidden = true;
 		          
 		          	const checkbox = document.createElement("input");
 		          	checkbox.type = "checkbox";
@@ -95,6 +100,7 @@
 		          	checkbox.checked = (curriculum.courses.filter(cc => cc.name === course.courseName && cc.credits === course.courseCredits).length != 0);          
 		
 		          	label.appendChild(paragraph);
+		          	label.appendChild(invis);
 		          	label.appendChild(checkbox);
 		          
 		          	cboxes_list.appendChild(label);
@@ -125,12 +131,13 @@
 	
 	        	const input_element = x.getElementsByTagName("input")[0];
 	        	const span_course_name = x.getElementsByTagName("span")[0];
+	        	const span_course_id = x.getElementsByTagName("span")[1];
 	        
 	        	// Add courses that were changed
 	        	if (input_element.checked && !(curriculum.courses.filter(cc => cc.name === span_course_name.innerHTML).length != 0)) {
-	          		changed_courses.push({ name: span_course_name.innerHTML, credits: input_element.value });
+	          		changed_courses.push({ name: span_course_name.innerHTML, credits: input_element.value, courseId: span_course_id.innerHTML });
 	        	} else if (!input_element.checked && (curriculum.courses.filter(cc => cc.name === span_course_name.innerHTML).length != 0)) {
-	          		changed_courses.push({ name: span_course_name.innerHTML, credits: input_element.value });
+	          		changed_courses.push({ name: span_course_name.innerHTML, credits: input_element.value, courseId: span_course_id.innerHTML });
 	        	}
 	      	}
       	

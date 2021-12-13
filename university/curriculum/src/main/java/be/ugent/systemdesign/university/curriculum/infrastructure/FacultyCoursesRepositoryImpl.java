@@ -49,6 +49,7 @@ public class FacultyCoursesRepositoryImpl implements FacultyCoursesRepository {
 						.availableCourses(d.getAvailable_courses()
 							.stream()
 							.map(c -> Course.builder()
+								.courseId(c.getCourseId())
 								.name(c.getName())
 								.credits(c.getCredits())
 								.build()
@@ -57,5 +58,4 @@ public class FacultyCoursesRepositoryImpl implements FacultyCoursesRepository {
 					).collect(Collectors.toList())
 				).build();
 	}
-
 }

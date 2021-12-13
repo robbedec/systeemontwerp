@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import com.example.evaluation.domain.exception.InvalidScoreException;
 import com.example.evaluation.domain.model.Task;
 import com.example.evaluation.domain.model.TaskSubmission;
+import com.example.evaluation.domain.repository.CourseRepository;
 import com.example.evaluation.domain.repository.TaskRepository;
-import com.example.evaluation.domain.repository.TaskSubmissionRepository;
 import com.example.evaluation.infrastructure.exception.TaskNotFoundException;
 import com.example.evaluation.infrastructure.exception.TaskSubmissionNotFoundException;
 
@@ -22,18 +22,25 @@ import com.example.evaluation.infrastructure.exception.TaskSubmissionNotFoundExc
 @Service
 public class TaskServiceImpl implements TaskService {
 	@Autowired
-	TaskRepository taskRepo;
-
+	private TaskRepository taskRepo;
+	
 	@Autowired
-	TaskSubmissionRepository taskSubmissionRepo;
+	private CourseRepository courseRepo;
 
 	@Override
-	public Response createTask(String courseId, String description, LocalDateTime dueDate, double weight) {
-		Task task = new Task(null, courseId, description, dueDate, weight);
+	public Response createTask(String courseId, String description, LocalDateTime dueDate, double weight, String teacherId) {
 		try {
+			if(!teacherId.equals(courseRepo.findTeacherForCourse(courseId))) {
+				return new Response(ResponseStatus.FAIL, "Only the teacher can create a task");
+			}
+			
+			Task task = new Task(null, courseId, description, dueDate, weight);
 			task = taskRepo.save(task);
 			
-			// TODO create submission for every student
+			for(String studentId : courseRepo.findStudentsFollowingCourse(courseId)) {
+				TaskSubmission taskSubmission = new TaskSubmission(courseId, studentId);
+				taskRepo.save(taskSubmission);
+			}
 			
 			return new Response(ResponseStatus.SUCCESS, "ID " + task.getTaskId());
 		} catch (Exception e) {
@@ -43,15 +50,14 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public Response submitTask(String taskId, String studentId, String file) {
-		TaskSubmission taskSubmission = new TaskSubmission(null, taskId, studentId, file, LocalDateTime.now(), -1);
-
 		try {
 			Task task = taskRepo.findById(taskId);
 			if (task.dueDatePassed()) {
 				return new Response(ResponseStatus.FAIL, "Missed due date");
 			}
+			TaskSubmission taskSubmission = taskRepo.findSubmissionByTaskIdAndStudentId(taskId, studentId);
 
-			taskSubmission = taskSubmissionRepo.save(taskSubmission);
+			taskSubmission = taskRepo.save(taskSubmission);
 			return new Response(ResponseStatus.SUCCESS, "ID " + taskSubmission.getSubmissionId());
 		} catch (TaskNotFoundException e) {
 			return new Response(ResponseStatus.FAIL, "Task doesn't exist");
@@ -61,11 +67,17 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public Response assignScore(String taskSubmissionId, int score) {
+	public Response assignScore(String taskSubmissionId, int score, String teacherId) {
 		try {
-			TaskSubmission taskSubmission = taskSubmissionRepo.findById(taskSubmissionId);
+			TaskSubmission taskSubmission = taskRepo.findSubmissionById(taskSubmissionId);
+			
+			String responsibleTeacher = courseRepo.findTeacherForCourse(taskRepo.findById(taskSubmission.getTaskId()).getCourseId());
+			if(!teacherId.equals(responsibleTeacher)) {
+				return new Response(ResponseStatus.FAIL, "Only the teacher can assign a score");
+			}
+			
 			taskSubmission.assignScore(score);
-			taskSubmissionRepo.save(taskSubmission);
+			taskRepo.save(taskSubmission);
 			return new Response(ResponseStatus.SUCCESS, "Updated score");
 		} catch (InvalidScoreException e) {
 			return new Response(ResponseStatus.FAIL, "Invalid score");
@@ -78,7 +90,7 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public Response checkPlagiarism(String taskId) {
-		List<TaskSubmission> taskSubmissions = taskSubmissionRepo.findByTaskId(taskId);
+		List<TaskSubmission> taskSubmissions = taskRepo.findSubmissionsByTaskId(taskId);
 		Set<String> plagiarismTasks = new HashSet<>();
 
 		for (int i = 0; i < taskSubmissions.size(); i++) {
@@ -96,12 +108,12 @@ public class TaskServiceImpl implements TaskService {
 					if (!plagiarismTasks.contains(taskSubmissions.get(i).getSubmissionId())) {
 						taskSubmissions.get(i).plagiarismDetected();
 						plagiarismTasks.add(taskSubmissions.get(i).getSubmissionId());
-						taskSubmissionRepo.save(taskSubmissions.get(i));
+						taskRepo.save(taskSubmissions.get(i));
 					}
 					if (!plagiarismTasks.contains(taskSubmissions.get(j).getSubmissionId())) {
 						taskSubmissions.get(j).plagiarismDetected();
 						plagiarismTasks.add(taskSubmissions.get(j).getSubmissionId());
-						taskSubmissionRepo.save(taskSubmissions.get(j));
+						taskRepo.save(taskSubmissions.get(j));
 					}
 				}
 			}

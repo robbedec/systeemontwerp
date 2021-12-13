@@ -21,7 +21,7 @@ public class CourseAccessDomainService{
 	@Autowired
 	CourseAccessRepository courseAccessRepo;	
 	
-	public List<Course> getAccessibleCourses(String studentId){
+	public List<Course> getAccessibleCourses(String studentId) throws StudentNotFoundException{
 		CourseAccess ca = courseAccessRepo.findById(studentId);
 		checkAccess(ca);
 		List<Course> courses = new ArrayList<Course>();
@@ -31,7 +31,7 @@ public class CourseAccessDomainService{
 		return courses;
 	}
 	
-	public List<CourseAnnouncement> getAccessibleCourseAnnouncements(String studentId, Integer courseId){
+	public List<CourseAnnouncement> getAccessibleCourseAnnouncements(String studentId, String courseId) throws StudentNotFoundException{
 		CourseAccess ca = courseAccessRepo.findById(studentId);
 		checkAccess(ca);
 		Course c = courseRepo.findOne(courseId);
@@ -40,7 +40,7 @@ public class CourseAccessDomainService{
 		return courseAnnouncements;
 	}
 	
-	public List<CourseMaterial> getAccessibleCourseMaterials(String studentId, Integer courseId){
+	public List<CourseMaterial> getAccessibleCourseMaterials(String studentId, String courseId) throws StudentNotFoundException{
 		CourseAccess ca = courseAccessRepo.findById(studentId);
 		checkAccess(ca);
 		return courseRepo.findOne(courseId).getVisibleCourseMaterials();

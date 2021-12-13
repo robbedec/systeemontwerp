@@ -16,16 +16,6 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 	@Autowired
 	private CertificateDataModelRepository certificateDMRepo;
 
-	private Certificate mapToCertificate(CertificateDataModel certificateDM) {
-		return new Certificate(certificateDM.getCertificateId(), certificateDM.getDegreeId(),
-				certificateDM.getStudentId());
-	}
-
-	private CertificateDataModel mapToCertificateDataModel(Certificate certificate) {
-		return new CertificateDataModel(certificate.getCertificateId(), certificate.getDegreeId(),
-				certificate.getCertificateId());
-	}
-
 	@Override
 	public Certificate findById(String certificateId) {
 		CertificateDataModel certificateDM = certificateDMRepo.findById(certificateId)
@@ -49,6 +39,17 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 	public List<Certificate> findByDegreeId(String degreeId) {
 		return certificateDMRepo.findByDegreeId(degreeId).stream().map(certificateDM -> mapToCertificate(certificateDM))
 				.collect(Collectors.toList());
+	}
+	
+	// Mappings from domain model <-> data model
+	private Certificate mapToCertificate(CertificateDataModel certificateDM) {
+		return new Certificate(certificateDM.getCertificateId(), certificateDM.getDegreeId(),
+				certificateDM.getStudentId());
+	}
+
+	private CertificateDataModel mapToCertificateDataModel(Certificate certificate) {
+		return new CertificateDataModel(certificate.getCertificateId(), certificate.getDegreeId(),
+				certificate.getCertificateId());
 	}
 
 }

@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CourseDataModel {
 	
+	private Integer courseId;
 	private String name;
 	private Integer credits;
 }

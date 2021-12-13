@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
 
-import be.ugent.timgeldof.learning_platform.application.command.CommandHandler;
 import be.ugent.timgeldof.learning_platform.application.event.EventHandler;
 import be.ugent.timgeldof.learning_platform.application.event.FacultyCoursesChangedEvent;
 import be.ugent.timgeldof.learning_platform.application.event.InvoicePaidEvent;
@@ -43,7 +42,7 @@ public class MessageInputGateway {
 	
 	@StreamListener(Channels.PLAGIARISM_REGISTERED_EVENT)
 	public void consumePlagiarismRegisteredEvent(PlagiarismRegisteredEvent event) {
-		log.info("Message input gateway received facultyCourseChangedEvent of type " + event.getChangeType());
+		log.info("Message input gateway received facultyCourseChangedEvent for student with id: " + event.getStudentId().toString());
 		eventHandler.handlePlagiarism(event);
 	}
 	

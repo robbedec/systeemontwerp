@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import be.ugent.timgeldof.notification.application.NotificationService;
 import be.ugent.timgeldof.notification.application.Response;
-import be.ugent.timgeldof.notification.application.command.GetStudentInformationResponse;
 
 @Service
 public class EventHandler {
@@ -18,17 +17,17 @@ public class EventHandler {
 	NotificationService service;
 	
 	public void handleCurriculumChangedEvent(CurriculumChangedEvent event) {
-		Response r = service.notifyStudentCurriculumChange(event.getStudentId(), event.getCourseName(), event.getChangeType());
+		Response r = service.notifyStudentCurriculumChange(event.getCourseName(), event.getChangeType());
 		log.info(r.getMessage());
 	}
 
 	public void handleCourseMaterialVisibilityEvent(CourseMaterialVisibleEvent event) {
-		Response r = service.notifyStudentCourseMaterialVisibility(event.getStudentId(), event.getCourseName(), event.getFileName());		
+		Response r = service.notifyStudentCourseMaterialVisibility(event.getCourseName(), event.getFileName());		
 		log.info(r.getMessage());
 	}
 
-	public void handleStudentInformationResponse(GetStudentInformationResponse response) {
-		Response r = service.registerNewStudentInformation(response.getStudentId(), response.getStudentEmail(), response.getFirstName(), response.getLastName());
+	public void handleNewRegistrationEvent(NewRegistrationEvent event) {
+		Response r = service.registerNewRegistration(event.getAccountId(), event.getEmail(), event.getDegree());
 		log.info(r.getMessage());
 	}
 }

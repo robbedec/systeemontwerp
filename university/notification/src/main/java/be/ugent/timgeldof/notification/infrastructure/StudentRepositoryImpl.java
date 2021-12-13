@@ -28,10 +28,10 @@ public class StudentRepositoryImpl implements StudentRepository{
 	}
 
 	@Override
-	public Student findByEmailAddress(String emailAddress) {
-		Optional<Student> s = this.studentJpaRepository.findByEmailAddress(emailAddress);
+	public Student findByEmail(String email) {
+		Optional<Student> s = this.studentJpaRepository.findByEmailAddress(email);
 		if(s.isEmpty())
 			throw new StudentNotFoundException();
-		return s.get();
+		return s.get();	
 	}
 }

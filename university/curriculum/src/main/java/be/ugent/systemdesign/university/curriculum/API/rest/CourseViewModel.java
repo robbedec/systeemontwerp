@@ -10,10 +10,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CourseViewModel {
 	
+	private Integer courseId;
 	private String name;
 	private String credits;
 	
 	public CourseViewModel(CourseReadModel _crm) {
+		this.courseId = _crm.getCourseId();
 		this.name = _crm.getName();
 		this.credits = _crm.getCredits().toString();
 	}

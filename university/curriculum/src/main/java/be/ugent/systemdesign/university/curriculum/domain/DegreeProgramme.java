@@ -25,19 +25,19 @@ public class DegreeProgramme {
 		this.availableCourses = new ArrayList<>();
 	}
 	
-	public void addCourse(String _name, Integer _credits) throws DuplicateCourseException {
+	public void addCourse(Integer _courseId, String _name, Integer _credits) throws DuplicateCourseException {
 		
 		boolean isPresent = this.availableCourses.stream().anyMatch(x -> x.getName().equals(_name) && x.getCredits() == _credits);
 		
 		if (isPresent) {
 			throw new DuplicateCourseException();
 		} else {
-			this.availableCourses.add(new Course(_name, _credits));
+			this.availableCourses.add(new Course(_courseId, _name, _credits));
 		}
 	}
 	
-	public void removeCourse(String _name, Integer _credits) {
-		this.availableCourses.remove(new Course(_name, _credits));
+	public void removeCourse(Integer _courseId, String _name, Integer _credits) {
+		this.availableCourses.remove(new Course(_courseId, _name, _credits));
 	}
 	
 	@Override
@@ -50,5 +50,4 @@ public class DegreeProgramme {
 	public int hashCode() {
 	    return Objects.hash(this.degreeName);
 	}
-	
 }

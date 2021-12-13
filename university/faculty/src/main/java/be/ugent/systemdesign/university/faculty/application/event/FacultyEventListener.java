@@ -26,7 +26,7 @@ public class FacultyEventListener {
 				event.getFacultyName(), 
 				event.getCourseName(),
 				event.getCourseCredits().toString(),
-				event.getChangeType().name()
+				event.getChangeType()
 		);
 		
 	}
@@ -34,13 +34,14 @@ public class FacultyEventListener {
 	@Async
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void handleFacultyCoursesChangedAsync(FacultyCoursesChangedDomainEvent event) {
-		log.info(">handle FacultyCoursesChanged Async of event created at {}, for faculty: {} ({}): {} with {} points ({})", 
+		log.info(">handle FacultyCoursesChanged Async of event created at {}, for faculty: {} ({}): {} with {} points ({}) with teacher ", 
 				event.getCreatedTime(), 
 				event.getFacultyName(), 
 				event.getDegreeName(),
 				event.getCourseName(),
 				event.getCourseCredits().toString(),
-				event.getChangeType().name()
+				event.getChangeType(),
+				event.getTeacherId().toString()
 		);
 		
 		eventDispatcher.publishFacultyEvent(event);

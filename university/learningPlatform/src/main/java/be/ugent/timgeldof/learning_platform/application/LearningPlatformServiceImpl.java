@@ -17,6 +17,7 @@ import be.ugent.timgeldof.learning_platform.domain.course.CourseMaterial;
 import be.ugent.timgeldof.learning_platform.domain.course.CourseRepository;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccess;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccessRepository;
+import be.ugent.timgeldof.learning_platform.domain.course_access.StudentNotFoundException;
 
 @Transactional
 @Service
@@ -32,7 +33,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	CourseAccessRepository courseAccessRepo; 
 	
 	@Override
-	public Response publishCourseMaterial(Integer courseId, byte[] file, String fileName) {
+	public Response publishCourseMaterial(String courseId, byte[] file, String fileName) {
 		CourseMaterial cm = new CourseMaterial();
 		cm.setFile(file);
 		cm.setName(fileName);
@@ -50,7 +51,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response changeCourseMaterialVisibility(Integer courseId) {
+	public Response changeCourseMaterialVisibility(String courseId) {
 		try {
 			Course c = courseRepo.findOne(courseId);
 			c.changeCourseMaterialVisibility(true);
@@ -62,7 +63,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response addCourseAnnouncements(int courseId, String message) {
+	public Response addCourseAnnouncements(String courseId, String message) {
 		CourseAnnouncement ca = new CourseAnnouncement();
 		ca.setMessage(message);
 		ca.setTimeStamp(LocalDateTime.now());
@@ -77,11 +78,13 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response addCourse(String courseName, Integer courseCredits) {
+	public Response addCourse(String courseId, String courseName, Integer courseCredits, String teacherId) {
 		try {
 			Course c = new Course();
+			c.setId(courseId);
 			c.setCourseName(courseName);
 			c.setCourseCredits(courseCredits);
+			c.setTeacherId(teacherId);
 			
 			this.courseRepo.save(c);
 			log.info(courseName + " was successfully added");
@@ -93,14 +96,12 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response removeCourse(String courseName, Integer courseCredits) {
+	public Response removeCourse(String courseId) {
 		try {
-			Course c = new Course();
-			c.setCourseName(courseName);
-			c.setCourseCredits(courseCredits);
+			Course c = this.courseRepo.findOne(courseId);
 			this.courseRepo.remove(c);
 			this.courseAccessRepo.removeCourse(c);
-			log.info(courseName + " was successfully deleted");
+			log.info(c.getCourseName() + " was successfully deleted");
 			return new Response(ResponseStatus.SUCCESS,"course removed: " + c.getCourseName());
 		}
 		catch (RuntimeException e) {
@@ -118,11 +119,13 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 		}
 		catch (RuntimeException e) {
 			return new Response(ResponseStatus.FAIL,"invoice payment not registered");
+		} catch (StudentNotFoundException e) {
+			return new Response(ResponseStatus.FAIL,"student not found");
 		}
 	}
 
 	@Override
-	public Response registerPlagiarism(String studentId, String changeType) {
+	public Response registerPlagiarism(String studentId) {
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
 			// TODO : see if changetype is implemented
@@ -132,22 +135,17 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 		}
 		catch (RuntimeException e) {
 			return new Response(ResponseStatus.FAIL,"The plagiarism was not registered successfully");
+		}catch (StudentNotFoundException e) {
+			return new Response(ResponseStatus.FAIL,"student not found");
 		}
 	}
 
 	@Override
-	public Response changeCurriculum(String changeType, String studentId, String courseCredits, String courseName) {
+	public Response changeCurriculum(String changeType, String studentId, String courseId) {
 
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
-			if(ca.getStudentId() == null || ca.getStudentId().isEmpty()) {
-				// the student ID being empty means the repository a the Course Access Object needs to be completed
-				ca.setStudentId(studentId);
-				ca.setInvoiceOpen(true);
-				ca.setUndergoingPlagiarismProcedure(false);
-				ca.setCourseIds(new ArrayList<Integer>());
-			}
-			Integer courseId = this.courseRepo.findByCourseNameAndCourseCredits(courseName, Integer.parseInt(courseCredits)).getId();
+
 			if(changeType.equalsIgnoreCase("ADDED")) {
 				ca.addCourse(courseId);
 			} else {
@@ -158,6 +156,22 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 		}
 		catch (RuntimeException e) {
 			return new Response(ResponseStatus.FAIL,"The curriculum change was not registered successfully");
+		} catch (StudentNotFoundException e) {
+			// CourseAccess object does not exist yet
+			if(changeType.equalsIgnoreCase("ADDED")) {
+				CourseAccess ca = new CourseAccess();
+				ca.setStudentId(studentId);
+				ca.setInvoiceOpen(true);
+				ca.setUndergoingPlagiarismProcedure(false);
+				ca.setCourseIds(new ArrayList<String>());
+				ca.addCourse(courseId);
+				this.courseAccessRepo.save(ca);
+				return new Response(ResponseStatus.SUCCESS,"Curriculum change successful for: " + ca.getStudentId());
+			}
+			else {
+				return new Response(ResponseStatus.SUCCESS,"Curriculum course removal was not necessary "
+						+ "since the student did not have access to the course anyway");
+			}
 		}
 	}
 }

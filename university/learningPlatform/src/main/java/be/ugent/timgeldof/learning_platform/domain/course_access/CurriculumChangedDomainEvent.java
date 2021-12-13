@@ -10,8 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CurriculumChangedDomainEvent {
+	private String courseId;
 	private String studentId;
-	private String courseName;
-	private String courseCredits;
 	private String changeType;
 }

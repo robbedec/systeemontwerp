@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Repository;
 
+import be.ugent.systemdesign.university.curriculum.domain.CompletedCourseLine;
 import be.ugent.systemdesign.university.curriculum.domain.Course;
 import be.ugent.systemdesign.university.curriculum.domain.Curriculum;
 import be.ugent.systemdesign.university.curriculum.domain.CurriculumRepository;
@@ -68,7 +69,9 @@ public class CurriculumRepositoryImpl implements CurriculumRepository {
 			_c.getAcademicYear(),
 			_c.getCourses(),
 			_c.getFacultyName(),
-			_c.getDegreeName()
+			_c.getDegreeName(),
+			_c.getCompletedCourses(),
+			_c.isDeleted()
 		);
 	}
 	
@@ -83,12 +86,18 @@ public class CurriculumRepositoryImpl implements CurriculumRepository {
 			.courses(_c.getCourses()
 					.stream()
 					.map(t -> Course.builder()
+							.courseId(t.getCourseId())
 							.name(t.getName())
 							.credits(t.getCredits())
 							.build())
 					.collect(Collectors.toList()))
 			.facultyName(_c.getFacultyName())
 			.degreeName(_c.getDegreeName())
+			.completedCourses(_c.getCompletedCourses()
+					.stream()
+					.map(t -> new CompletedCourseLine(t.getCourseId(), t.getYear()))
+					.collect(Collectors.toList()))
+			.isDeleted(_c.isDeleted())
 			.build();
 	}
 }

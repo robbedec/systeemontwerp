@@ -11,4 +11,6 @@ import lombok.Setter;
 @Setter
 public class CourseViewModel {
 	public String name;
+	public String id;
+	public String teacherID;
 }

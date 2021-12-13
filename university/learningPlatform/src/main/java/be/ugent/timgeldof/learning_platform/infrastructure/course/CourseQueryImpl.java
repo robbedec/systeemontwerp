@@ -21,6 +21,7 @@ import be.ugent.timgeldof.learning_platform.domain.course.CourseRepository;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccess;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccessDomainService;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccessRepository;
+import be.ugent.timgeldof.learning_platform.domain.course_access.StudentNotFoundException;
 
 @Component
 public class CourseQueryImpl implements CourseQuery{
@@ -34,18 +35,18 @@ public class CourseQueryImpl implements CourseQuery{
 	private CourseRepository courseRepo;
 
 	@Override
-	public List<CourseViewModel> getAvailableCourses(String studentId) {
+	public List<CourseViewModel> getAvailableCourses(String studentId) throws StudentNotFoundException {
 		return courseAccessDomainService.getAccessibleCourses(studentId)
 				.stream()
 				.map(c ->{
 					log.info("returning course " + c.getCourseName() + "with ID: " + c.getId());
-					return new CourseViewModel(c.getCourseName());
+					return new CourseViewModel(c.getCourseName(), c.getId(), c.getTeacherId());
 				 })
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(String studentId, int courseId) {
+	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(String studentId, String courseId) throws StudentNotFoundException {
 		String courseName = courseRepo.findOne(courseId).getCourseName();
 		List<CourseAnnouncement> courseAnnouncements = courseAccessDomainService.getAccessibleCourseAnnouncements(studentId, courseId);
 		CourseWithCourseAnnouncementsViewModel c_a = new CourseWithCourseAnnouncementsViewModel();
@@ -55,13 +56,25 @@ public class CourseQueryImpl implements CourseQuery{
 	}
 
 	@Override
-	public CourseWithCourseMaterialViewModel getCourseMaterial(String studentId, int courseId) {
+	public CourseWithCourseMaterialViewModel getCourseMaterial(String studentId, String courseId) throws StudentNotFoundException {
 		String courseName = courseRepo.findOne(courseId).getCourseName();
 		List<CourseMaterial> courseMaterials = courseAccessDomainService.getAccessibleCourseMaterials(studentId, courseId);
 		CourseWithCourseMaterialViewModel c_m = new CourseWithCourseMaterialViewModel();
 		c_m.setCourseName(courseName);
 		c_m.setCourseMaterials(courseMaterials.stream().map(c -> new CourseMaterialViewModel(c.getName(), c.getTimestamp(), c.getFile())).collect(Collectors.toList()));
 		return c_m;
+	}
+
+	
+	// method for testing purposes
+	@Override
+	public List<CourseViewModel> getAllCourses() {
+		
+		return courseRepo.findAll().stream()
+				.map(c ->{
+					return new CourseViewModel(c.getCourseName(), c.getId(), c.getTeacherId());
+				 })
+				.collect(Collectors.toList());
 	}
 	
 

@@ -39,11 +39,11 @@ public class TaskController {
 	private TaskService taskService;
 
 	@PostMapping
-	public ResponseEntity<String> createTask(@RequestBody TaskViewModel taskVM) {
+	public ResponseEntity<String> createTask(@RequestBody TaskViewModel taskVM, String teacherId) {
 		log.info("{} {} {}",taskVM.description, taskVM.dueDate, taskVM.weight);
 		double weight = (double) Integer.parseInt(taskVM.weight.replace("%", "")) / 100;
 		Response response = taskService.createTask(taskVM.courseId, taskVM.description,
-				LocalDateTime.parse(taskVM.dueDate), weight);
+				LocalDateTime.parse(taskVM.dueDate), weight, teacherId);
 		return createResponseEntity(response.status, "Task created", HttpStatus.CREATED, response.message,
 				HttpStatus.CONFLICT);
 	}
@@ -57,8 +57,8 @@ public class TaskController {
 	}
 
 	@PutMapping("submissions/{id}/score")
-	public ResponseEntity<String> assignScore(@PathVariable String taskSubmissionId, int score) {
-		Response response = taskService.assignScore(taskSubmissionId, score);
+	public ResponseEntity<String> assignScore(@PathVariable String taskSubmissionId, int score, String teacherId) {
+		Response response = taskService.assignScore(taskSubmissionId, score, teacherId);
 		return createResponseEntity(response.status, "Score assigned", HttpStatus.OK, response.message,
 				HttpStatus.CONFLICT);
 	}

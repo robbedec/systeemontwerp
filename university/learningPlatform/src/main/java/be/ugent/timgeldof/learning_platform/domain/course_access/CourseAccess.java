@@ -15,15 +15,17 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CourseAccess extends AggregateRoot {
 	private String studentId;
-	private List<Integer> courseIds;
+	private List<String> courseIds;
 	private boolean undergoingPlagiarismProcedure;
 	private boolean invoiceOpen;
 	
-	public void addCourse(int courseId) {
-		courseIds.add(courseId);
+	public void addCourse(String courseId) {
+		if(!courseIds.contains(courseId))
+			courseIds.add(courseId);
 	}
-	public void removeCourse(int courseId) {
-		courseIds.remove(courseId);
+	public void removeCourse(String courseId) {
+		if(courseIds.contains(courseId))
+			courseIds.remove(courseId);
 	}
 	
 	public boolean isStudentAllowedCourseAccess() {

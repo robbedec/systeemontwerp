@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,13 +24,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "courses")
 public class CourseDataModel {
 	private String name;
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer Id;
+	private String Id;
 	private Integer courseCredits;
+	private String teacherId;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<CourseAnnouncementDataModel> announcements;

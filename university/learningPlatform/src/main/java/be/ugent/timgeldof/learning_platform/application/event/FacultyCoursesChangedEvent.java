@@ -10,8 +10,10 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FacultyCoursesChangedEvent {
 	// Changetype can be either ADDED or REMOVED
+	private String courseId;
 	private String changeType;
 	private String facultyName;
 	private String courseName;
 	private Integer courseCredits;
+	private String teacherId;
 }

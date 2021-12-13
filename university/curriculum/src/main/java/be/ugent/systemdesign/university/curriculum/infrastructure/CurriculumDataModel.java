@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import be.ugent.systemdesign.university.curriculum.domain.CompletedCourseLine;
 import be.ugent.systemdesign.university.curriculum.domain.Course;
 import be.ugent.systemdesign.university.curriculum.domain.CurriculumStatus;
 import lombok.Getter;
@@ -31,16 +32,20 @@ public class CurriculumDataModel {
 	private List<CourseDataModel> courses;
 	private String facultyName;
 	private String degreeName;
+	private List<CompletedCourseLineDataModel> completedCourses;
+	private boolean isDeleted;
 	
-	public CurriculumDataModel(String _curriculumId, String _studentId, CurriculumStatus _curriculumStatus, LocalDate _dateCreated, LocalDate _dateLastChanged, Year _academicYear, List<Course> _courses, String _facultyName, String _degreeName) {
+	public CurriculumDataModel(String _curriculumId, String _studentId, CurriculumStatus _curriculumStatus, LocalDate _dateCreated, LocalDate _dateLastChanged, Year _academicYear, List<Course> _courses, String _facultyName, String _degreeName, List<CompletedCourseLine> _completedCourses, boolean _isDeleted) {
 		this.curriculumId = _curriculumId;
 		this.studentId = _studentId;
 		this.curriculumStatus = _curriculumStatus.name();
 		this.dateCreated = _dateCreated;
 		this.dateLastChanged = _dateLastChanged;
 		this.academicYear = _academicYear.getValue();
-		this.courses = _courses.stream().map(c -> new CourseDataModel(c.getName(), c.getCredits())).collect(Collectors.toList());
+		this.courses = _courses.stream().map(c -> new CourseDataModel(c.getCourseId(), c.getName(), c.getCredits())).collect(Collectors.toList());
 		this.facultyName = _facultyName;
 		this.degreeName = _degreeName;
+		this.completedCourses = _completedCourses.stream().map(c -> new CompletedCourseLineDataModel(c.getCourseId(), c.getYear())).collect(Collectors.toList());
+		this.isDeleted = _isDeleted;
 	}
 }

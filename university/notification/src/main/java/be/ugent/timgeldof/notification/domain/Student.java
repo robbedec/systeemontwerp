@@ -18,12 +18,6 @@ import lombok.Setter;
 public class Student {
 	@Id
 	private String studentId;
-	private String emailAddress;
-	private String firstName;
-	private String lastName;
-	
-	public String getFullName(){
-		return this.firstName + " " + this.lastName;
-	}
-
+	private String email;
+	private String degree;
 }

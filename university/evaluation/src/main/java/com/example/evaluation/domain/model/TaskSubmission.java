@@ -20,6 +20,12 @@ public class TaskSubmission extends AggregateRoot {
 	private String file;
 	private LocalDateTime dateSubmitted;
 	private int score;
+	
+	public TaskSubmission(String taskId, String studentId) {
+		this.taskId = taskId;
+		this.studentId = studentId;
+		this.score = -1;
+	}
 
 	public void assignScore(int score) {
 		if (score < 0 || score > 20)
