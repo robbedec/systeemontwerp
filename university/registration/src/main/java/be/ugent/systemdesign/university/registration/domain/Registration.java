@@ -48,7 +48,7 @@ public class Registration extends AggregateRoot{
 	
 	public void accept () {
 		this.status = Status.ACCEPTED;
-		addDomainEvent(new RegistrationAcceptedEvent(accountId, email, name, firstName, faculty, degree));
+		addDomainEvent(new RegistrationAcceptedEvent(accountId, email, faculty, degree));
 	}
 	
 	public void reject() {
