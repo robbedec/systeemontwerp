@@ -4,9 +4,6 @@ services:
   curriculum_db:
     image: mongo
     container_name: curriculum_db
-  faculty_curriculum_db:
-    image: mongo
-    container_name: faculty_curriculum_db
   zookeeper:
     image: confluentinc/cp-zookeeper
     environment:
@@ -47,18 +44,15 @@ services:
     container_name: curriculum
     links:
       - curriculum_db
-      - faculty_curriculum_db
       - kafka
     depends_on:
       - curriculum_db
-      - faculty_curriculum_db
       - kafka
       - learningplatform
     environment: 
       - spring.cloud.stream.kafka.binder.brokers=kafka
       - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
       - spring.data.mongodb.host=curriculum_db
-      - spring.data.mongodb.host=faculty_curriculum_db
       - spring.data.mongodb.port=27017
   faculty:
     build: ./faculty
