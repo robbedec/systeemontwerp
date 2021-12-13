@@ -23,10 +23,10 @@ public class NotificationServiceImpl implements NotificationService {
 	private static final Logger log = LoggerFactory.getLogger(EventHandler.class);
 
 	@Override
-	public Response notifyStudentCurriculumChange(Integer studentId, String courseName, String changeType) {
+	public Response notifyStudentCurriculumChange(String courseName, String changeType) {
 		try{
-			
-			Student s = repo.findOne(studentId);
+			// this could be used to register which courses the student should receive notifications from, but considering this is 
+			// a stub implementation, it won't be implemented
 			StringBuilder messageContent = new StringBuilder();
 			messageContent.append("\nCONTENT: Hello,\n The course \"" + courseName + "\" has been ");
 			if(changeType.equalsIgnoreCase("ADDED"))
@@ -34,7 +34,7 @@ public class NotificationServiceImpl implements NotificationService {
 			else
 				messageContent.append("removed from your curriculum");
 
-			communicationProvider.send(s.getEmail(), messageContent.toString());
+			communicationProvider.send("subscribers", messageContent.toString());
 			return new Response(ResponseStatus.SUCCESS, "student was notified of curriculum change");
 
 		} catch (StudentNotFoundException e) {
@@ -45,14 +45,13 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public Response notifyStudentCourseMaterialVisibility(Integer studentId, String courseName, String fileName) {
+	public Response notifyStudentCourseMaterialVisibility(String courseName, String fileName) {
 		try{
-			Student s = repo.findOne(studentId);
 			StringBuilder messageContent = new StringBuilder();
 			
 			messageContent.append("\n The course \"" + courseName + "\" contains new course material:  " + fileName);
 
-			communicationProvider.send(s.getEmail(), messageContent.toString());
+			communicationProvider.send("subscribers", messageContent.toString());
 			return new Response(ResponseStatus.SUCCESS, "student was notified of new visible course material");
 		} catch (StudentNotFoundException e) {
 			return new Response(ResponseStatus.FAIL, "student was not found");
@@ -62,7 +61,7 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public Response registerNewRegistration(Integer accountId, String email, String degree) {
+	public Response registerNewRegistration(String accountId, String email, String degree) {
 		try {
 			Student s = new Student();
 			s.setEmail(email);

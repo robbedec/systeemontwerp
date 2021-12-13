@@ -47,24 +47,24 @@ public class LearningPlatformController {
 	}
 	
 	@GetMapping("students/{studentId}/courses/")
-	public List<CourseViewModel> getAvailableCourses(@PathVariable("studentId") Integer studentId) throws StudentNotFoundException{
+	public List<CourseViewModel> getAvailableCourses(@PathVariable("studentId") String studentId) throws StudentNotFoundException{
 		return q.getAvailableCourses(studentId);
 	}
 	
 	@GetMapping("students/{studentId}/courses/{courseId}/materials/")
-	public CourseWithCourseMaterialViewModel getCourseMaterial(@PathVariable("studentId") Integer studentId, @PathVariable("courseId") Integer courseId) throws StudentNotFoundException{
+	public CourseWithCourseMaterialViewModel getCourseMaterial(@PathVariable("studentId") String studentId, @PathVariable("courseId") String courseId) throws StudentNotFoundException{
 		return q.getCourseMaterial(studentId, courseId);
 	}
 	
 	@GetMapping("students/{studentId}/courses/{courseId}/announcements")
-	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(@PathVariable("studentId") Integer studentId, @PathVariable("courseId") Integer courseId) throws StudentNotFoundException{
+	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(@PathVariable("studentId") String studentId, @PathVariable("courseId") String courseId) throws StudentNotFoundException{
 		return q.getCourseAnnouncements(studentId, courseId);
 	}
 	
 	// PUT
 	
 	@PutMapping("teachers/{teacherId}/courses/{courseId}/materials/add")
-	public ResponseEntity<String> publishCourseMaterial(@RequestBody CourseMaterialViewModel courseMaterialViewModel, @PathVariable("courseId") Integer courseId) {
+	public ResponseEntity<String> publishCourseMaterial(@RequestBody CourseMaterialViewModel courseMaterialViewModel, @PathVariable("courseId") String courseId) {
         byte[] file = Base64.getEncoder().encode(courseMaterialViewModel.getFileBase64().getBytes());	
 		Response response = s.publishCourseMaterial(courseId, file, courseMaterialViewModel.getFileName());
 		
@@ -80,7 +80,7 @@ public class LearningPlatformController {
 	@PutMapping("teachers/{teacherId}/courses/{courseId}/materials/makevisible")
 	public ResponseEntity<String> makeCourseMaterialVisible(@PathVariable("courseId") String courseId) {
 				
-		Response response = s.changeCourseMaterialVisibility(Integer.parseInt(courseId));
+		Response response = s.changeCourseMaterialVisibility(courseId);
 		
 		return createResponseEntity(
 				response.status, 
@@ -94,7 +94,7 @@ public class LearningPlatformController {
 	@PutMapping("teachers/{teacherId}/courses/{courseId}/announcements/add")
 	public ResponseEntity<String> addCourseAnnouncement(@RequestBody CourseAnnouncementViewModel courseAnnouncementViewModel, @PathVariable("courseId") String courseId) {
 				
-		Response response = s.addCourseAnnouncements(Integer.parseInt(courseId), courseAnnouncementViewModel.getMessage());
+		Response response = s.addCourseAnnouncements(courseId, courseAnnouncementViewModel.getMessage());
 		
 		return createResponseEntity(
 				response.status, 

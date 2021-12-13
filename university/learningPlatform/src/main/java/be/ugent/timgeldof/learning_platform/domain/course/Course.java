@@ -17,10 +17,10 @@ import be.ugent.timgeldof.learning_platform.domain.seedwork.AggregateRoot;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Course extends AggregateRoot{
-	private Integer id;
+	private String id;
 	private String courseName;
 	private Integer courseCredits;
-	private Integer teacherId;
+	private String teacherId;
 	
 	private List<CourseAnnouncement> courseAnnouncements;
 	private List<CourseMaterial> courseMaterial;

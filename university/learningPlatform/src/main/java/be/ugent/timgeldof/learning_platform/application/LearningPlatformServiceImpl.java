@@ -33,7 +33,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	CourseAccessRepository courseAccessRepo; 
 	
 	@Override
-	public Response publishCourseMaterial(Integer courseId, byte[] file, String fileName) {
+	public Response publishCourseMaterial(String courseId, byte[] file, String fileName) {
 		CourseMaterial cm = new CourseMaterial();
 		cm.setFile(file);
 		cm.setName(fileName);
@@ -51,7 +51,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response changeCourseMaterialVisibility(Integer courseId) {
+	public Response changeCourseMaterialVisibility(String courseId) {
 		try {
 			Course c = courseRepo.findOne(courseId);
 			c.changeCourseMaterialVisibility(true);
@@ -63,7 +63,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response addCourseAnnouncements(int courseId, String message) {
+	public Response addCourseAnnouncements(String courseId, String message) {
 		CourseAnnouncement ca = new CourseAnnouncement();
 		ca.setMessage(message);
 		ca.setTimeStamp(LocalDateTime.now());
@@ -78,7 +78,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response addCourse(Integer courseId, String courseName, Integer courseCredits, Integer teacherId) {
+	public Response addCourse(String courseId, String courseName, Integer courseCredits, String teacherId) {
 		try {
 			Course c = new Course();
 			c.setId(courseId);
@@ -96,7 +96,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response removeCourse(Integer courseId) {
+	public Response removeCourse(String courseId) {
 		try {
 			Course c = this.courseRepo.findOne(courseId);
 			this.courseRepo.remove(c);
@@ -110,7 +110,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response registerInvoicePaid(Integer studentId) {
+	public Response registerInvoicePaid(String studentId) {
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
 			ca.setInvoiceOpen(false);
@@ -125,7 +125,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response registerPlagiarism(Integer studentId) {
+	public Response registerPlagiarism(String studentId) {
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
 			// TODO : see if changetype is implemented
@@ -141,7 +141,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response changeCurriculum(String changeType, Integer studentId, Integer courseId) {
+	public Response changeCurriculum(String changeType, String studentId, String courseId) {
 
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
@@ -163,7 +163,8 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 				ca.setStudentId(studentId);
 				ca.setInvoiceOpen(true);
 				ca.setUndergoingPlagiarismProcedure(false);
-				ca.setCourseIds(new ArrayList<Integer>());
+				ca.setCourseIds(new ArrayList<String>());
+				ca.addCourse(courseId);
 				this.courseAccessRepo.save(ca);
 				return new Response(ResponseStatus.SUCCESS,"Curriculum change successful for: " + ca.getStudentId());
 			}

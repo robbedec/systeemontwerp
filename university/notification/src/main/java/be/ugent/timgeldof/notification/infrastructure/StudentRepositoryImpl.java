@@ -15,7 +15,7 @@ public class StudentRepositoryImpl implements StudentRepository{
 	StudentJPARepository studentJpaRepository;
 	
 	@Override
-	public Student findOne(Integer id) throws StudentNotFoundException {
+	public Student findOne(String id) throws StudentNotFoundException {
 		Optional<Student> s = this.studentJpaRepository.findById(id);
 		if(s.isEmpty())
 			throw new StudentNotFoundException();

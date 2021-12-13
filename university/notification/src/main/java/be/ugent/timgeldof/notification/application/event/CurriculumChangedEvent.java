@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CurriculumChangedEvent {
-	private Integer studentId;
-	private Integer courseId;
+	private String studentId;
+	private String courseId;
 	private String courseName;
 	private String courseCredits;
 	private String changeType;

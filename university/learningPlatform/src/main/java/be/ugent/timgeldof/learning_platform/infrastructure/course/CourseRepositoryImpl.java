@@ -40,7 +40,7 @@ public class CourseRepositoryImpl implements CourseRepository{
 	}
 
 	@Override
-	public Course findOne(Integer id) {
+	public Course findOne(String id) {
 		Optional<CourseDataModel> c = repo.findById(id);
 		if(c.isEmpty())
 			throw new CourseNotFoundException();

@@ -17,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Student {
 	@Id
-	private Integer studentId;
+	private String studentId;
 	private String email;
 	private String degree;
 }

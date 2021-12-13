@@ -17,12 +17,12 @@ public class EventHandler {
 	NotificationService service;
 	
 	public void handleCurriculumChangedEvent(CurriculumChangedEvent event) {
-		Response r = service.notifyStudentCurriculumChange(event.getStudentId(), event.getCourseName(), event.getChangeType());
+		Response r = service.notifyStudentCurriculumChange(event.getCourseName(), event.getChangeType());
 		log.info(r.getMessage());
 	}
 
 	public void handleCourseMaterialVisibilityEvent(CourseMaterialVisibleEvent event) {
-		Response r = service.notifyStudentCourseMaterialVisibility(event.getAccountId(), event.getCourseName(), event.getFileName());		
+		Response r = service.notifyStudentCourseMaterialVisibility(event.getCourseName(), event.getFileName());		
 		log.info(r.getMessage());
 	}
 

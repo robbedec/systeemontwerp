@@ -35,7 +35,7 @@ public class CourseAccessRepositoryImpl implements CourseAccessRepository{
 	}
 
 	@Override
-	public CourseAccess findById(Integer id) throws StudentNotFoundException {
+	public CourseAccess findById(String id) throws StudentNotFoundException {
 		Optional<CourseAccessDataModel> ca_o = repo.findById(id);
 		if(ca_o.isEmpty()) {
 			throw new StudentNotFoundException();

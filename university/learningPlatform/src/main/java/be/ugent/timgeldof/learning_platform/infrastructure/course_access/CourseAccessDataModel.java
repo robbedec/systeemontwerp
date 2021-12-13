@@ -23,9 +23,9 @@ import lombok.Setter;
 @Table(name = "course_access")
 public class CourseAccessDataModel {
 	@Id
-	private Integer studentId;
+	private String studentId;
     @ElementCollection  
-	private List<Integer> courseIds;
+	private List<String> courseIds;
 	private boolean undergoingPlagiarismProcedure;
 	private boolean invoiceOpen;
 }

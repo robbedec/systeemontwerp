@@ -29,9 +29,9 @@ import lombok.Setter;
 public class CourseDataModel {
 	private String name;
 	@Id
-	private Integer Id;
+	private String Id;
 	private Integer courseCredits;
-	private Integer teacherId;
+	private String teacherId;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<CourseAnnouncementDataModel> announcements;

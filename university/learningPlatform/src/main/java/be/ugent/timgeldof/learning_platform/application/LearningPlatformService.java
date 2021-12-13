@@ -1,12 +1,12 @@
 package be.ugent.timgeldof.learning_platform.application;
 
 public interface LearningPlatformService {
-	Response publishCourseMaterial(Integer courseId, byte[] file, String fileName);
-	Response changeCourseMaterialVisibility(Integer courseId);
-	Response addCourseAnnouncements(int courseId, String message);
-	Response addCourse(Integer courseId, String courseName, Integer courseCredits, Integer teacherId);
-	Response removeCourse(Integer courseId);
-	Response registerInvoicePaid(Integer studentId);
-	Response registerPlagiarism(Integer studentId);
-	Response changeCurriculum(String changeType, Integer studentId, Integer courseId);
+	Response publishCourseMaterial(String courseId, byte[] file, String fileName);
+	Response changeCourseMaterialVisibility(String courseId);
+	Response addCourseAnnouncements(String courseId, String message);
+	Response addCourse(String courseId, String courseName, Integer courseCredits, String teacherId);
+	Response removeCourse(String courseId);
+	Response registerInvoicePaid(String studentId);
+	Response registerPlagiarism(String studentId);
+	Response changeCurriculum(String changeType, String studentId, String courseId);
 }

@@ -35,7 +35,7 @@ public class CourseQueryImpl implements CourseQuery{
 	private CourseRepository courseRepo;
 
 	@Override
-	public List<CourseViewModel> getAvailableCourses(Integer studentId) throws StudentNotFoundException {
+	public List<CourseViewModel> getAvailableCourses(String studentId) throws StudentNotFoundException {
 		return courseAccessDomainService.getAccessibleCourses(studentId)
 				.stream()
 				.map(c ->{
@@ -46,7 +46,7 @@ public class CourseQueryImpl implements CourseQuery{
 	}
 
 	@Override
-	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(Integer studentId, Integer courseId) throws StudentNotFoundException {
+	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(String studentId, String courseId) throws StudentNotFoundException {
 		String courseName = courseRepo.findOne(courseId).getCourseName();
 		List<CourseAnnouncement> courseAnnouncements = courseAccessDomainService.getAccessibleCourseAnnouncements(studentId, courseId);
 		CourseWithCourseAnnouncementsViewModel c_a = new CourseWithCourseAnnouncementsViewModel();
@@ -56,7 +56,7 @@ public class CourseQueryImpl implements CourseQuery{
 	}
 
 	@Override
-	public CourseWithCourseMaterialViewModel getCourseMaterial(Integer studentId, Integer courseId) throws StudentNotFoundException {
+	public CourseWithCourseMaterialViewModel getCourseMaterial(String studentId, String courseId) throws StudentNotFoundException {
 		String courseName = courseRepo.findOne(courseId).getCourseName();
 		List<CourseMaterial> courseMaterials = courseAccessDomainService.getAccessibleCourseMaterials(studentId, courseId);
 		CourseWithCourseMaterialViewModel c_m = new CourseWithCourseMaterialViewModel();
