@@ -17,7 +17,7 @@ public class EventHandler {
 	InvoiceService invoiceService;
 	
 	public void handleNewRegistrationEvent(NewRegistrationEvent event) {		
-		Response response = invoiceService.createNewRegistrationInvoice(event.getAccountId(), event.getName(), event.getFirstName(), event.getFaculty());
+		Response response = invoiceService.createNewRegistrationInvoice(event.getAccountId(), event.getEmail(), event.getFaculty(), event.getDegree());
 		log.info("-response status[{}] message[{}]", response.status, response.message);
 	}
 }

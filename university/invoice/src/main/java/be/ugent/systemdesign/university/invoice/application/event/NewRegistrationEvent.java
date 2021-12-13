@@ -10,7 +10,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NewRegistrationEvent {
 	private String accountId;
-	private String firstName;
-	private String name;
+	private String email;
 	private String faculty;
+	private String degree;
 }

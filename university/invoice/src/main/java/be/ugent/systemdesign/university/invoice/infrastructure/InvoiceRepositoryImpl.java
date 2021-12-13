@@ -20,8 +20,8 @@ public class InvoiceRepositoryImpl implements InvoiceRepository{
 	ApplicationEventPublisher eventPublisher;
 
 	@Override
-	public Invoice findOne(Integer id) {
-		Invoice invoice = repo.findById(id).orElseThrow(InvoiceNotFoundException::new);
+	public Invoice findOne(String id) {
+		Invoice invoice = repo.findByInvoiceId(id).orElseThrow(InvoiceNotFoundException::new);
 		return invoice;
 	}
 

@@ -1,1 +1,1 @@
-INSERT INTO invoice(invoice_id, school_name, school_invoice_number, student_first_name, student_last_name, student_number, amount, due_date, description, is_paid) VALUES (1111, 'Ugent', 'BE123454516', 'Bram', 'DB', '12345', 700.00, '2021-12-12', 'Registration payment', 0);
+INSERT INTO invoice(invoice_id, school_name, school_invoice_number, student_first_name, student_last_name, student_number, amount, due_date, description, is_paid) VALUES ("1111", 'Ugent', 'BE123454516', 'Bram', 'DB', '12345', 700.00, '2021-12-12', 'Registration payment', 0);

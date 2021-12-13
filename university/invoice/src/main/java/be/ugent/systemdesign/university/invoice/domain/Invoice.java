@@ -20,7 +20,7 @@ public class Invoice extends AggregateRoot {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int invoiceId;	
+	private String invoiceId;	
 	private final String schoolName = "Ugent";
 	private final String schoolInvoiceNumber = "BE123456789";	
 	
