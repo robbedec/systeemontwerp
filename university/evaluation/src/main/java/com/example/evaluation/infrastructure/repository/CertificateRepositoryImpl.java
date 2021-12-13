@@ -49,7 +49,7 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 
 	private CertificateDataModel mapToCertificateDataModel(Certificate certificate) {
 		return new CertificateDataModel(certificate.getCertificateId(), certificate.getDegreeId(),
-				certificate.getCertificateId());
+				certificate.getStudentId());
 	}
 
 }

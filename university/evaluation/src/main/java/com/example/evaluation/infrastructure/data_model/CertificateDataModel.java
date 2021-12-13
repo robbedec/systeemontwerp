@@ -21,6 +21,6 @@ public class CertificateDataModel {
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private String certificateId;
-	private String studentId;
 	private String degreeId;
+	private String studentId;
 }

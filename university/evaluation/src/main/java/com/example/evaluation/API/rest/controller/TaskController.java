@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.evaluation.API.rest.post_model.AssignScorePostModel;
+import com.example.evaluation.API.rest.post_model.TaskPostModel;
+import com.example.evaluation.API.rest.post_model.TaskSubmissionPostModel;
 import com.example.evaluation.API.rest.view_model.TaskSubmissionViewModel;
 import com.example.evaluation.API.rest.view_model.TaskViewModel;
 import com.example.evaluation.application.query.TaskQuery;
@@ -31,49 +34,62 @@ import org.slf4j.Logger;
 @CrossOrigin(origins = "*")
 public class TaskController {
 	private static final Logger log = LoggerFactory.getLogger(TaskController.class);
-	
+
 	@Autowired
 	private TaskQuery taskQuery;
 
 	@Autowired
 	private TaskService taskService;
 
-	@PostMapping
-	public ResponseEntity<String> createTask(@RequestBody TaskViewModel taskVM, String teacherId) {
-		log.info("{} {} {}",taskVM.description, taskVM.dueDate, taskVM.weight);
-		double weight = (double) Integer.parseInt(taskVM.weight.replace("%", "")) / 100;
-		Response response = taskService.createTask(taskVM.courseId, taskVM.description,
-				LocalDateTime.parse(taskVM.dueDate), weight, teacherId);
-		return createResponseEntity(response.status, "Task created", HttpStatus.CREATED, response.message,
-				HttpStatus.CONFLICT);
+	@GetMapping
+	public List<TaskViewModel> getTasks(String userId) {
+		return taskQuery.getTasks(userId).stream().map(taskRM -> new TaskViewModel(taskRM))
+				.collect(Collectors.toList());
 	}
 
-	@PostMapping("submission")
-	public ResponseEntity<String> submitTask(@RequestBody TaskSubmissionViewModel taskSubmissionVM) {
-		Response response = taskService.submitTask(taskSubmissionVM.taskId, taskSubmissionVM.studentId,
-				taskSubmissionVM.file);
-		return createResponseEntity(response.status, "Task submitted", HttpStatus.CREATED, response.message,
-				HttpStatus.CONFLICT);
+	@GetMapping("{taskId}/submission")
+	public TaskSubmissionViewModel getTaskSubmission(@PathVariable String taskId, String studentId) {
+		return new TaskSubmissionViewModel(taskQuery.getTaskSubmission(taskId, studentId));
 	}
 
-	@PutMapping("submissions/{id}/score")
-	public ResponseEntity<String> assignScore(@PathVariable String taskSubmissionId, int score, String teacherId) {
-		Response response = taskService.assignScore(taskSubmissionId, score, teacherId);
-		return createResponseEntity(response.status, "Score assigned", HttpStatus.OK, response.message,
-				HttpStatus.CONFLICT);
-	}
-
-	@GetMapping("{id}/submissions")
+	@GetMapping("{taskId}/submissions")
 	public List<TaskSubmissionViewModel> getTaskSubmissions(@PathVariable String taskId) {
+		// TODO check teacherId
 		return taskQuery.getTaskSubmissions(taskId).stream()
 				.map(taskSubmissionRM -> new TaskSubmissionViewModel(taskSubmissionRM)).collect(Collectors.toList());
 	}
 
-	@PostMapping("{id}/checkplagiarism")
+	@PostMapping
+	public ResponseEntity<String> createTask(@RequestBody TaskPostModel task, String teacherId) {
+		Response response = taskService.createTask(task.getCourseId(), task.getDescription(),
+				LocalDateTime.parse(task.getDueDate()), task.getWeight() / 100, teacherId);
+		return createResponseEntity(response.status, "Task created", HttpStatus.CREATED, response.message,
+				HttpStatus.CONFLICT);
+	}
+
+	@PostMapping("{taskId}/checkplagiarism")
 	public ResponseEntity<String> checkPlagiarism(@PathVariable String taskId) {
 		Response response = taskService.checkPlagiarism(taskId);
 		return createResponseEntity(response.status, "Tasks checked for plagiarism", HttpStatus.OK,
 				"Failed to check for plagiarism", HttpStatus.CONFLICT);
+	}
+
+	@PutMapping("{taskId}/submit")
+	public ResponseEntity<String> submitTask(@RequestBody TaskSubmissionPostModel taskSubmission,
+			@PathVariable String taskId, String studentId) {
+		Response response = taskService.submitTask(taskId, studentId, taskSubmission.getFile());
+		return createResponseEntity(response.status, "Task submitted", HttpStatus.OK, response.message,
+				HttpStatus.CONFLICT);
+	}
+
+	@PutMapping("{taskId}/submissions/score")
+	public ResponseEntity<String> assignScore(@RequestBody AssignScorePostModel score, @PathVariable String taskId,
+			String teacherId) {
+		log.info("{} {}", score.getStudentId(), score.getScore());
+		Response response = taskService.assignScore(taskId, score.getStudentId(), score.getScore(), teacherId);
+		log.info("{} {}", response.status, response.message);
+		return createResponseEntity(response.status, "Score assigned", HttpStatus.OK, response.message,
+				HttpStatus.CONFLICT);
 	}
 
 	private ResponseEntity<String> createResponseEntity(ResponseStatus status, String successMsg,

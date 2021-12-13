@@ -8,4 +8,5 @@ import com.example.evaluation.infrastructure.data_model.TaskDataModel;
 
 public interface TaskDataModelRepository extends JpaRepository<TaskDataModel, String> {
 	List<TaskDataModel> findByCourseId(String courseId);
+	List<TaskDataModel> findByCourseIdIn(List<String> courseIds);
 }

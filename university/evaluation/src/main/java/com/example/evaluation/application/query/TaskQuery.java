@@ -2,6 +2,11 @@ package com.example.evaluation.application.query;
 
 import java.util.List;
 
+import com.example.evaluation.application.query.read_model.TaskReadModel;
+import com.example.evaluation.application.query.read_model.TaskSubmissionReadModel;
+
 public interface TaskQuery {
+	TaskSubmissionReadModel getTaskSubmission(String taskId, String studentId);
 	List<TaskSubmissionReadModel> getTaskSubmissions(String taskId);
+	List<TaskReadModel> getTasks(String userId);
 }

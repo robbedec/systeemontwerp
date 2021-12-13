@@ -22,10 +22,11 @@ public class MessageInputGateway {
 	@SendTo(Channels.ACCOUNT_CREATED_RESPONSE)
 	public AccountCreatedResponse receiveCreateAccountRequest(CreateAccountRequest req) {
 		String username = (req.getFirstName() + req.getLastName()).toLowerCase();
-		Account account = new Account(null, req.getFirstName(), req.getLastName(), username, req.getPassword(), req.getAddress(), req.getDateOfBirth(), req.getType(), new ArrayList<>());
+		String email = username + "@ugent.be";
+		Account account = new Account(null, req.getFirstName(), req.getLastName(), username, email, req.getPassword(), req.getAddress(), req.getDateOfBirth(), req.getType(), new ArrayList<>());
 		account = accountRepo.save(account);
 		
-		return new AccountCreatedResponse(account.getAccountId(), username);
+		return new AccountCreatedResponse(account.getAccountId(), username, email);
 	}
 	
 	@StreamListener(Channels.PLAGIARISM_DETECTED_EVENT)

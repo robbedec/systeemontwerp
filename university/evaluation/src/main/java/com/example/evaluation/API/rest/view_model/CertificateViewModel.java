@@ -1,9 +1,13 @@
 package com.example.evaluation.API.rest.view_model;
 
-import lombok.AllArgsConstructor;
+import com.example.evaluation.application.query.read_model.CertificateReadModel;
 
-@AllArgsConstructor
 public class CertificateViewModel {
-	public final String studentId;
+	public final String certificateId;
 	public final String degreeId;
+	
+	public CertificateViewModel(CertificateReadModel certificateRM) {
+		certificateId = certificateRM.certificateId;
+		degreeId = certificateRM.degreeId;
+	}
 }

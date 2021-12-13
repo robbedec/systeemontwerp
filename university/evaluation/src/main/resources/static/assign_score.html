@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Score</title>
+		<script>
+			function selectTask(taskId) {
+				fetch("http://localhost:2225/api/evaluation/tasks/" + taskId + "/submissions", {
+					method: "GET",
+					mode: "cors"
+				}).then(res => res.json()).then(submissions => {
+					document.getElementById("submissions").innerHTML = "";
+					submissions.forEach(submission => {
+						const table = document.createElement("table");
+						
+						let tr = document.createElement("tr");
+						let td = document.createElement("td");
+						td.innerText = "Student: ";
+						tr.appendChild(td);
+						td = document.createElement("td");
+						td.innerText = submission.studentId;
+						tr.appendChild(td);
+						table.appendChild(tr);
+						
+						tr = document.createElement("tr");
+						td = document.createElement("td");
+						td.innerText = "File: ";
+						tr.appendChild(td);
+						td = document.createElement("td");
+						td.innerText = submission.file;
+						tr.appendChild(td);
+						table.appendChild(tr);
+						
+						tr = document.createElement("tr");
+						td = document.createElement("td");
+						td.innerText = "Score: ";
+						tr.appendChild(td);
+						td = document.createElement("td");
+						let input = document.createElement("input");
+						input.onchange = () => {assignScore(submission.studentId)};
+						input.id = submission.studentId;
+						input.type = "number";
+						input.min = 0;
+						input.max = 20;
+						input.placeholder = "Score (/20)";
+						td.appendChild(input);
+						tr.appendChild(td);
+						table.appendChild(tr);
+						
+						document.getElementById("submissions").appendChild(document.createElement("br"));
+						document.getElementById("submissions").appendChild(table);
+					});
+				})
+			}
+			
+			function assignScore(studentId) {
+				req = {
+					studentId: studentId,
+					score: document.getElementById(studentId).value
+				}
+				
+				fetch("http://localhost:2225/api/evaluation/tasks/" + selectedTask + "/submissions/score?teacherId=" + sessionStorage.userId, {
+					method: "PUT",
+					mode: "cors",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(req)
+				})
+			}
+		</script>
+		<script src="getTasks.js"></script>
+	</head>
+	<body>
+		<div id="tasks"></div>
+		<div id="submissions"></div>
+	</body>
+</html>

@@ -8,18 +8,18 @@
 		function createTask() {
 			req = {
 				description: document.getElementById("description").value,
-				dueDate: document.getElementById("dueDate").value + " " + document.getElementById("dueTime").value,
-				weight: document.getElementById("weight") + "%"
+				dueDate: document.getElementById("dueDate").value + "T" + document.getElementById("dueTime").value,
+				weight: parseInt(document.getElementById("weight"))
 			};
 
-			fetch("http://localhost:8080/api/evaluation/tasks/", {
+			fetch("http://localhost:2225/api/evaluation/tasks?teacherId=" + sessionStorage.userId, {
 				method: "POST",
 				mode: "cors",
 				headers: {
 					"Content-Type": "application/json"
 				},
 				body: JSON.stringify(req)
-			}).then(res => res.json()).then(res => document.getElementById("msg").innerText = res).catch(err => console.error(err));
+			}).then(res => res.json()).then(res => console.log(res)).catch(err => console.error(err));
 		}
 	</script>
 </head>

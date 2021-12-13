@@ -1,11 +1,13 @@
 package com.example.evaluation.API.rest.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,14 +28,15 @@ public class ScoreCardController {
 	@Autowired
 	ScoreCardService scoreCardService;
 
-	@GetMapping("{id}")
-	public ScoreCardViewModel getScoreCard(@PathVariable String degreeId, String studentId) {
-		return new ScoreCardViewModel(scoreCardQuery.getScoreCard(studentId, degreeId));
+	@GetMapping
+	public List<ScoreCardViewModel> getScoreCard(String studentId) {
+		return scoreCardQuery.getScoreCards(studentId).stream().map(scoreCardRM -> new ScoreCardViewModel(scoreCardRM))
+				.collect(Collectors.toList());
 	}
 
-	@PostMapping("{id}/generate")
-	public ResponseEntity<String> generateScoreCards(String degreeId) {
-		Response response = scoreCardService.generateScoreCards(degreeId);
+	@PostMapping("generate")
+	public ResponseEntity<String> generateScoreCards() {
+		Response response = scoreCardService.generateScoreCards();
 		return createResponseEntity(response.status, "Generated score cards", HttpStatus.OK, response.message,
 				HttpStatus.CONFLICT);
 	}

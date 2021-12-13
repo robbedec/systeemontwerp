@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Certificate {
 	private String certificateId;
-	private String studentId;
 	private String degreeId;
+	private String studentId;
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Verify certificate</title>
+		<script>
+			function verifyCertificate() {
+				fetch("http://localhost:2225/api/evaluation/certificates/" + document.getElementById("certificateId").value + "/verify", {
+					method: "GET",
+					mode: "cors"
+				}).then(res => res.json()).then(res => document.getElementById("valid").innerText = res.valid).catch(err => console.error(err));
+			}
+		</script>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<td>
+					<label for="certificateId">Certificate ID: </label>
+				</td>
+				<td>
+					<input type="text" name="certificateId" id="certificateId" placeholder="Certificate ID" />
+				</td>
+				<td>
+					<button onclick="verifyCertificate()">Verify</button>
+				</td>
+			</tr>
+			<tr>
+				<td>Valid: </td>
+				<td id="valid">...</td>
+			</tr>
+		</table>
+	</body>
+</html>
