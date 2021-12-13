@@ -1,0 +1,84 @@
+body {
+	background-color: powderblue;
+	align-content: center;
+	text-align: center;
+}
+.myButton {
+	background-color:#44c767;
+	border-radius:28px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:16px 31px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+.myButton:hover {
+	background-color:#5cbf2a;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+.overflowDiv{
+   height: auto;
+   width:auto;
+   max-width: 1000px;
+   max-height: 600px;
+   overflow-y: auto;
+   overflow-x: auto;
+   margin: auto;
+}
+
+.block {
+	background-color: #64dfb3;	
+	margin: 20px auto;
+	padding: 5px;
+}
+
+.courseButton {
+	background-color:#469c5d;
+	border-radius:28px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:2px 31px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+.courseButton:hover {
+	background-color:#2f6627;
+}
+.courseButton:active {
+	position:relative;
+	top:1px;
+}
+
+.optionButton {
+	background-color:darkgray;
+	border-radius:28px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:2px 31px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+.optionButton:hover {
+	background-color:#2f6627;
+}
+.optionButton:active {
+	position:relative;
+	top:1px;
+}
+
+       

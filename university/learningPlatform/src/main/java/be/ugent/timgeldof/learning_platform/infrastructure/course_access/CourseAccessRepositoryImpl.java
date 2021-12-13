@@ -18,6 +18,7 @@ import be.ugent.timgeldof.learning_platform.domain.course.CourseMaterial;
 import be.ugent.timgeldof.learning_platform.domain.course.CourseRepository;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccess;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccessRepository;
+import be.ugent.timgeldof.learning_platform.domain.course_access.StudentNotFoundException;
 import be.ugent.timgeldof.learning_platform.infrastructure.course.CourseDataModelRepository;
 
 // make repo injectable
@@ -34,11 +35,10 @@ public class CourseAccessRepositoryImpl implements CourseAccessRepository{
 	}
 
 	@Override
-	public CourseAccess findById(Integer id) {
+	public CourseAccess findById(Integer id) throws StudentNotFoundException {
 		Optional<CourseAccessDataModel> ca_o = repo.findById(id);
 		if(ca_o.isEmpty()) {
-			// return new courseAccess object
-			return new CourseAccess();
+			throw new StudentNotFoundException();
 		}
 		return mapCourseAccessDataModelToDomainModel(ca_o.get());
 	}

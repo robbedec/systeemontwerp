@@ -20,10 +20,12 @@ public class CourseAccess extends AggregateRoot {
 	private boolean invoiceOpen;
 	
 	public void addCourse(int courseId) {
-		courseIds.add(courseId);
+		if(!courseIds.contains(courseId))
+			courseIds.add(courseId);
 	}
 	public void removeCourse(int courseId) {
-		courseIds.remove(courseId);
+		if(courseIds.contains(courseId))
+			courseIds.remove(courseId);
 	}
 	
 	public boolean isStudentAllowedCourseAccess() {

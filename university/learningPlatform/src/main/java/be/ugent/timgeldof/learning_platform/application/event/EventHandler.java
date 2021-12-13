@@ -25,7 +25,7 @@ public class EventHandler {
 	}
 
 	public void handleCurriculumChanged(CurriculumChangedDomainEvent event) {
-		s.changeCurriculum(event.getChangeType(), event.getStudentId(), event.getCourseCredits(), event.getCourseName());
+		s.changeCurriculum(event.getChangeType(), event.getStudentId(), event.getCourseId());
 	}
 
 	public void handleInvoicePaid(InvoicePaidEvent event) {

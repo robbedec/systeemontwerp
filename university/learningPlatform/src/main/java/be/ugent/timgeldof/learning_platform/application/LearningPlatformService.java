@@ -8,5 +8,5 @@ public interface LearningPlatformService {
 	Response removeCourse(Integer courseId);
 	Response registerInvoicePaid(Integer studentId);
 	Response registerPlagiarism(Integer studentId);
-	Response changeCurriculum(String changeType, Integer studentId, String courseCredits, String courseName);
+	Response changeCurriculum(String changeType, Integer studentId, Integer courseId);
 }

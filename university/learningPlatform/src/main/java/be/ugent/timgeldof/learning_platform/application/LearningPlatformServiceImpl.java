@@ -17,6 +17,7 @@ import be.ugent.timgeldof.learning_platform.domain.course.CourseMaterial;
 import be.ugent.timgeldof.learning_platform.domain.course.CourseRepository;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccess;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccessRepository;
+import be.ugent.timgeldof.learning_platform.domain.course_access.StudentNotFoundException;
 
 @Transactional
 @Service
@@ -80,7 +81,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	public Response addCourse(Integer courseId, String courseName, Integer courseCredits, Integer teacherId) {
 		try {
 			Course c = new Course();
-			c.setId(teacherId);
+			c.setId(courseId);
 			c.setCourseName(courseName);
 			c.setCourseCredits(courseCredits);
 			c.setTeacherId(teacherId);
@@ -118,6 +119,8 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 		}
 		catch (RuntimeException e) {
 			return new Response(ResponseStatus.FAIL,"invoice payment not registered");
+		} catch (StudentNotFoundException e) {
+			return new Response(ResponseStatus.FAIL,"student not found");
 		}
 	}
 
@@ -132,22 +135,17 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 		}
 		catch (RuntimeException e) {
 			return new Response(ResponseStatus.FAIL,"The plagiarism was not registered successfully");
+		}catch (StudentNotFoundException e) {
+			return new Response(ResponseStatus.FAIL,"student not found");
 		}
 	}
 
 	@Override
-	public Response changeCurriculum(String changeType, Integer studentId, String courseCredits, String courseName) {
+	public Response changeCurriculum(String changeType, Integer studentId, Integer courseId) {
 
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
-			if(ca.getStudentId() == 0) {
-				// the student ID being zerp means the repository a the Course Access Object needs to be completed
-				ca.setStudentId(studentId);
-				ca.setInvoiceOpen(true);
-				ca.setUndergoingPlagiarismProcedure(false);
-				ca.setCourseIds(new ArrayList<Integer>());
-			}
-			Integer courseId = this.courseRepo.findByCourseNameAndCourseCredits(courseName, Integer.parseInt(courseCredits)).getId();
+
 			if(changeType.equalsIgnoreCase("ADDED")) {
 				ca.addCourse(courseId);
 			} else {
@@ -158,6 +156,21 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 		}
 		catch (RuntimeException e) {
 			return new Response(ResponseStatus.FAIL,"The curriculum change was not registered successfully");
+		} catch (StudentNotFoundException e) {
+			// CourseAccess object does not exist yet
+			if(changeType.equalsIgnoreCase("ADDED")) {
+				CourseAccess ca = new CourseAccess();
+				ca.setStudentId(studentId);
+				ca.setInvoiceOpen(true);
+				ca.setUndergoingPlagiarismProcedure(false);
+				ca.setCourseIds(new ArrayList<Integer>());
+				this.courseAccessRepo.save(ca);
+				return new Response(ResponseStatus.SUCCESS,"Curriculum change successful for: " + ca.getStudentId());
+			}
+			else {
+				return new Response(ResponseStatus.SUCCESS,"Curriculum course removal was not necessary "
+						+ "since the student did not have access to the course anyway");
+			}
 		}
 	}
 }

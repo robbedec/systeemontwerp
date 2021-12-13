@@ -12,7 +12,5 @@ import lombok.Setter;
 public class CurriculumChangedDomainEvent {
 	private Integer courseId;
 	private Integer studentId;
-	private String courseName;
-	private String courseCredits;
 	private String changeType;
 }

@@ -8,10 +8,13 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Repository;
 
+import be.ugent.timgeldof.learning_platform.application.LearningPlatformServiceImpl;
 import be.ugent.timgeldof.learning_platform.domain.course.Course;
 import be.ugent.timgeldof.learning_platform.domain.course.CourseAnnouncement;
 import be.ugent.timgeldof.learning_platform.domain.course.CourseMaterial;
@@ -22,6 +25,9 @@ import be.ugent.timgeldof.learning_platform.domain.course.CourseRepository;
 @Transactional
 public class CourseRepositoryImpl implements CourseRepository{
 
+	private static final Logger log = LoggerFactory.getLogger(CourseRepositoryImpl.class);
+
+	
 	@Autowired
 	CourseDataModelRepository repo;
 	
@@ -51,7 +57,8 @@ public class CourseRepositoryImpl implements CourseRepository{
 				mapCourseAnnouncementDomainModelToDataModel(c.getCourseAnnouncements(), c),
 				mapCourseMaterialDomainModelToDataModel(c.getCourseMaterial(), c)
 		);
-		repo.save(c_dm);
+		c_dm = repo.save(c_dm);
+		log.info("REPO HAS SAVED THE COURSE {} with ID {}", c_dm.getName(), c_dm.getId());
 		c.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
 		c.clearDomainEvents();
 	}

@@ -25,6 +25,7 @@ import be.ugent.timgeldof.learning_platform.application.query.CourseViewModel;
 import be.ugent.timgeldof.learning_platform.application.query.CourseWithCourseAnnouncementsViewModel;
 import be.ugent.timgeldof.learning_platform.application.query.CourseWithCourseMaterialViewModel;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CourseAccessDeniedException;
+import be.ugent.timgeldof.learning_platform.domain.course_access.StudentNotFoundException;
 import be.ugent.timgeldof.learning_platform.infrastructure.course.CourseQueryImpl;
 
 
@@ -45,30 +46,30 @@ public class LearningPlatformController {
 		return q.getAllCourses();
 	}
 	
-	@GetMapping("courses/{studentId}")
-	public List<CourseViewModel> getAvailableCourses(@PathVariable("studentId") Integer studentId){
+	@GetMapping("students/{studentId}/courses/")
+	public List<CourseViewModel> getAvailableCourses(@PathVariable("studentId") Integer studentId) throws StudentNotFoundException{
 		return q.getAvailableCourses(studentId);
 	}
 	
-	@GetMapping("course/{courseId}/materials/{studentId}")
-	public CourseWithCourseMaterialViewModel getCourseMaterial(@PathVariable("studentId") Integer studentId, @PathVariable("courseId") Integer courseId){
+	@GetMapping("students/{studentId}/courses/{courseId}/materials/")
+	public CourseWithCourseMaterialViewModel getCourseMaterial(@PathVariable("studentId") Integer studentId, @PathVariable("courseId") Integer courseId) throws StudentNotFoundException{
 		return q.getCourseMaterial(studentId, courseId);
 	}
 	
-	@GetMapping("course/{courseId}/announcements/{studentId}")
-	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(@PathVariable("studentId") Integer studentId, @PathVariable("courseId") Integer courseId){
+	@GetMapping("students/{studentId}/courses/{courseId}/announcements")
+	public CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(@PathVariable("studentId") Integer studentId, @PathVariable("courseId") Integer courseId) throws StudentNotFoundException{
 		return q.getCourseAnnouncements(studentId, courseId);
 	}
 	
 	// PUT
 	
-	@PutMapping("course/{courseId}/materials/add")
+	@PutMapping("teachers/{teacherId}/courses/{courseId}/materials/add")
 	public ResponseEntity<String> publishCourseMaterial(@RequestBody CourseMaterialViewModel courseMaterialViewModel, @PathVariable("courseId") Integer courseId) {
         byte[] file = Base64.getEncoder().encode(courseMaterialViewModel.getFileBase64().getBytes());	
 		Response response = s.publishCourseMaterial(courseId, file, courseMaterialViewModel.getFileName());
 		
 		return createResponseEntity(
-				response.status, 
+				response.status,
 				"Course material " + courseMaterialViewModel.getFileName() + " added.", 
 				HttpStatus.OK, 
 				response.message, 
@@ -76,7 +77,7 @@ public class LearningPlatformController {
 			);
 	}
 	
-	@PutMapping("course/{courseId}/materials/makevisible")
+	@PutMapping("teachers/{teacherId}/courses/{courseId}/materials/makevisible")
 	public ResponseEntity<String> makeCourseMaterialVisible(@PathVariable("courseId") String courseId) {
 				
 		Response response = s.changeCourseMaterialVisibility(Integer.parseInt(courseId));
@@ -90,7 +91,7 @@ public class LearningPlatformController {
 			);
 	}
 	
-	@PutMapping("course/{courseId}/announcements/add")
+	@PutMapping("teachers/{teacherId}/courses/{courseId}/announcements/add")
 	public ResponseEntity<String> addCourseAnnouncement(@RequestBody CourseAnnouncementViewModel courseAnnouncementViewModel, @PathVariable("courseId") String courseId) {
 				
 		Response response = s.addCourseAnnouncements(Integer.parseInt(courseId), courseAnnouncementViewModel.getMessage());
@@ -111,10 +112,17 @@ public class LearningPlatformController {
 	}
 	
 	  @ExceptionHandler(CourseAccessDeniedException.class)
-	  public ResponseEntity<String> handleNoSuchElementFoundException(CourseAccessDeniedException exception) {
+	  public ResponseEntity<String> handleCourseAccessDeniedException(CourseAccessDeniedException exception) {
 	    return ResponseEntity
 	        .status(HttpStatus.UNAUTHORIZED)
-	        .body(exception.getMessage());
+	        .body("COURSE_ACCESS_DENIED");
+	  }
+	  
+	  @ExceptionHandler(StudentNotFoundException.class)
+	  public ResponseEntity<String> handleNoSuchElementFoundException(StudentNotFoundException exception) {
+	    return ResponseEntity
+	        .status(HttpStatus.UNAUTHORIZED)
+	        .body("STUDENT_NOT_FOUND");
 	  }
 	
 }
