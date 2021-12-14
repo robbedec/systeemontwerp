@@ -28,8 +28,8 @@ public class EventHandler {
 		s.changeCurriculum(event.getChangeType(), event.getStudentId(), event.getCourseId());
 	}
 
-	public void handleInvoicePaid(InvoicePaidEvent event) {
-		s.registerInvoicePaid(event.getStudentId());
+	public void handlePaymentOverdue(PaymentOverdueEvent event) {
+		s.registerInvoiceOverdue(event.getStudentNumber());
 	}
 
 	public void handlePlagiarism(PlagiarismRegisteredEvent event) {

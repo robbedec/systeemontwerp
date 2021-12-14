@@ -6,7 +6,7 @@ import be.ugent.timgeldof.learning_platform.domain.course_access.StudentNotFound
 
 public interface CourseQuery
  {	
-	List<CourseViewModel> getAllCourses();
+	List<CourseViewModel> getTeacherCourses(String teacherId);
 	List<CourseViewModel> getAvailableCourses(String studentId) throws StudentNotFoundException;
 	CourseWithCourseAnnouncementsViewModel getCourseAnnouncements(String studentId, String courseId) throws StudentNotFoundException;
 	CourseWithCourseMaterialViewModel getCourseMaterial(String studentId, String courseId) throws StudentNotFoundException;

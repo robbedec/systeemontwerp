@@ -66,11 +66,11 @@ public class CourseQueryImpl implements CourseQuery{
 	}
 
 	
-	// method for testing purposes
 	@Override
-	public List<CourseViewModel> getAllCourses() {
+	public List<CourseViewModel> getTeacherCourses(String teacherId) {
 		
 		return courseRepo.findAll().stream()
+				.filter(c -> c.getTeacherId().equalsIgnoreCase(teacherId))
 				.map(c ->{
 					return new CourseViewModel(c.getCourseName(), c.getId(), c.getTeacherId());
 				 })

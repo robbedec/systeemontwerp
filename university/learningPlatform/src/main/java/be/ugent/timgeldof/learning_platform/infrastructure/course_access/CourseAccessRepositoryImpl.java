@@ -9,9 +9,12 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import be.ugent.timgeldof.learning_platform.application.LearningPlatformServiceImpl;
 import be.ugent.timgeldof.learning_platform.domain.course.Course;
 import be.ugent.timgeldof.learning_platform.domain.course.CourseAnnouncement;
 import be.ugent.timgeldof.learning_platform.domain.course.CourseMaterial;
@@ -25,6 +28,8 @@ import be.ugent.timgeldof.learning_platform.infrastructure.course.CourseDataMode
 @Repository
 @Transactional
 public class CourseAccessRepositoryImpl implements CourseAccessRepository{
+
+	private static final Logger log = LoggerFactory.getLogger(LearningPlatformServiceImpl.class);
 
 	@Autowired
 	CourseAccessJPARepository repo;
@@ -46,6 +51,11 @@ public class CourseAccessRepositoryImpl implements CourseAccessRepository{
 	@Override
 	public void save(CourseAccess c) {
 		repo.save(mapCourseAccessDomainModelToDataModel(c));
+		if(c.isStudentAllowedCourseAccess())
+			log.info("student with ID " + c.getStudentId() + "should have access");
+		else 
+			log.info("student with ID " + c.getStudentId() + "should NOT have access");
+		
 	}
 	
 	public List<CourseAccess> mapCourseAccessDataModelToDomainModel(List<CourseAccessDataModel> list){
