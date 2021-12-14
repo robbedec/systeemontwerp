@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ import com.example.evaluation.infrastructure.exception.TaskSubmissionNotFoundExc
 @Transactional
 @Service
 public class TaskServiceImpl implements TaskService {
+	Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
+	
 	@Autowired
 	private TaskRepository taskRepo;
 	
@@ -29,6 +33,7 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public Response createTask(String courseId, String description, LocalDateTime dueDate, double weight, String teacherId) {
+		// TODO check sum weights
 		try {
 			if(!teacherId.equals(courseRepo.findTeacherForCourse(courseId))) {
 				return new Response(ResponseStatus.FAIL, "Only the teacher can create a task");
@@ -38,8 +43,8 @@ public class TaskServiceImpl implements TaskService {
 			task = taskRepo.save(task);
 			
 			for(String studentId : courseRepo.findStudentsFollowingCourse(courseId)) {
-				TaskSubmission taskSubmission = new TaskSubmission(courseId, studentId);
-				taskRepo.save(taskSubmission);
+				TaskSubmission taskSubmission = new TaskSubmission(task.getTaskId(), studentId);
+				taskSubmission = taskRepo.save(taskSubmission);
 			}
 			
 			return new Response(ResponseStatus.SUCCESS, "ID " + task.getTaskId());
@@ -56,9 +61,9 @@ public class TaskServiceImpl implements TaskService {
 				return new Response(ResponseStatus.FAIL, "Missed due date");
 			}
 			TaskSubmission taskSubmission = taskRepo.findSubmissionByTaskIdAndStudentId(taskId, studentId);
-
+			taskSubmission.setFile(file);
 			taskSubmission = taskRepo.save(taskSubmission);
-			return new Response(ResponseStatus.SUCCESS, "ID " + taskSubmission.getSubmissionId());
+			return new Response(ResponseStatus.SUCCESS, "Task submitted");
 		} catch (TaskNotFoundException e) {
 			return new Response(ResponseStatus.FAIL, "Task doesn't exist");
 		} catch (Exception e) {
@@ -67,15 +72,14 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public Response assignScore(String taskSubmissionId, int score, String teacherId) {
+	public Response assignScore(String taskId, String studentId, int score, String teacherId) {
 		try {
-			TaskSubmission taskSubmission = taskRepo.findSubmissionById(taskSubmissionId);
-			
-			String responsibleTeacher = courseRepo.findTeacherForCourse(taskRepo.findById(taskSubmission.getTaskId()).getCourseId());
+			String responsibleTeacher = courseRepo.findTeacherForCourse(taskRepo.findById(taskId).getCourseId());
 			if(!teacherId.equals(responsibleTeacher)) {
 				return new Response(ResponseStatus.FAIL, "Only the teacher can assign a score");
 			}
 			
+			TaskSubmission taskSubmission = taskRepo.findSubmissionByTaskIdAndStudentId(taskId, studentId);
 			taskSubmission.assignScore(score);
 			taskRepo.save(taskSubmission);
 			return new Response(ResponseStatus.SUCCESS, "Updated score");

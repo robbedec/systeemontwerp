@@ -11,7 +11,7 @@ public interface Channels {
 	public final static String COURSE_MATERIAL_VISIBILITY_EVENT = "course_material_visibility_event";
 	public final static String FACULTY_EVENT = "faculty_event";
 	public final static String CURRICULUM_CHANGED_EVENT = "curriculum_changed_event";
-	public final static String INVOICE_PAID_EVENT = "invoice_paid_event";
+	public final static String PAYMENT_OVERDUE_EVENT = "payment_overdue_event";
 	public final static String PLAGIARISM_REGISTERED_EVENT = "plagiarism_registered_event";
 
 
@@ -27,8 +27,8 @@ public interface Channels {
 	@Input(CURRICULUM_CHANGED_EVENT)
 	SubscribableChannel noteCurriculumChange();
 	
-	@Input(INVOICE_PAID_EVENT)
-	SubscribableChannel noteInvoicePaid();
+	@Input(PAYMENT_OVERDUE_EVENT)
+	SubscribableChannel notePaymentOverdue();
 	
 	@Input(PLAGIARISM_REGISTERED_EVENT)
 	SubscribableChannel notePlagiarismRegistered();

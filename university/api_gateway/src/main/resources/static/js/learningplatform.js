@@ -1,9 +1,9 @@
 const BASE_URL = "/api/learningplatform/"
 const STUDENT_URL = BASE_URL + "students/"
-const TEACHERS = BASE_URL + "teachers/"
+const TEACHERS_URL = BASE_URL + "teachers/"
 
-async function getAllCourses(){
-    const coursesResponse = await fetch(BASE_URL + "courses/"); 
+async function getTeacherCourses(teacherId){
+    const coursesResponse = await fetch(TEACHERS_URL + teacherId +  "/courses/"); 
 	const courses = await coursesResponse.json();
     
     return courses;
@@ -41,7 +41,7 @@ async function addCourseAnnouncements(teacherId, courseId, message){
 	data = {message:message};
 	
     const courseAnnouncementsResponse = await fetch(
-	TEACHERS + teacherId + "/courses/" + courseId + "/announcements/add", 
+	TEACHERS_URL + teacherId + "/courses/" + courseId + "/announcements/add", 
 	{
 		  method: 'PUT',
   		  headers: {'Content-Type': 'application/json'},
@@ -58,7 +58,7 @@ async function addCourseAnnouncements(teacherId, courseId, message){
 async function addCourseMaterials(teacherId, courseId, fileName){
 	data = {fileName:fileName, fileBase64: "YmVzdGFuZAo="};
     const courseAnnouncementsResponse = await fetch(
-	TEACHERS + teacherId + "/courses/" + courseId + "/materials/add", 
+	TEACHERS_URL + teacherId + "/courses/" + courseId + "/materials/add", 
 	{
 		  method: 'PUT',
   		  headers: {'Content-Type': 'application/json'},
@@ -74,7 +74,7 @@ async function addCourseMaterials(teacherId, courseId, fileName){
 }
 async function makeCourseMaterialsVisible(teacherId, courseId){
     const courseAnnouncementsResponse = await fetch(
-	TEACHERS + teacherId + "/courses/" + courseId + "/materials/makevisible", 
+	TEACHERS_URL + teacherId + "/courses/" + courseId + "/materials/makevisible", 
 	{
 		  method: 'PUT',
   		  headers: {'Content-Type': 'application/json'},
@@ -195,7 +195,7 @@ window.onload = function(){
 		let teacherIdInput = document.getElementById("teacherIdInput");
 		let teacherId = teacherIdInput.value;
 		console.log("GOT " + teacherId + " from teacher id input textbox");
-		const coursesResponse = getAllCourses();
+		const coursesResponse = getTeacherCourses(teacherId);
 		coursesResponse.then(
 			cr => {
 				teacherCoursesDiv.innerHTML= "";

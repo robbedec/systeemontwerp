@@ -1,0 +1,44 @@
+<!DOCYTPE html>
+
+<html>
+	<head>
+		<title>Submit Task</title>
+		<script>
+			function submitTask() {
+				req = {
+					file: document.getElementById("file").value
+				};
+				
+				fetch("http://localhost:2225/api/evaluation/tasks/" + selectedTask + "/submit?studentId=" + sessionStorage.userId, {
+					method: "PUT",
+					mode: "cors",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(req)
+				}).then(res => res.json()).then(res => document.getElementById("result").innerText = res).catch(err => console.error(err));
+			}
+			
+			function selectTask(taskId) {
+				selectedTask = taskId;
+				fetch("http://localhost:2225/api/evaluation/tasks/" + taskId + "/submission?studentId=" + sessionStorage.userId, {
+					method: "GET",
+					mode: "cors",
+				}).then(res => res.json()).then(submission => {
+					document.getElementById("file").value = submission.file;
+					document.getElementById("score").innerText = "Score: " + submission.score;
+				}).catch(err => console.error(err));
+			}
+		</script>
+		<script src="getTasks.js"></script>
+	</head>
+	<body>
+		<div id="tasks"></div>
+		<div id="submit">
+			<textarea id="file" rows="20" cols="50"></textarea><br />
+			<button onclick="submitTask()">submit</button><br />
+			<p id="score"></p>
+			<p id="result"></p>
+		</div>
+	</body>
+</html>

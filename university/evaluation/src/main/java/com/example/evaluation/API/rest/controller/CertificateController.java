@@ -1,50 +1,40 @@
 package com.example.evaluation.API.rest.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evaluation.API.rest.view_model.CertificateVerificationViewModel;
 import com.example.evaluation.API.rest.view_model.CertificateViewModel;
-import com.example.evaluation.application.service.CertificateService;
-import com.example.evaluation.application.service.Response;
-import com.example.evaluation.application.service.ResponseStatus;
 import com.example.evaluation.application.query.CertificateQuery;
 
 @RestController
 @RequestMapping(path = "api/evaluation/certificates")
 @CrossOrigin(origins = "*")
 public class CertificateController {
-
+	Logger log = LoggerFactory.getLogger(CertificateController.class);
+	
 	@Autowired
 	private CertificateQuery certificateQuery;
 
-	@Autowired
-	private CertificateService certificateService;
+	@GetMapping
+	public List<CertificateViewModel> getCertificates(String studentId) {
+		log.info("cert {}", studentId);
+		return certificateQuery.getCertificates(studentId).stream()
+				.map(certificateRM -> new CertificateViewModel(certificateRM)).collect(Collectors.toList());
+	}
 
 	@GetMapping("{id}/verify")
 	public CertificateVerificationViewModel verifyCertificate(@PathVariable("id") String certificateId) {
 		return new CertificateVerificationViewModel(certificateQuery.verifyCertificate(certificateId));
 	}
 
-	@PostMapping
-	public ResponseEntity<String> generateCertificate(@RequestBody CertificateViewModel certificate) {
-		Response response = certificateService.generateCertificate(certificate.studentId, certificate.degreeId);
-		return createResponseEntity(response.status, "Certificate generated", HttpStatus.CREATED, response.message,
-				HttpStatus.CONFLICT);
-	}
-
-	private ResponseEntity<String> createResponseEntity(ResponseStatus status, String successMsg,
-			HttpStatus successStatus, String failMsg, HttpStatus failStatus) {
-		if (status == ResponseStatus.SUCCESS)
-			return new ResponseEntity<>(successMsg, successStatus);
-		return new ResponseEntity<>(failMsg, failStatus);
-	}
 }

@@ -1,4 +1,4 @@
-package com.example.evaluation.application.query;
+package com.example.evaluation.application.query.read_model;
 
 import java.time.LocalDateTime;
 

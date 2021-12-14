@@ -17,12 +17,12 @@ public class CourseRepositoryImpl implements CourseRepository {
 
 	@Autowired
 	CourseJpaRepository courseJpaRepo;
-	
+
 	@Override
 	public void save(Course course) {
 		courseJpaRepo.save(course);
 	}
-	
+
 	@Override
 	public String findTeacherForCourse(String courseId) {
 		Course course = courseJpaRepo.findById(courseId).orElseThrow(CourseNotFoundException::new);
@@ -32,7 +32,7 @@ public class CourseRepositoryImpl implements CourseRepository {
 	public List<String> findStudentsFollowingDegree(String degreeId) {
 		Set<String> studentIds = new HashSet<>();
 		List<Course> courses = courseJpaRepo.findByDegreeId(degreeId);
-		for(Course course : courses) {
+		for (Course course : courses) {
 			studentIds.addAll(course.getStudentIds());
 		}
 		return List.copyOf(studentIds);
@@ -46,12 +46,35 @@ public class CourseRepositoryImpl implements CourseRepository {
 
 	@Override
 	public List<String> findCoursesInDegree(String degreeId) {
-		return courseJpaRepo.findByDegreeId(degreeId).stream().map(course -> course.getCourseId()).collect(Collectors.toList());
+		return courseJpaRepo.findByDegreeId(degreeId).stream().map(course -> course.getCourseId())
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public List<String> findCoursesStudentFollows(String studentId) {
-		return courseJpaRepo.findByStudentIds(studentId).stream().map(course -> course.getCourseId()).collect(Collectors.toList());
+		return courseJpaRepo.findByStudentIds(studentId).stream().map(course -> course.getCourseId())
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<String> findDegreesStudentFollows(String studentId) {
+		return List.copyOf(courseJpaRepo.findByStudentIds(studentId).stream().map(course -> course.getDegreeId())
+				.collect(Collectors.toSet()));
+	}
+
+	@Override
+	public List<String> findStudents() {
+		Set<String> students = new HashSet<>();
+		for (Course course : courseJpaRepo.findAll()) {
+			students.addAll(course.getStudentIds());
+		}
+		return List.copyOf(students);
+	}
+
+	@Override
+	public List<String> findCoursesStudentFollowsInDegree(String degreeId, String studentId) {
+		return courseJpaRepo.findByDegreeIdAndStudentIds(degreeId, studentId).stream()
+				.map(course -> course.getCourseId()).collect(Collectors.toList());
 	}
 
 }

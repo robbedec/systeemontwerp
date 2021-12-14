@@ -110,15 +110,16 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 	}
 
 	@Override
-	public Response registerInvoicePaid(String studentId) {
+	public Response registerInvoiceOverdue(String studentId) {
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
-			ca.setInvoiceOpen(false);
+			ca.setInvoiceOpen(true);
 			this.courseAccessRepo.save(ca);
-			return new Response(ResponseStatus.SUCCESS,"course access granted because invoice has been paid by: " + ca.getStudentId());
+			
+			return new Response(ResponseStatus.SUCCESS,"course access denied because invoice has been not paid by: " + ca.getStudentId());
 		}
 		catch (RuntimeException e) {
-			return new Response(ResponseStatus.FAIL,"invoice payment not registered");
+			return new Response(ResponseStatus.FAIL,"invoice payment overdue not registered");
 		} catch (StudentNotFoundException e) {
 			return new Response(ResponseStatus.FAIL,"student not found");
 		}
@@ -145,7 +146,8 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 
 		try {
 			CourseAccess ca = this.courseAccessRepo.findById(studentId);
-
+			ca.setInvoiceOpen(false);
+			ca.setUndergoingPlagiarismProcedure(false);
 			if(changeType.equalsIgnoreCase("ADDED")) {
 				ca.addCourse(courseId);
 			} else {
@@ -161,7 +163,7 @@ public class LearningPlatformServiceImpl implements LearningPlatformService{
 			if(changeType.equalsIgnoreCase("ADDED")) {
 				CourseAccess ca = new CourseAccess();
 				ca.setStudentId(studentId);
-				ca.setInvoiceOpen(true);
+				ca.setInvoiceOpen(false);
 				ca.setUndergoingPlagiarismProcedure(false);
 				ca.setCourseIds(new ArrayList<String>());
 				ca.addCourse(courseId);

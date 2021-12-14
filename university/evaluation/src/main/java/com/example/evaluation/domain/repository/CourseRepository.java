@@ -11,4 +11,7 @@ public interface CourseRepository {
 	List<String> findStudentsFollowingCourse(String courseId);
 	List<String> findCoursesInDegree(String degreeId);
 	List<String> findCoursesStudentFollows(String studentId);
+	List<String> findDegreesStudentFollows(String studentId);
+	List<String> findCoursesStudentFollowsInDegree(String degreeId, String studentId);
+	List<String> findStudents();
 }

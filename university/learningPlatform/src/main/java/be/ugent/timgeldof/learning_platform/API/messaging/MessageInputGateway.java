@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import be.ugent.timgeldof.learning_platform.application.event.EventHandler;
 import be.ugent.timgeldof.learning_platform.application.event.FacultyCoursesChangedEvent;
-import be.ugent.timgeldof.learning_platform.application.event.InvoicePaidEvent;
+import be.ugent.timgeldof.learning_platform.application.event.PaymentOverdueEvent;
 import be.ugent.timgeldof.learning_platform.application.event.PlagiarismRegisteredEvent;
 import be.ugent.timgeldof.learning_platform.domain.course_access.CurriculumChangedDomainEvent;
 
@@ -34,10 +34,10 @@ public class MessageInputGateway {
 		eventHandler.handleCurriculumChanged(event);
 	}
 	
-	@StreamListener(Channels.INVOICE_PAID_EVENT)
-	public void consumeInvoicePaidEvent(InvoicePaidEvent event) {
-		log.info("Message input gateway received INVOICE_PAID_EVENT of student: " + event.getStudentId());
-		eventHandler.handleInvoicePaid(event);
+	@StreamListener(Channels.PAYMENT_OVERDUE_EVENT)
+	public void consumePaymentOverdue(PaymentOverdueEvent event) {
+		log.info("Message input gateway received INVOICE_PAID_EVENT of student: " + event.getStudentNumber());
+		eventHandler.handlePaymentOverdue(event);
 	}
 	
 	@StreamListener(Channels.PLAGIARISM_REGISTERED_EVENT)

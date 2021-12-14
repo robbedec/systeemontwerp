@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Certificates</title>
+		<script>
+			function loadCertificates() {
+				fetch("http://localhost:2225/api/evaluation/certificates?studentId=" + sessionStorage.userId, {
+					method: "GET",
+					mode: "cors"
+				}).then(res => res.json()).then(certificates => certificates.forEach(certificate => {
+					const tr = document.createElement("tr");
+					let td = document.createElement("td");
+					td.innerText = certificate.certificateId;
+					tr.appendChild(td);
+					td = document.createElement("td");
+					td.innerText = certificate.degreeId;
+					tr.appendChild(td);
+					document.getElementById("certificates").appendChild(tr);
+				}));
+			}
+			
+			document.body.onload = loadCertificates();
+		</script>
+	</head>
+	<body>
+		<table id="certificates">
+			<thead>
+				<th>Certificate</th>
+				<th>Degree ID</th>
+			</thead>
+		</table>
+	</body>
+</html>
