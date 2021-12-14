@@ -23,6 +23,12 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 		RegistrationDataModel dataModel = registrationRepo.findById(id).orElseThrow(RegistrationNotFoundException::new);
 		return mapToRegistration(dataModel);
 	}
+	
+	@Override
+	public Registration getActiveRegistration(String studentId) {
+		RegistrationDataModel rdm = registrationRepo.findByAccountIdAndIsActive(studentId, true).get(0);	//only 1 active registration / accountId
+		return mapToRegistration(rdm);
+	}
 
 	@Override
 	public void save(Registration _r) {
@@ -39,7 +45,7 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 	
 	private RegistrationDataModel mapToRegistrationDataModel(Registration _r) {
 		return new RegistrationDataModel(_r.getRegistrationId(), _r.getAccountId(), _r.getRegistrationDate(), 
-				_r.getEmail(), _r.getName(), _r.getFirstName(), _r.getDateOfBirth(), _r.getFaculty(), _r.getDegree(), _r.getStatus());
+				_r.getEmail(), _r.getName(), _r.getFirstName(), _r.getDateOfBirth(), _r.getFaculty(), _r.getDegree(), _r.getStatus(), _r.getIsActive());
 	}
 	
 	private Registration mapToRegistration(RegistrationDataModel _rdm) {
@@ -53,8 +59,9 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 							.dateOfBirth(_rdm.getDateOfBirth())
 							.faculty(_rdm.getFaculty())
 							.degree(_rdm.getDegree())
-							.status(Status.valueOf(_rdm.getStatus()))							
+							.status(Status.valueOf(_rdm.getStatus()))	
+							.isActive(_rdm.getIsActive())
 							.build();
 		return r;
-	}	
+	}		
 }

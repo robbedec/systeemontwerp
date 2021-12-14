@@ -33,6 +33,8 @@ public class Registration extends AggregateRoot{
 	private String faculty;
 	private String degree;
 	private Status status;	
+	private Integer numberOfOpenViolations;
+	private Boolean isActive;
 	
 	
 	public Registration(Date _registrationDate, String _email, String _name, String _firstName, LocalDate _dateOfBirth, String _faculty, String _degree) {
@@ -40,14 +42,17 @@ public class Registration extends AggregateRoot{
 		setEmail(_email);
 		this.name = _name;
 		this.firstName = _firstName;
-		this.dateOfBirth = _dateOfBirth;
+		setDateOfBirth(_dateOfBirth);		
 		this.faculty = _faculty;
 		this.degree = _degree;
 		this.status = Status.SUBMITTED;
+		this.numberOfOpenViolations = 0;	//can't create a new registration with open valiations
+		this.isActive = false;
 	}
 	
 	public void accept () {
 		this.status = Status.ACCEPTED;
+		this.isActive = true;
 		addDomainEvent(new RegistrationAcceptedEvent(accountId, email, faculty, degree));
 	}
 	
@@ -56,10 +61,38 @@ public class Registration extends AggregateRoot{
 		//notification service aanspreken
 	}
 	
+	public void noteLatePayment() {
+		this.status = status.ACCEPTED_LATE_PAYMENT;
+	}
+	
+	public void noteNewViolation() {
+		this.numberOfOpenViolations++;
+	}
+	
+	public void notePayment() {
+		this.status = Status.ACCEPTED_PAID;		
+	}
+	
+	public boolean isPaid() {
+		return this.status == Status.ACCEPTED_PAID;
+	}
+	
+	public boolean hasOpenViolations() {
+		return this.numberOfOpenViolations > 0;
+	}
+	
 	public void setEmail(String _email) {
 		if(!_email.contains("@")) {
 			throw new InvalidRegistrationException();
 		}
 		this.email = _email;
 	}
+	
+	public void setDateOfBirth(LocalDate dateOfBirth) {
+		if(dateOfBirth.isAfter(LocalDate.now())) {
+			throw new InvalidRegistrationException();
+		}
+	}
+
+	
 }

@@ -8,6 +8,7 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import be.ugent.systemdesign.university.registration.application.RegistrationService;
+import be.ugent.systemdesign.university.registration.application.Response;
 
 @Service
 public class EventHandler {
@@ -24,17 +25,23 @@ public class EventHandler {
 	
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void handleInvoicePaid(InvoicePaidEvent event) {
-		
+		String accountId = event.getStudentNumber();
+		Response response = registrationService.notePaidRegistration(accountId); 
+		log.info("-response status[{}] message[{}]", response.getStatus(), response.getMessage());
 	}
 	
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void handlePaymentToLate(PaymentToLateEvent event) {
-		
+	public void handlePaymentToLate(PaymentOverdueEvent event) {
+		String accountId = event.getStudentNumber();
+		Response response = registrationService.noteLatePayment(accountId);
+		log.info("-response status[{}] message[{}]", response.getStatus(), response.getMessage());
 	}
 	
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void handlePlagiarismViolation(PlagiarismViolationEvent event) {
-		
+		String accountId = event.getStudentId();
+		Response response = registrationService.noteNewViolation(accountId);
+		log.info("-response status[{}] message[{}]", response.getStatus(), response.getMessage());
 	}
 	
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

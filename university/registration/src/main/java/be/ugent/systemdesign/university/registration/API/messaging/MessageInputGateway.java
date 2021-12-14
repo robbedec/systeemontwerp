@@ -10,7 +10,7 @@ import be.ugent.systemdesign.university.registration.application.command.Account
 import be.ugent.systemdesign.university.registration.application.command.CommandHandler;
 import be.ugent.systemdesign.university.registration.application.event.EventHandler;
 import be.ugent.systemdesign.university.registration.application.event.InvoicePaidEvent;
-import be.ugent.systemdesign.university.registration.application.event.PaymentToLateEvent;
+import be.ugent.systemdesign.university.registration.application.event.PaymentOverdueEvent;
 import be.ugent.systemdesign.university.registration.application.event.PlagiarismViolationEvent;
 import be.ugent.systemdesign.university.registration.application.event.ScoresPublishedEvent;
 
@@ -36,7 +36,7 @@ public class MessageInputGateway {
 	}
 	
 	@StreamListener(Channels.PAYMENT_LATE_EVENT)
-	public void consumePayementLateEvent(PaymentToLateEvent event) {
+	public void consumePayementLateEvent(PaymentOverdueEvent event) {
 		log.info("Registration hasn't been paid on time");
 		eventHandler.handlePaymentToLate(event);
 	}
