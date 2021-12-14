@@ -13,8 +13,9 @@ public class FacultyCoursesChangedDomainEvent extends DomainEvent {
 	private String courseName;
 	private Integer courseCredits;
 	private String teacherId;
+	private String degreeId;
 	
-	public FacultyCoursesChangedDomainEvent(Integer _courseId, FacultyCoursesChangeType _type, String _fname, String _dname, String _cname, Integer credits, Integer _teacherId) {
+	public FacultyCoursesChangedDomainEvent(Integer _courseId, FacultyCoursesChangeType _type, String _fname, String _dname, String _cname, Integer credits, Integer _teacherId, Integer _degreeId) {
 		super();
 		this.courseId = _courseId.toString();
 		this.changeType = _type.name();
@@ -23,6 +24,7 @@ public class FacultyCoursesChangedDomainEvent extends DomainEvent {
 		this.courseName = _cname;
 		this.courseCredits = credits;
 		this.teacherId = _teacherId.toString();
+		this.degreeId = _degreeId.toString();
 	}
 	
 }
