@@ -15,11 +15,11 @@ public class ApiGatewayApplication {
 	}
 	
 	private String getEnvOrLocalhost(String envName) {
-        String env = System.getenv(envName);
-        if(env == null) {
-            return "localhost";
-        }
-        return env;
+		String env = System.getenv(envName);
+		if(env == null) {
+			return "localhost";
+		}
+		return env;
     }
 	
 	@Bean
