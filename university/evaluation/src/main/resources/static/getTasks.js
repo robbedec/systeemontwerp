@@ -6,22 +6,36 @@ function loadTasks() {
 		const table = document.createElement("table");
 		const thead = document.createElement("thead");
 		let th = document.createElement("th");
+		th.innerText = "Course";
+		thead.appendChild(th);
+		th = document.createElement("th");
 		th.innerText = "Task";
 		thead.appendChild(th);
 		th = document.createElement("th");
 		th.innerText = "Due";
 		thead.appendChild(th);
+		th = document.createElement("th");
+		th.innerText = "Weight";
+		thead.appendChild(th);
 		table.appendChild(thead);
 		document.getElementById("tasks").appendChild(table);
 		tasks.forEach(task => {
 			const tr = document.createElement("tr");
-
+			
 			let td = document.createElement("td");
+			td.innerText = task.courseName;
+			tr.appendChild(td);
+
+			td = document.createElement("td");
 			td.innerText = task.description;
 			tr.appendChild(td);
 
 			td = document.createElement("td");
 			td.innerText = task.dueDate;
+			tr.appendChild(td);
+			
+			td = document.createElement("td");
+			td.innerText = task.weight;
 			tr.appendChild(td);
 
 			td = document.createElement("td");

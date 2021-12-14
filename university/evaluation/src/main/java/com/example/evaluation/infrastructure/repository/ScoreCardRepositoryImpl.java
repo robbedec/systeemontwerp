@@ -3,6 +3,7 @@ package com.example.evaluation.infrastructure.repository;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Repository;
 
 import com.example.evaluation.domain.model.CourseScore;
@@ -17,16 +18,9 @@ public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 
 	@Autowired
 	ScoreCardDataModelRepository scoreCardDMRepo;
-
-	private ScoreCardDataModel mapToScoreCardDataModel(ScoreCard scoreCard) {
-		return new ScoreCardDataModel(scoreCard.getScoreCardId(), scoreCard.getStudentId(), scoreCard.getDegreeId(),
-				scoreCard.getScores().stream().map(courseScore -> mapToCourseScoreDataModel(courseScore))
-						.collect(Collectors.toList()));
-	}
-
-	private CourseScoreDataModel mapToCourseScoreDataModel(CourseScore courseScore) {
-		return new CourseScoreDataModel(courseScore.getCourseId(), courseScore.getScore());
-	}
+	
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
 
 	@Override
 	public ScoreCard findByStudentIdAndDegreeId(String studentId, String degreeId) {
@@ -38,6 +32,10 @@ public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 	@Override
 	public ScoreCard save(ScoreCard scoreCard) {
 		ScoreCardDataModel scoreCardDM = scoreCardDMRepo.save(mapToScoreCardDataModel(scoreCard));
+		
+		scoreCard.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
+		scoreCard.clearDomainEvents();
+		
 		return mapToScoreCard(scoreCardDM);
 	}
 	
@@ -50,6 +48,16 @@ public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 
 	private CourseScore mapToCourseScore(CourseScoreDataModel courseScoreDM) {
 		return new CourseScore(courseScoreDM.getCourseId(), courseScoreDM.getScore());
+	}
+	
+	private ScoreCardDataModel mapToScoreCardDataModel(ScoreCard scoreCard) {
+		return new ScoreCardDataModel(scoreCard.getScoreCardId(), scoreCard.getStudentId(), scoreCard.getDegreeId(),
+				scoreCard.getScores().stream().map(courseScore -> mapToCourseScoreDataModel(courseScore))
+						.collect(Collectors.toList()));
+	}
+
+	private CourseScoreDataModel mapToCourseScoreDataModel(CourseScore courseScore) {
+		return new CourseScoreDataModel(courseScore.getCourseId(), courseScore.getScore());
 	}
 
 }

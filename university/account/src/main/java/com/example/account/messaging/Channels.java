@@ -9,7 +9,6 @@ public interface Channels {
 	static final String CREATE_ACCOUNT_REQUEST = "create_account_request";
 	static final String ACCOUNT_CREATED_RESPONSE = "account_created_response";
 	static final String PLAGIARISM_DETECTED_EVENT = "plagiarism_detected_event";
-	static final String PLAGIARISM_REGISTERED_EVENT = "plagiarism_registered_event";
 	
 	@Output(ACCOUNT_CREATED_RESPONSE)
 	MessageChannel accountCreatedResponse();
@@ -19,7 +18,4 @@ public interface Channels {
 	
 	@Input(PLAGIARISM_DETECTED_EVENT)
 	SubscribableChannel registerPlagiarismViolation();
-	
-	@Output(PLAGIARISM_REGISTERED_EVENT)
-	MessageChannel plagiarismRegisteredEvent();
 }

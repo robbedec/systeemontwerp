@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.evaluation.API.rest.post_model.AssignScorePostModel;
 import com.example.evaluation.API.rest.post_model.TaskPostModel;
 import com.example.evaluation.API.rest.post_model.TaskSubmissionPostModel;
+import com.example.evaluation.API.rest.view_model.CourseViewModel;
 import com.example.evaluation.API.rest.view_model.TaskSubmissionViewModel;
 import com.example.evaluation.API.rest.view_model.TaskViewModel;
 import com.example.evaluation.application.query.TaskQuery;
@@ -53,16 +54,21 @@ public class TaskController {
 	}
 
 	@GetMapping("{taskId}/submissions")
-	public List<TaskSubmissionViewModel> getTaskSubmissions(@PathVariable String taskId) {
-		// TODO check teacherId
-		return taskQuery.getTaskSubmissions(taskId).stream()
+	public List<TaskSubmissionViewModel> getTaskSubmissions(@PathVariable String taskId, String teacherId) {
+		return taskQuery.getTaskSubmissions(taskId, teacherId).stream()
 				.map(taskSubmissionRM -> new TaskSubmissionViewModel(taskSubmissionRM)).collect(Collectors.toList());
 	}
-
+	
+	@GetMapping("/responsibilities")
+	public List<CourseViewModel> getTaskResponsibilities(String teacherId) {
+		return taskQuery.getTaskResponsibilities(teacherId);
+	}
+	
 	@PostMapping
 	public ResponseEntity<String> createTask(@RequestBody TaskPostModel task, String teacherId) {
+		log.info("rw {}", task.getWeight());
 		Response response = taskService.createTask(task.getCourseId(), task.getDescription(),
-				LocalDateTime.parse(task.getDueDate()), task.getWeight() / 100, teacherId);
+				LocalDateTime.parse(task.getDueDate()), (double) task.getWeight() / 100, teacherId);
 		return createResponseEntity(response.status, "Task created", HttpStatus.CREATED, response.message,
 				HttpStatus.CONFLICT);
 	}

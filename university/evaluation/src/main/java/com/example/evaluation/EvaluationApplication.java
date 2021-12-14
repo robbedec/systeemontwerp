@@ -33,7 +33,7 @@ import com.example.evaluation.infrastructure.repository.CourseJpaRepository;
 
 @SuppressWarnings("deprecation")
 @SpringBootApplication
-//@EnableBinding(Channels.class)
+@EnableBinding(Channels.class)
 public class EvaluationApplication {
 
 	private static final Logger log = LoggerFactory.getLogger(EvaluationApplication.class);
@@ -44,10 +44,10 @@ public class EvaluationApplication {
 
 	@Bean
 	CommandLineRunner startTest(CourseRepository courseRepo, TaskService taskService,
-			ScoreCardService scoreCardService) {
+			ScoreCardService scoreCardService, TaskRepository taskRepo) {
 		return (args) -> {
-			courseRepo.save(new Course("Course1", "Teacher1", "Degree1", List.of("Student1", "Student2")));
-			courseRepo.save(new Course("Course2", "Teacher1", "Degree1", List.of("Student1", "Student2")));
+			courseRepo.save(new Course("Course1", "CourseName1", "Teacher1", "Degree1", List.of("Student1", "Student2")));
+			courseRepo.save(new Course("Course2", "CourseName2", "Teacher1", "Degree1", List.of("Student1", "Student2")));
 
 			Response res = taskService.createTask("Course1", "Course1 Task", LocalDateTime.parse("2022-01-01T12:00"),
 					0.2, "Teacher1");
@@ -65,7 +65,11 @@ public class EvaluationApplication {
 			taskService.assignScore(taskId1, "Student2", 10, "Teacher1");
 			taskService.assignScore(taskId2, "Student2", 10, "Teacher1");
 			taskService.assignScore(taskId3, "Student2", 8, "Teacher1");
-
+			
+			log.info("w {}", taskRepo.findTotalWeight("Course2"));
+			
+			taskService.submitTask(taskId1, "Student1", "Hallo ik heb plagiaat gepleegd");
+			taskService.submitTask(taskId1, "Student2", "Hallo ik heb geen plagiaat gepleegd");		
 			scoreCardService.generateScoreCards();
 		};
 	}

@@ -7,7 +7,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PlagiarismDetectedDomainEvent extends DomainEvent {
-	private String taskId;
+public class ScoreCardGeneratedDomainEvent extends DomainEvent {
 	private String studentId;
+	private String degreeId;
+	private boolean passed;
 }

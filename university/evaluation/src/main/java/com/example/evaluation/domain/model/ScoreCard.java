@@ -2,6 +2,9 @@ package com.example.evaluation.domain.model;
 
 import java.util.List;
 
+import com.example.evaluation.domain.event.ScoreCardGeneratedDomainEvent;
+import com.example.evaluation.domain.seedwork.AggregateRoot;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScoreCard {
+public class ScoreCard extends AggregateRoot {
 	private String scoreCardId;
 	private String studentId;
 	private String degreeId;
@@ -23,5 +26,9 @@ public class ScoreCard {
 				return false;
 		}
 		return true;
+	}
+	
+	public void passed(boolean passed) {
+		addDomainEvent(new ScoreCardGeneratedDomainEvent(studentId, degreeId, passed));
 	}
 }

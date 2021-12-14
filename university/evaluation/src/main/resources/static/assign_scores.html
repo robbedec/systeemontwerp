@@ -5,7 +5,7 @@
 		<title>Score</title>
 		<script>
 			function selectTask(taskId) {
-				fetch("http://localhost:2225/api/evaluation/tasks/" + taskId + "/submissions", {
+				fetch("http://localhost:2225/api/evaluation/tasks/" + taskId + "/submissions?teacherId=" + sessionStorage.userId, {
 					method: "GET",
 					mode: "cors"
 				}).then(res => res.json()).then(submissions => {
@@ -43,6 +43,9 @@
 						input.min = 0;
 						input.max = 20;
 						input.placeholder = "Score (/20)";
+						if(submission.score !== "-/20") {
+							input.value = submission.score.split("/")[0];
+						}
 						td.appendChild(input);
 						tr.appendChild(td);
 						table.appendChild(tr);
@@ -51,6 +54,14 @@
 						document.getElementById("submissions").appendChild(table);
 					});
 				})
+			}
+			
+			async function plagiarismCheck() {
+				fetch("http://localhost:2225/api/evaluation/tasks/" + selectedTask + "/checkplagiarism", {
+					method: "POST",
+					mode: "cors"
+				});
+				selectTask(selectTask);
 			}
 			
 			function assignScore(studentId) {
@@ -73,6 +84,7 @@
 	</head>
 	<body>
 		<div id="tasks"></div>
+		<button onclick="plagiarismCheck()">Plagiarism Check</button>
 		<div id="submissions"></div>
 	</body>
 </html>
