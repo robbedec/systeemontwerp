@@ -6,5 +6,5 @@ public enum Status {
 	DENIED,
 	ACCEPTED,
 	ACCEPTED_PAID,
-	TERMINATED		//payment to late
+	ACCEPTED_LATE_PAYMENT
 }

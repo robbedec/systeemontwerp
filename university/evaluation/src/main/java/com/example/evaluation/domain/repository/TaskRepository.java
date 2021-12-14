@@ -19,4 +19,6 @@ public interface TaskRepository {
 	List<TaskSubmission> findSubmissionsByTaskId(String taskId);
 
 	TaskSubmission findSubmissionByTaskIdAndStudentId(String taskId, String studentId);
+	
+	double findTotalWeight(String courseId);
 }

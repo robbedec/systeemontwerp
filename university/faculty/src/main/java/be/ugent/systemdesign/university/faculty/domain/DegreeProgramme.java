@@ -47,12 +47,12 @@ public class DegreeProgramme extends AggregateRoot {
 	
 	public void addCourse(Course _course) {
 		availableCourses.add(_course);
-		addDomainEvent(new FacultyCoursesChangedDomainEvent(_course.getId().intValue(), FacultyCoursesChangeType.ADDED, faculty.getFacultyName(), this.degreeName, _course.getCourseName(), _course.getCourseCredits(), _course.getTeacherId()));
+		addDomainEvent(new FacultyCoursesChangedDomainEvent(_course.getId().intValue(), FacultyCoursesChangeType.ADDED, faculty.getFacultyName(), this.degreeName, _course.getCourseName(), _course.getCourseCredits(), _course.getTeacherId(), this.degreeId.intValue()));
 	}
 	
 	public void removeCourse(Course _course) {
 		availableCourses.remove(_course);
-		addDomainEvent(new FacultyCoursesChangedDomainEvent(_course.getId().intValue(), FacultyCoursesChangeType.REMOVED, faculty.getFacultyName(), this.degreeName, _course.getCourseName(), _course.getCourseCredits(), _course.getTeacherId()));
+		addDomainEvent(new FacultyCoursesChangedDomainEvent(_course.getId().intValue(), FacultyCoursesChangeType.REMOVED, faculty.getFacultyName(), this.degreeName, _course.getCourseName(), _course.getCourseCredits(), _course.getTeacherId(), this.degreeId.intValue()));
 	}
 	
 	@Override

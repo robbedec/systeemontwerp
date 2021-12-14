@@ -12,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import be.ugent.systemdesign.university.registration.API.messaging.Channels;
 import be.ugent.systemdesign.university.registration.application.RegistrationService;
@@ -23,6 +24,7 @@ import be.ugent.systemdesign.university.registration.domain.RegistrationReposito
 import be.ugent.systemdesign.university.registration.infrastructure.RegistrationDataModelRepository;
 import be.ugent.systemdesign.university.registration.infrastructure.RegistrationNotFoundException;
 
+@EnableAsync
 @EnableBinding(Channels.class)
 @SpringBootApplication
 public class RegistrationApplication {
@@ -31,6 +33,19 @@ public class RegistrationApplication {
 	
 	public static void main(String[] args) {
 		SpringApplication.run(RegistrationApplication.class, args);
+	}
+	
+	@Bean
+	public CommandLineRunner populateDatabase(RegistrationDataModelRepository DMrepo, RegistrationRepository repo) {
+		return (args) -> {
+			DMrepo.deleteAll();
+			
+			Registration r = new Registration(new Date(), "bramdb@gmail.com", "De Bleecker", "Bram", LocalDate.of(1999, 12, 24), "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
+			Registration r2 = new Registration(new Date(), "bob@gmail.com", "De Bleecker", "BOB", LocalDate.of(1720, 10, 2), "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
+			repo.save(r);
+			repo.save(r2);
+			logger.info("Database populated");
+		};
 	}
 	
 	/**@Bean

@@ -1,4 +1,4 @@
-package be.ugent.systemdesign.university.registration.application.event;
+package com.example.evaluation.application.event;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -8,7 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlagiarismViolationEvent {
-	private String taskId;
+public class CurriculumChangedEvent {
 	private String studentId;
+	private String courseId;
+	private String courseName;
+	private int courseCredits;
+	private String changeType;
 }

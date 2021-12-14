@@ -8,8 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class InvoicePaidEvent {
+public class PaymentOverdueEvent {
 	private String invoiceId;
 	private String studentNumber;
+	private String dueDate;
 	private String amount;
-};
+}

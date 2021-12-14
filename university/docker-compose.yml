@@ -73,6 +73,10 @@ services:
     depends_on:
       - curriculum
       - learningplatform
+    environment:
+      - CURRICULUM_HOST=curriculum
+      - FACULTY_HOST=faculty
+      - LEARNINGPLATFORM_HOST=learningplatform
     ports:
       - 80:8080
     container_name: api_gateway

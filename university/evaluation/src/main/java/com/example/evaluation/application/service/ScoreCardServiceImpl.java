@@ -57,14 +57,17 @@ public class ScoreCardServiceImpl implements ScoreCardService {
 					}
 					scoreCard.getScores().add(new CourseScore(courseId, (int) Math.round(score)));
 				}
-				scoreCardRepo.save(scoreCard);
 
 				// Generate certificate if student passed all courses
 				if (scoreCard.getScores().size() == courseRepo.findCoursesInDegree(degreeId).size()
 						&& scoreCard.passedAllCourses()) {
 					Certificate certificate = new Certificate(null, degreeId, studentId);
 					certificate = certificateRepo.save(certificate);
+					scoreCard.passed(true);
+				} else {
+					scoreCard.passed(false);
 				}
+				scoreCardRepo.save(scoreCard);
 			}
 		}
 		return new Response(ResponseStatus.SUCCESS, "Score cards generated");

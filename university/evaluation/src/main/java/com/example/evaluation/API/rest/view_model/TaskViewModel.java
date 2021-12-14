@@ -9,6 +9,7 @@ public class TaskViewModel {
 	public final String taskId;
 	public final String courseId;
 	public final String description;
+	public final String courseName;
 	public final String dueDate;
 	public final String weight;
 	
@@ -16,6 +17,7 @@ public class TaskViewModel {
 		taskId = taskRM.taskId;
 		courseId = taskRM.courseId;
 		description = taskRM.description;
+		courseName = taskRM.courseName;
 		dueDate = taskRM.dueDate.toString();
 		weight = taskRM.weight * 100 + "%";
 	}

@@ -30,10 +30,10 @@ public class Account {
 	private String firstName;
 	private String lastName;
 	private String username;
-	private String email;
-	private String password;
-	private String address;
+	private String personalEmail;
+	private String universityEmail;
 	private LocalDate dateOfBirth;
+	private String socialSecurityNumber;
 	private AccountType type;
 	
 	@ElementCollection

@@ -28,7 +28,7 @@ public class Invoice extends AggregateRoot {
 	private String studentLastName;
 	private String studentNumber;
 
-	private Double amount;
+	private Double amount;//
 	private LocalDate dueDate;
 	private String description;
 	private boolean isPaid;

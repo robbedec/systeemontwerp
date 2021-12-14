@@ -5,7 +5,14 @@ import java.util.Date;
 
 public class RegistrationGenerator {
 
-	public Registration generateRegistration(Registration r) {		
-		return new Registration(new Date(), r.getEmail(), r.getName(), r.getFirstName(), r.getDateOfBirth(), r.getFaculty(), r.getDegree());
+	public static Registration generateRegistration(Registration r) {
+		Registration newRegistration;
+		if(r.isPaid() && !r.hasOpenViolations()) {
+			 newRegistration = new Registration(new Date(), r.getEmail(), r.getName(), r.getFirstName(), r.getDateOfBirth(), r.getFaculty(), r.getDegree());
+			newRegistration.setStatus(Status.GENERATED);			
+		} else {
+			throw new RuntimeException();
+		}	
+		return newRegistration;
 	}
 }

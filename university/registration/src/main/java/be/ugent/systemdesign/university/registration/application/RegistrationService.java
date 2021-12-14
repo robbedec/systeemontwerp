@@ -1,6 +1,5 @@
 package be.ugent.systemdesign.university.registration.application;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 public interface RegistrationService {
@@ -9,5 +8,7 @@ public interface RegistrationService {
 	Response acceptRegistration(String registrationId);
 	Response rejectRegistration(String registrationId);	
 	Response removeRegistration(String registrationId);
-	
+	Response noteLatePayment(String accountId);
+	Response noteNewViolation(String accountId);
+	Response notePaidRegistration(String accountId);
 }

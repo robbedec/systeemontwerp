@@ -22,7 +22,7 @@ public class RegistrationDataModel {
 
 	@Id
 	@Column(name="registration_id")
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer registrationId;
 	
 	private String accountId;
@@ -34,9 +34,10 @@ public class RegistrationDataModel {
 	private String faculty;
 	private String degree;
 	private String status;
+	private Boolean isActive;
 	
 	public RegistrationDataModel(Integer registrationId, String accountId, Date registrationDate, String email, String name, String firstName, 
-			LocalDate dateOfBirth, String faculty, String degree, Status status){		
+			LocalDate dateOfBirth, String faculty, String degree, Status status, boolean isActive){		
 				this.registrationId = registrationId;
 				this.accountId = accountId;
 				this.registrationDate = registrationDate;
@@ -46,6 +47,7 @@ public class RegistrationDataModel {
 				this.dateOfBirth = dateOfBirth;
 				this.faculty = faculty;
 				this.degree = degree;
-				this.status = status.name();				
+				this.status = status.name();	
+				this.isActive = isActive;
 			}	
 }
