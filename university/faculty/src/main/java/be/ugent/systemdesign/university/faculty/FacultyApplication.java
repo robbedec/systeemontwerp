@@ -73,7 +73,7 @@ public class FacultyApplication {
 	}
 	
 	@Bean
-	CommandLineRunner addCourseToFaculty(FacultyService service, FacultyRepository repo, EventDispatcher eventDispatcher){ 
+	public CommandLineRunner addCourseToFaculty(FacultyService service, FacultyRepository repo, EventDispatcher eventDispatcher){ 
 		return(args)->{
 			logger.info("**ADD COURSES TRHOUGH SERVICE**");
 			
