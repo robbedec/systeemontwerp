@@ -5,11 +5,33 @@
 <head>
 	<title>Create Task</title>
 	<script>
+		let selectedCourse;
+	
+		function loadCourses() {
+			fetch("http://localhost:2225/api/evaluation/tasks/responsibilities?teacherId=" + sessionStorage.userId, {
+				method: "GET",
+				mode: "cors"
+			}).then(res => res.json()).then(courses => courses.forEach(course => {
+				const tr = document.createElement("tr");
+				let td = document.createElement("td");
+				td.innerText = course.courseName;
+				tr.appendChild(td);
+				td = document.createElement("td");
+				const button = document.createElement("button");
+				button.innerText = "Select";
+				button.onclick = () => {selectedCourse = course.courseId};
+				td.appendChild(button);
+				tr.appendChild(td);
+				document.getElementById("courses").appendChild(tr);
+			}));
+		}
+	
 		function createTask() {
 			req = {
+				courseId: selectedCourse,
 				description: document.getElementById("description").value,
 				dueDate: document.getElementById("dueDate").value + "T" + document.getElementById("dueTime").value,
-				weight: parseInt(document.getElementById("weight"))
+				weight: parseInt(document.getElementById("weight").value)
 			};
 
 			fetch("http://localhost:2225/api/evaluation/tasks?teacherId=" + sessionStorage.userId, {
@@ -21,10 +43,17 @@
 				body: JSON.stringify(req)
 			}).then(res => res.json()).then(res => console.log(res)).catch(err => console.error(err));
 		}
+		
+		document.body.onload = loadCourses();
 	</script>
 </head>
 
 <body>
+	<table id="courses">
+		<thead>
+			<th>Course</th>
+		</thead>
+	</table>
 	<table>
 		<tr>
 			<td>

@@ -2,6 +2,7 @@ package com.example.evaluation.infrastructure.repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -17,6 +18,8 @@ import com.example.evaluation.infrastructure.exception.TaskSubmissionNotFoundExc
 
 @Repository
 public class TaskRepositoryImpl implements TaskRepository {
+	private static final String Optional = null;
+
 	@Autowired
 	private TaskDataModelRepository taskDMRepo;
 
@@ -56,6 +59,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 		TaskSubmissionDataModel taskDM = taskSubmissionDMRepo.save(mapToTaskSubmissionDataModel(taskSubmission));
 
 		taskSubmission.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
+		taskSubmission.clearDomainEvents();
 
 		return mapToTaskSubmission(taskDM);
 	}
@@ -71,6 +75,14 @@ public class TaskRepositoryImpl implements TaskRepository {
 		TaskSubmissionDataModel taskSubmissionDM = taskSubmissionDMRepo.findByTaskIdAndStudentId(taskId, studentId)
 				.orElseThrow(TaskSubmissionNotFoundException::new);
 		return mapToTaskSubmission(taskSubmissionDM);
+	}
+	
+	@Override
+	public double findTotalWeight(String courseId) {
+		Optional<Double> weight = taskDMRepo.findTotalWeight(courseId);
+		if(weight.isEmpty())
+			return 0;
+		return weight.get();
 	}
 
 	// Mappings from domain model <-> data model

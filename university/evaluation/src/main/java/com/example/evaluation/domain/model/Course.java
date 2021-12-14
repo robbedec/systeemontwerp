@@ -22,6 +22,7 @@ import lombok.Setter;
 public class Course {
 	@Id
 	private String courseId;
+	private String courseName;
 	private String teacherId;
 	private String degreeId;
 	
