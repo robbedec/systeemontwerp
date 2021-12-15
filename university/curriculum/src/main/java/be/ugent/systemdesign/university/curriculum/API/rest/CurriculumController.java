@@ -37,11 +37,6 @@ public class CurriculumController {
 	@Autowired
 	FacultyCoursesDataModelRepository fdmrepo;
 	
-	@GetMapping("test")
-	public List<FacultyDataModel> test() {
-		return fdmrepo.findAll();
-	}
-	
 	@GetMapping
 	public List<CurriculumViewModel> findAll() {
 		return curriculumQuery.findAll().stream().map(c -> new CurriculumViewModel(c)).collect(Collectors.toList());
@@ -92,6 +87,13 @@ public class CurriculumController {
 				response.message, 
 				HttpStatus.BAD_REQUEST
 			);
+	}
+	
+	// This endpoint is used to check if the curriculum service handles faculty_change events
+	// in a correct manner. It does not belong to the core functionality.
+	@GetMapping("test")
+	public List<FacultyDataModel> test() {
+		return fdmrepo.findAll();
 	}
 	
 	private ResponseEntity<String> createResponseEntity(ResponseStatus status, String happyMessage, HttpStatus happyStatus, String sadMessage, HttpStatus sadStatus){
