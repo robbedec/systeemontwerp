@@ -8,7 +8,7 @@
 		let selectedCourse;
 	
 		function loadCourses() {
-			fetch("http://localhost:2225/api/evaluation/tasks/responsibilities?teacherId=" + sessionStorage.userId, {
+			fetch("/api/evaluation/tasks/responsibilities?teacherId=" + sessionStorage.userId, {
 				method: "GET",
 				mode: "cors"
 			}).then(res => res.json()).then(courses => courses.forEach(course => {
@@ -34,7 +34,7 @@
 				weight: parseInt(document.getElementById("weight").value)
 			};
 
-			fetch("http://localhost:2225/api/evaluation/tasks?teacherId=" + sessionStorage.userId, {
+			fetch("/api/evaluation/tasks?teacherId=" + sessionStorage.userId, {
 				method: "POST",
 				mode: "cors",
 				headers: {

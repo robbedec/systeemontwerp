@@ -1,5 +1,5 @@
 function loadTasks() {
-	fetch("http://localhost:2225/api/evaluation/tasks?userId=" + sessionStorage.userId, {
+	fetch("/api/evaluation/tasks?userId=" + sessionStorage.userId, {
 		method: "GET",
 		mode: "cors"
 	}).then(res => res.json()).then(tasks => {
