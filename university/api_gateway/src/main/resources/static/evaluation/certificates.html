@@ -5,7 +5,7 @@
 		<title>Certificates</title>
 		<script>
 			function loadCertificates() {
-				fetch("http://localhost:2225/api/evaluation/certificates?studentId=" + sessionStorage.userId, {
+				fetch("/api/evaluation/certificates?studentId=" + sessionStorage.userId, {
 					method: "GET",
 					mode: "cors"
 				}).then(res => res.json()).then(certificates => certificates.forEach(certificate => {

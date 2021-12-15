@@ -5,7 +5,7 @@
 		<title>Score</title>
 		<script>
 			function selectTask(taskId) {
-				fetch("http://localhost:2225/api/evaluation/tasks/" + taskId + "/submissions?teacherId=" + sessionStorage.userId, {
+				fetch("/api/evaluation/tasks/" + taskId + "/submissions?teacherId=" + sessionStorage.userId, {
 					method: "GET",
 					mode: "cors"
 				}).then(res => res.json()).then(submissions => {
@@ -57,7 +57,7 @@
 			}
 			
 			async function plagiarismCheck() {
-				fetch("http://localhost:2225/api/evaluation/tasks/" + selectedTask + "/checkplagiarism", {
+				fetch("/api/evaluation/tasks/" + selectedTask + "/checkplagiarism", {
 					method: "POST",
 					mode: "cors"
 				});
@@ -70,7 +70,7 @@
 					score: document.getElementById(studentId).value
 				}
 				
-				fetch("http://localhost:2225/api/evaluation/tasks/" + selectedTask + "/submissions/score?teacherId=" + sessionStorage.userId, {
+				fetch("/api/evaluation/tasks/" + selectedTask + "/submissions/score?teacherId=" + sessionStorage.userId, {
 					method: "PUT",
 					mode: "cors",
 					headers: {

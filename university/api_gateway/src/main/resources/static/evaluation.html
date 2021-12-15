@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Evaluation service</title>
+		<script>
+			function generateScoreCards() {
+				fetch("/api/evaluation/scorecards", {
+					method: "POST",
+					mode: "cors"
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<b>Student</b>
+		<ul>
+			<li><a href="evaluation/submit_task.html">Tasks</a></li>
+			<li><a href="evaluation/score_cards.html">Score Cards</a></li>
+			<li><a href="evaluation/certificates.html">Certificates</a></li>
+		</ul>
+		<br/><br />
+		<b>Teacher</b>
+		<ul>
+			<li><a href="evaluation/create_task.html">Create Task</a></li>
+			<li><a href="assign_scores.html">Assign Scores</a></li>
+		</ul>
+		<br /><br />
+		<b>Anyone</b>
+		<ul>
+			<li><a href="evaluation/verify_certificate.html">Verify Certificate</a></li>
+		</ul>
+		<br /><br />
+		<b>Administrator</b>
+		<button onclick="evaluation/generateScoreCards()">Generate score cards</button>
+	</body>
+</html
