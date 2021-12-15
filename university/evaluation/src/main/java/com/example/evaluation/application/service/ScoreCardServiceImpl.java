@@ -56,7 +56,8 @@ public class ScoreCardServiceImpl implements ScoreCardService {
 						} catch (TaskSubmissionNotFoundException e) {
 						}
 					}
-					scoreCard.getScores().add(new CourseScore(courseId, (int) Math.round(score)));
+					scoreCard.getScores()
+							.add(new CourseScore(courseRepo.findCourseName(courseId), (int) Math.round(score)));
 				}
 
 				// Generate certificate if student passed all courses

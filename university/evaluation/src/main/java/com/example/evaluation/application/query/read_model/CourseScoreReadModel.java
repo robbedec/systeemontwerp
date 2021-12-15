@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CourseScoreReadModel {
 
-	public final String courseId;
+	public final String course;
 	public final int score;
 
 }

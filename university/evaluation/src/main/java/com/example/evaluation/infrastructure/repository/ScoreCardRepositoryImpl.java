@@ -57,7 +57,7 @@ public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 	}
 
 	private CourseScoreDataModel mapToCourseScoreDataModel(CourseScore courseScore) {
-		return new CourseScoreDataModel(courseScore.getCourseId(), courseScore.getScore());
+		return new CourseScoreDataModel(courseScore.getCourse(), courseScore.getScore());
 	}
 
 }

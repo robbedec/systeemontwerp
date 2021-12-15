@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CourseScore {
 
-	private String courseId;
+	private String course;
 	private int score;
 
 	public boolean passed() {

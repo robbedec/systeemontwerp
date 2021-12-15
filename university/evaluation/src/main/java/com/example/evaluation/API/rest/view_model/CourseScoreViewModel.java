@@ -8,7 +8,7 @@ public class CourseScoreViewModel {
 	public final String score;
 
 	public CourseScoreViewModel(CourseScoreReadModel courseScoreRM) {
-		course = courseScoreRM.courseId;
+		course = courseScoreRM.course;
 		score = courseScoreRM.score + "/20";
 	}
 
