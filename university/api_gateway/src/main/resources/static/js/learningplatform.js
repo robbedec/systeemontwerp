@@ -21,7 +21,7 @@ async function getStudentCourses(studentId){
     return courses;
 }
 
-async function reseedCoursesDb(studentId){
+async function reseedCoursesDb(){
     const courseReseedResponse = await fetch(SEED_DB_URL); 
     return await courseReseedResponse.json();
 }
@@ -153,8 +153,10 @@ function showCourseContents(studentId, courseId){
 }
 
 window.onload = function(){
-	
-	reseedCoursesDb().then(msg => console.log(msg));
+	let getAllCoursesButton = document.getElementById("getAllCoursesButton");
+	getAllCoursesButton.addEventListener("click", function(){
+		reseedCoursesDb().then(msg => console.log(msg));
+	})
 	
 	// GET COURSES OF STUDENT
 	let getAllStudentCoursesButton = document.getElementById("getStudentCoursesButton");
