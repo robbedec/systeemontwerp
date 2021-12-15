@@ -77,6 +77,8 @@ services:
       - CURRICULUM_HOST=curriculum
       - FACULTY_HOST=faculty
       - LEARNINGPLATFORM_HOST=learningplatform
+      - EVALUATION_HOST=evaluation
+      - ACCOUNT_HOST=account
     ports:
       - 80:8080
     container_name: api_gateway
@@ -100,6 +102,13 @@ services:
       - kafka
       - faculty
       - curriculum
+  account:
+    build: ./account
+    container_name: account
+    links:
+      - kafka
+    depends_on:
+      - kafka
     environment:
       - spring.cloud.stream.kafka.binder.brokers=kafka
       - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
