@@ -15,7 +15,6 @@ import be.ugent.systemdesign.university.faculty.domain.Course;
 import be.ugent.systemdesign.university.faculty.domain.DegreeProgramme;
 import be.ugent.systemdesign.university.faculty.domain.Faculty;
 import be.ugent.systemdesign.university.faculty.infrastructure.FacultyJPARepository;
-import be.ugent.systemdesign.university.faculty.infrastructure.ReseedDatabase;
 
 @RestController
 @RequestMapping(path="api/faculty/")
