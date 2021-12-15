@@ -13,6 +13,7 @@ import com.example.evaluation.infrastructure.exception.CertificateNotFoundExcept
 
 @Repository
 public class CertificateRepositoryImpl implements CertificateRepository {
+
 	@Autowired
 	private CertificateDataModelRepository certificateDMRepo;
 
@@ -40,7 +41,7 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 		return certificateDMRepo.findByDegreeId(degreeId).stream().map(certificateDM -> mapToCertificate(certificateDM))
 				.collect(Collectors.toList());
 	}
-	
+
 	// Mappings from domain model <-> data model
 	private Certificate mapToCertificate(CertificateDataModel certificateDM) {
 		return new Certificate(certificateDM.getCertificateId(), certificateDM.getDegreeId(),

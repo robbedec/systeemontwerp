@@ -18,17 +18,16 @@ import com.example.evaluation.infrastructure.exception.TaskSubmissionNotFoundExc
 
 @Repository
 public class TaskRepositoryImpl implements TaskRepository {
-	private static final String Optional = null;
 
 	@Autowired
 	private TaskDataModelRepository taskDMRepo;
 
 	@Autowired
 	private TaskSubmissionDataModelRepository taskSubmissionDMRepo;
-	
+
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
-	
+
 	@Override
 	public Task findById(String taskId) {
 		TaskDataModel taskDM = taskDMRepo.findById(taskId).orElseThrow(TaskNotFoundException::new);
@@ -76,11 +75,11 @@ public class TaskRepositoryImpl implements TaskRepository {
 				.orElseThrow(TaskSubmissionNotFoundException::new);
 		return mapToTaskSubmission(taskSubmissionDM);
 	}
-	
+
 	@Override
 	public double findTotalWeight(String courseId) {
 		Optional<Double> weight = taskDMRepo.findTotalWeight(courseId);
-		if(weight.isEmpty())
+		if (weight.isEmpty())
 			return 0;
 		return weight.get();
 	}

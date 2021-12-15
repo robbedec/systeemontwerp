@@ -8,8 +8,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class TaskPostModel {
+
 	private String courseId;
 	private String description;
 	private String dueDate;
 	private int weight;
+
 }

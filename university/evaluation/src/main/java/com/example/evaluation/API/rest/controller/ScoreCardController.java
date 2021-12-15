@@ -22,6 +22,7 @@ import com.example.evaluation.application.query.ScoreCardQuery;
 @RequestMapping(path = "api/evaluation/scorecards")
 @CrossOrigin(origins = "*")
 public class ScoreCardController {
+
 	@Autowired
 	ScoreCardQuery scoreCardQuery;
 
@@ -47,4 +48,5 @@ public class ScoreCardController {
 			return new ResponseEntity<>(successMsg, successStatus);
 		return new ResponseEntity<>(failMsg, failStatus);
 	}
+
 }

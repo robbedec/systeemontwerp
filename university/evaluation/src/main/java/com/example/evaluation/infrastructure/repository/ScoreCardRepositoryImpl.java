@@ -18,7 +18,7 @@ public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 
 	@Autowired
 	ScoreCardDataModelRepository scoreCardDMRepo;
-	
+
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
 
@@ -32,13 +32,13 @@ public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 	@Override
 	public ScoreCard save(ScoreCard scoreCard) {
 		ScoreCardDataModel scoreCardDM = scoreCardDMRepo.save(mapToScoreCardDataModel(scoreCard));
-		
+
 		scoreCard.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
 		scoreCard.clearDomainEvents();
-		
+
 		return mapToScoreCard(scoreCardDM);
 	}
-	
+
 	// Mappings from domain model <-> data model
 	private ScoreCard mapToScoreCard(ScoreCardDataModel scoreCardDM) {
 		return new ScoreCard(scoreCardDM.getScoreCardId(), scoreCardDM.getStudentId(), scoreCardDM.getDegreeId(),
@@ -49,7 +49,7 @@ public class ScoreCardRepositoryImpl implements ScoreCardRepository {
 	private CourseScore mapToCourseScore(CourseScoreDataModel courseScoreDM) {
 		return new CourseScore(courseScoreDM.getCourseId(), courseScoreDM.getScore());
 	}
-	
+
 	private ScoreCardDataModel mapToScoreCardDataModel(ScoreCard scoreCard) {
 		return new ScoreCardDataModel(scoreCard.getScoreCardId(), scoreCard.getStudentId(), scoreCard.getDegreeId(),
 				scoreCard.getScores().stream().map(courseScore -> mapToCourseScoreDataModel(courseScore))

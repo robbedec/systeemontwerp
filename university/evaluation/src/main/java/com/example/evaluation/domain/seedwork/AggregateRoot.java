@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class AggregateRoot {
+
 	private final List<DomainEvent> domainEvents = new ArrayList<>();
 
 	protected void addDomainEvent(DomainEvent event) {
@@ -18,4 +19,5 @@ public abstract class AggregateRoot {
 	public void clearDomainEvents() {
 		domainEvents.clear();
 	}
+
 }
