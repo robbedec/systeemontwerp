@@ -1,4 +1,4 @@
 FROM openjdk:11
-COPY . .
-RUN apt-get install -y curl && ./mvnw package -DskipTests
-CMD ["java", "-jar", "./target/curriculum-0.0.1-SNAPSHOT.jar"]
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+CMD ["java", "-jar", "/app.jar"]
