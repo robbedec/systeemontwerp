@@ -77,6 +77,8 @@ services:
       - CURRICULUM_HOST=curriculum
       - FACULTY_HOST=faculty
       - LEARNINGPLATFORM_HOST=learningplatform
+      - EVALUATION_HOST=evaluation
+      - ACCOUNT_HOST=account
     ports:
       - 80:8080
     container_name: api_gateway
