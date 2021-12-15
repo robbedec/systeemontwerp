@@ -8,6 +8,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class PlagiarismDetectedDomainEvent extends DomainEvent {
+
 	private String taskId;
 	private String studentId;
+
 }

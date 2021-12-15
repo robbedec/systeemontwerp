@@ -17,7 +17,6 @@ import com.example.evaluation.infrastructure.repository.ScoreCardDataModelReposi
 
 @Component
 public class ScoreCardQueryImpl implements ScoreCardQuery {
-	Logger log = LoggerFactory.getLogger(ScoreCardQueryImpl.class);
 	
 	@Autowired
 	private ScoreCardDataModelRepository scoreCardDMRepo;
@@ -30,10 +29,6 @@ public class ScoreCardQueryImpl implements ScoreCardQuery {
 
 	@Override
 	public List<ScoreCardReadModel> getScoreCards(String studentId) {
-		List<ScoreCardDataModel> scorecards = scoreCardDMRepo.findByStudentId(studentId);
-		for(ScoreCardDataModel sc : scorecards) {
-			log.info("sc {} {}", sc.getDegreeId(), sc.getStudentId());
-		}
 		return scoreCardDMRepo.findByStudentId(studentId).stream()
 				.map(scoreCardDM -> mapToScoreCardReadModel(scoreCardDM)).collect(Collectors.toList());
 	}

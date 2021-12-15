@@ -14,13 +14,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class TaskSubmission extends AggregateRoot {
+
 	private String submissionId;
 	private String taskId;
 	private String studentId;
 	private String file;
 	private LocalDateTime dateSubmitted;
 	private int score;
-	
+
 	public TaskSubmission(String taskId, String studentId) {
 		this.taskId = taskId;
 		this.studentId = studentId;
@@ -41,8 +42,9 @@ public class TaskSubmission extends AggregateRoot {
 		score = 0;
 		addDomainEvent(new PlagiarismDetectedDomainEvent(taskId, studentId));
 	}
-	
+
 	public boolean passed() {
 		return score >= 10;
 	}
+
 }

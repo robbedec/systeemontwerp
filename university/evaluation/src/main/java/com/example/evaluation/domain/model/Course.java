@@ -20,14 +20,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Course {
+
 	@Id
 	private String courseId;
 	private String courseName;
 	private String teacherId;
 	private String degreeId;
-	
+
 	@ElementCollection
 	@CollectionTable(name = "course_students", joinColumns = @JoinColumn(name = "course_id"))
 	@Column(name = "studentId")
 	private List<String> studentIds;
+
 }

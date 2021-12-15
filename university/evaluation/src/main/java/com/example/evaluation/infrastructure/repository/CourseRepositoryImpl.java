@@ -2,7 +2,6 @@ package com.example.evaluation.infrastructure.repository;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,19 +22,19 @@ public class CourseRepositoryImpl implements CourseRepository {
 	public void save(Course course) {
 		courseJpaRepo.save(course);
 	}
-	
+
 	@Override
 	public void remove(String courseId) {
 		courseJpaRepo.deleteById(courseId);
 	}
-	
+
 	@Override
 	public void addStudent(String courseId, String studentId) {
 		Course course = courseJpaRepo.findById(courseId).orElseThrow(CourseNotFoundException::new);
 		course.getStudentIds().add(studentId);
 		courseJpaRepo.save(course);
 	}
-	
+
 	@Override
 	public void removeStudent(String courseId, String studentId) {
 		Course course = courseJpaRepo.findById(courseId).orElseThrow(CourseNotFoundException::new);
@@ -48,7 +47,7 @@ public class CourseRepositoryImpl implements CourseRepository {
 		Course course = courseJpaRepo.findById(courseId).orElseThrow(CourseNotFoundException::new);
 		return course.getTeacherId();
 	}
-	
+
 	@Override
 	public String findCourseName(String courseId) {
 		Course course = courseJpaRepo.findById(courseId).orElseThrow(CourseNotFoundException::new);

@@ -10,6 +10,9 @@ import com.example.evaluation.infrastructure.data_model.ScoreCardDataModel;
 
 @Repository
 public interface ScoreCardDataModelRepository extends JpaRepository<ScoreCardDataModel, String> {
+
 	List<ScoreCardDataModel> findByStudentId(String studentId);
+
 	Optional<ScoreCardDataModel> findByStudentIdAndDegreeId(String studentId, String degreeId);
+
 }

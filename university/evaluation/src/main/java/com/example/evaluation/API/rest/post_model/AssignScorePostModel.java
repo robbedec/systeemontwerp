@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class AssignScorePostModel {
+
 	private String studentId;
 	private int score;
+
 }
