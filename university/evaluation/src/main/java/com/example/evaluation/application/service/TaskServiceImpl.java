@@ -24,7 +24,7 @@ import com.example.evaluation.infrastructure.exception.TaskSubmissionNotFoundExc
 @Service
 public class TaskServiceImpl implements TaskService {
 
-	Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
 
 	@Autowired
 	private TaskRepository taskRepo;
@@ -45,7 +45,7 @@ public class TaskServiceImpl implements TaskService {
 
 			Task task = new Task(null, courseId, description, dueDate, weight);
 			task = taskRepo.save(task);
-			log.info("Task created {}", task.getTaskId());
+			log.info("Task created {}, due {}", task.getTaskId(), task.getDueDate().toString());
 
 			// Create submission entry for every student
 			for (String studentId : courseRepo.findStudentsFollowingCourse(courseId)) {
@@ -64,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
 		try {
 			Task task = taskRepo.findById(taskId);
 			if (task.dueDatePassed()) {
-				return new Response(ResponseStatus.FAIL, "Missed due date");
+				return new Response(ResponseStatus.FAIL, "Missed due date " + LocalDateTime.now().toString());
 			}
 			TaskSubmission taskSubmission = taskRepo.findSubmissionByTaskIdAndStudentId(taskId, studentId);
 			taskSubmission.setFile(file);

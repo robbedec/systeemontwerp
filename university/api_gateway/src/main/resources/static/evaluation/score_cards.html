@@ -5,7 +5,7 @@
 		<title>Score cards</title>
 		<script>
 			function loadScoreCards() {
-				fetch("/api/evaluation/scorecards?studentId=" + sessionStorage.userId, {
+				fetch("../api/evaluation/scorecards?studentId=" + sessionStorage.userId, {
 					method: "GET"
 				}).then(res => res.json()).then(scoreCards => {
 					scoreCards.forEach(scoreCard => {

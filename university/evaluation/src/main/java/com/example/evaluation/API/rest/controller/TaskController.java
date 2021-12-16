@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 @RequestMapping("api/evaluation/tasks")
 @CrossOrigin(origins = "*")
 public class TaskController {
+	
 	private static final Logger log = LoggerFactory.getLogger(TaskController.class);
 
 	@Autowired
@@ -44,29 +45,33 @@ public class TaskController {
 
 	@GetMapping
 	public List<TaskViewModel> getTasks(String userId) {
+		log.info("getTasks");
 		return taskQuery.getTasks(userId).stream().map(taskRM -> new TaskViewModel(taskRM))
 				.collect(Collectors.toList());
 	}
 
 	@GetMapping("{taskId}/submission")
 	public TaskSubmissionViewModel getTaskSubmission(@PathVariable String taskId, String studentId) {
+		log.info("getTaskSubmission");
 		return new TaskSubmissionViewModel(taskQuery.getTaskSubmission(taskId, studentId));
 	}
 
 	@GetMapping("{taskId}/submissions")
 	public List<TaskSubmissionViewModel> getTaskSubmissions(@PathVariable String taskId, String teacherId) {
+		log.info("getTaskSubmissions");
 		return taskQuery.getTaskSubmissions(taskId, teacherId).stream()
 				.map(taskSubmissionRM -> new TaskSubmissionViewModel(taskSubmissionRM)).collect(Collectors.toList());
 	}
 
 	@GetMapping("/responsibilities")
 	public List<CourseViewModel> getTaskResponsibilities(String teacherId) {
+		log.info("getTaskResponsibilities");
 		return taskQuery.getTaskResponsibilities(teacherId);
 	}
 
 	@PostMapping
 	public ResponseEntity<String> createTask(@RequestBody TaskPostModel task, String teacherId) {
-		log.info("rw {}", task.getWeight());
+		log.info("createTask");
 		Response response = taskService.createTask(task.getCourseId(), task.getDescription(),
 				LocalDateTime.parse(task.getDueDate()), (double) task.getWeight() / 100, teacherId);
 		return createResponseEntity(response.status, "Task created", HttpStatus.CREATED, response.message,
@@ -75,6 +80,7 @@ public class TaskController {
 
 	@PostMapping("{taskId}/checkplagiarism")
 	public ResponseEntity<String> checkPlagiarism(@PathVariable String taskId) {
+		log.info("checkPlagiarism");
 		Response response = taskService.checkPlagiarism(taskId);
 		return createResponseEntity(response.status, "Tasks checked for plagiarism", HttpStatus.OK,
 				"Failed to check for plagiarism", HttpStatus.CONFLICT);
@@ -83,6 +89,7 @@ public class TaskController {
 	@PutMapping("{taskId}/submit")
 	public ResponseEntity<String> submitTask(@RequestBody TaskSubmissionPostModel taskSubmission,
 			@PathVariable String taskId, String studentId) {
+		log.info("submitTask");
 		Response response = taskService.submitTask(taskId, studentId, taskSubmission.getFile());
 		return createResponseEntity(response.status, "Task submitted", HttpStatus.OK, response.message,
 				HttpStatus.CONFLICT);
@@ -91,7 +98,7 @@ public class TaskController {
 	@PutMapping("{taskId}/submissions/score")
 	public ResponseEntity<String> assignScore(@RequestBody AssignScorePostModel score, @PathVariable String taskId,
 			String teacherId) {
-		log.info("{} {}", teacherId, score.getScore());
+		log.info("assignScore");
 		Response response = taskService.assignScore(taskId, score.getStudentId(), score.getScore(), teacherId);
 		return createResponseEntity(response.status, "Score assigned", HttpStatus.OK, response.message,
 				HttpStatus.CONFLICT);
@@ -101,6 +108,7 @@ public class TaskController {
 			HttpStatus successStatus, String failMsg, HttpStatus failStatus) {
 		if (status == ResponseStatus.SUCCESS)
 			return new ResponseEntity<>(successMsg, successStatus);
+		log.info("FAILED {}", failMsg);
 		return new ResponseEntity<>(failMsg, failStatus);
 	}
 

@@ -5,7 +5,7 @@
 		<title>Verify certificate</title>
 		<script>
 			function verifyCertificate() {
-				fetch("/api/evaluation/certificates/" + document.getElementById("certificateId").value + "/verify", {
+				fetch("../api/evaluation/certificates/" + document.getElementById("certificateId").value + "/verify", {
 					method: "GET",
 					mode: "cors"
 				}).then(res => res.json()).then(res => document.getElementById("valid").innerText = res.valid).catch(err => console.error(err));
