@@ -24,7 +24,7 @@ public class MessageInputGateway {
 	public AccountCreatedResponse receiveCreateAccountRequest(CreateAccountRequest req) {
 		String username = (req.getFirstname() + req.getName()).toLowerCase();
 		String email = username + "@ugent.be";
-		Account account = new Account(null, req.getFirstname(), req.getName(), username, req.getEmail(), email, req.getDateOfBirth(), req.getSocialSecurityNumber(), AccountType.STUDENT, new ArrayList<>());
+		Account account = new Account(null, req.getFirstname(), req.getName(), username, req.getEmail(), email, req.getDateOfBirth() AccountType.STUDENT, new ArrayList<>());
 		account = accountRepo.save(account);
 		
 		return new AccountCreatedResponse(account.getAccountId(), username, email);

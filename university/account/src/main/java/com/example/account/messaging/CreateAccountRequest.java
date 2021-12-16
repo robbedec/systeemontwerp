@@ -16,5 +16,4 @@ public class CreateAccountRequest {
 	private String name;
 	private String firstname;
 	private LocalDate dateOfBirth;
-	private String socialSecurityNumber;
 }

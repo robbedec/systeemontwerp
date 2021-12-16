@@ -33,7 +33,6 @@ public class Account {
 	private String personalEmail;
 	private String universityEmail;
 	private LocalDate dateOfBirth;
-	private String socialSecurityNumber;
 	private AccountType type;
 	
 	@ElementCollection
