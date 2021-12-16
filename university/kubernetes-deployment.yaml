@@ -1,0 +1,580 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper-1
+  template:
+    metadata:
+      labels:
+        app: zookeeper-1
+    spec:
+      containers:
+      - name: zoo1
+        image: confluentinc/cp-zookeeper
+        ports:
+        - containerPort: 2181
+        env:
+        - name: ZOOKEEPER_ID
+          value: "1"
+        - name: ZOOKEEPER_CLIENT_PORT
+          value: "2181"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zoo1
+  labels:
+    app: zookeeper-1
+spec:
+  selector:
+    app: zookeeper-1
+  ports:
+  - name: client
+    port: 2181
+    protocol: TCP
+  - name: follower
+    port: 2888
+    protocol: TCP
+  - name: leader
+    port: 3888
+    protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-broker0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+        id: "1"
+    spec:
+      containers:
+      - name: kafka
+        image: confluentinc/cp-kafka:5.2.4
+        ports:
+        - containerPort: 9092
+        env:
+        - name: KAFKA_BROKER_ID
+          value: "1"
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: zoo1:2181
+        - name: KAFKA_ADVERTISED_LISTENERS
+          value: "PLAINTEXT://kafka-service:9092"
+        - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+          value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-service
+  labels:
+    name: kafka
+spec:
+  ports:
+  - port: 9092
+    name: kafka-port
+    protocol: TCP
+  selector:
+    app: kafka
+    id: "1"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: learningplatform-db-deployment
+  labels:
+    app: learningplatformdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: learningplatformdb
+  template:
+    metadata:
+      labels:
+        app: learningplatformdb
+    spec:
+      containers:
+      - name: learningplatformdb
+        image: mysql:5.7
+        args: ["--default-authentication-plugin=mysql_native_password"]
+        env:
+        - name: MYSQL_DATABASE
+          value: Learningplatform
+        - name: MYSQL_ROOT_PASSWORD
+          value: "saulgoodman"
+        ports:
+        - containerPort: 3306
+          name: mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: learningplatformdb-service
+spec:
+  selector:
+    app: learningplatformdb
+  ports:
+  - port: 3306
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: learningplatform-deployment
+  labels:
+    app: learningplatform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: learningplatform
+  template:
+    metadata:
+      labels:
+        app: learningplatform
+    spec:
+      containers:
+      - name: learningplatform
+        image: timgeldof/systeemontwerp:learningplatform
+        ports:
+        - containerPort: 2229
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:mysql://learningplatformdb-service.default.svc.cluster.local:3306/Learningplatform"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "saulgoodman"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+          value: "kafka-service"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+          value: "zoo1:2181"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_REPLICATIONFACTOR
+          value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: learningplatform-service
+spec:
+  selector:
+    app: learningplatform
+  ports:
+  - port: 2229
+    targetPort: 2229
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-deployment
+  labels:
+    app: notification
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification
+  template:
+    metadata:
+      labels:
+        app: notification
+    spec:
+      containers:
+      - name: notification
+        image: timgeldof/systeemontwerp:notification
+        ports:
+        - containerPort: 2897
+        env:
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+          value: "kafka-service"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+          value: "zoo1:2181"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_REPLICATIONFACTOR
+          value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+spec:
+  selector:
+    app: notification
+  ports:
+  - port: 2897
+    targetPort: 2897
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curriculum-db-deployment
+  labels:
+    app: curriculumdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: curriculumdb
+  template:
+    metadata:
+      labels:
+        app: curriculumdb
+    spec:
+      containers:
+      - name: curriculumdb
+        image: mongo
+        ports:
+        - containerPort: 27017
+          name: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: curriculumdb-service
+spec:
+  selector:
+    app: curriculumdb
+  ports:
+  - port: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curriculum-deployment
+  labels:
+    app: curriculum
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: curriculum
+  template:
+    metadata:
+      labels:
+        app: curriculum
+    spec:
+      containers:
+      - name: curriculum
+        image: robbedec/systeemontwerp:curriculum_rdc3
+        ports:
+        - containerPort: 2223
+        env:
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+          value: "kafka-service"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+          value: "zoo1:2181"
+        - name: SPRING_DATA_MONGODB_PORT
+          value: "27017"
+        - name: SPRING_DATA_MONGODB_HOST
+          value: curriculumdb-service
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_REPLICATIONFACTOR
+          value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: curriculum-service
+spec:
+  selector:
+    app: curriculum
+  ports:
+  - port: 2223
+    targetPort: 2223
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faculty-deployment
+  labels:
+    app: faculty
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: faculty
+  template:
+    metadata:
+      labels:
+        app: faculty
+    spec:
+      containers:
+      - name: faculty
+        image: robbedec/systeemontwerp:faculty_rdc1
+        ports:
+        - containerPort: 2224
+        env:
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+          value: "kafka-service"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+          value: "zoo1:2181"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_REPLICATIONFACTOR
+          value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: faculty-service
+spec:
+  selector:
+    app: faculty
+  ports:
+  - port: 2224
+    targetPort: 2224
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: evaluation-service
+spec:
+  selector:
+    app: evaluation
+  ports:
+  - port: 2225
+    targetPort: 2225
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: evaluation-deployment
+  labels:
+    app: evaluation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: evaluation
+  template:
+    metadata:
+      labels:
+        app: evaluation
+    spec:
+      containers:
+      - name: evaluation
+        image: mickmoen/systeemontwerp:evaluation
+        ports:
+        - containerPort: 2225
+        env:
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+          value: "kafka-service"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+          value: "zoo1:2181"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-service
+spec:
+  selector:
+    app: account
+  ports:
+  - port: 2226
+    targetPort: 2226
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-deployment
+  labels:
+    app: account
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account
+  template:
+    metadata:
+      labels:
+        app: account
+    spec:
+      containers:
+      - name: account
+        image: mickmoen/systeemontwerp:account2
+        ports:
+        - containerPort: 2226
+        env:
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+          value: "kafka-service"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registration-db-deployment
+  labels:
+    app: registrationdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registrationdb
+  template:
+    metadata:
+      labels:
+        app: registrationdb
+    spec:
+      containers:
+      - name: registrationdb
+        image: mysql:5.7
+        args: ["--default-authentication-plugin=mysql_native_password"]
+        env:
+        - name: MYSQL_DATABASE
+          value: registration
+        - name: MYSQL_ROOT_PASSWORD
+          value: "saulgoodman"
+        ports:
+        - containerPort: 3306
+          name: mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registrationdb-service
+spec:
+  selector:
+    app: registrationdb
+  ports:
+  - port: 3306
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registration-deployment
+  labels:
+    app: registration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registration
+  template:
+    metadata:
+      labels:
+        app: registration
+    spec:
+      containers:
+      - name: registration
+        image: bramdb24/systeemontwerp:regv1
+        ports:
+        - containerPort: 2227
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:mysql://registrationdb-service.default.svc.cluster.local:3306/registration"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "saulgoodman"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+          value: "kafka-service"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+          value: "zoo1:2181"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_REPLICATIONFACTOR
+          value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registration-service
+spec:
+  selector:
+    app: registration
+  ports: 
+  - port: 2227
+    targetPort: 2227
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invoice-deployment
+  labels:
+    app: invoice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invoice
+  template:
+    metadata:
+      labels:
+        app: invoice
+    spec:
+      containers:
+      - name: invoice
+        image: bramdb24/systeemontwerp:invv1
+        ports:
+        - containerPort: 2228
+        env:
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+          value: "kafka-service"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDERS_ZKNODES
+          value: "zoo1:2181"
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_REPLICATIONFACTOR
+          value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: invoice-service
+spec:
+  selector:
+    app: invoice
+  ports:
+  - port: 2228
+    targetPort: 2228
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apigw-deployment
+  labels:
+    app: apigw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apigw
+  template:
+    metadata:
+      labels:
+        app: apigw
+    spec:
+      containers:
+      - name: apigw
+        image: robbedec/systeemontwerp:apigw_rdc2
+        ports:
+        - containerPort: 8080
+          name: apigw
+        env:
+        - name: CURRICULUM_HOST
+          value: "curriculum-service.default.svc.cluster.local"
+        - name: FACULTY_HOST
+          value: "faculty-service.default.svc.cluster.local"
+        - name: LEARNINGPLATFORM_HOST
+          value: "learningplatform-service.default.svc.cluster.local"
+        - name: NOTIFICATION_HOST
+          value: "notification-service.default.svc.cluster.local"
+        - name: ACCOUNT_HOST
+          value: "account-service.default.svc.cluster.local"
+        - name: EVALUATION_HOST
+          value: "evaluation-service.default.svc.cluster.local"
+        - name: REGISTRATION_HOST
+          value: "registration-service.default.svc.cluster.local"
+        - name: INVOICE_HOST
+          value: "invoice-service.default.svc.cluster.local"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apigw-service
+spec:
+  selector:
+    app: apigw
+  ports:
+  - port: 80
+    targetPort: 8080
+  externalIPs:
+    - 193.191.169.20
