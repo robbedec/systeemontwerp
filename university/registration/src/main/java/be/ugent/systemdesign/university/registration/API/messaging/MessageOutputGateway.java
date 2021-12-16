@@ -16,7 +16,7 @@ public interface MessageOutputGateway extends EventDispatcher, CommandDispatcher
 	void publishRegistrationAcceptedEvent(RegistrationAcceptedEvent event);
 	
 	//commands
-	@Gateway(requestChannel = Channels.CREATE_ACCOUNT_COMMAND)
+	@Gateway(requestChannel = Channels.CREATE_ACCOUNT_REQUEST)
 	void sendCreateAccountCommand(CreateAccountCommand command);
 
 }

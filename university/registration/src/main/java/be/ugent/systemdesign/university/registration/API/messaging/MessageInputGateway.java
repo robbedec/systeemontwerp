@@ -41,7 +41,7 @@ public class MessageInputGateway {
 		eventHandler.handlePaymentToLate(event);
 	}
 	
-	@StreamListener(Channels.PLAGIARISM_EVENT)
+	@StreamListener(Channels.PLAGIARISM_DETECTED_EVENT)
 	public void consumePlagiarismEvent(PlagiarismViolationEvent event) {
 		log.info("Plagiarism noted");
 		eventHandler.handlePlagiarismViolation(event);
