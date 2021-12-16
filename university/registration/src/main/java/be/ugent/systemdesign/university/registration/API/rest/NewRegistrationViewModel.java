@@ -15,6 +15,7 @@ public class NewRegistrationViewModel {
 	private String name;
 	private String firstName;
 	private String dateOfBirth;
+	private String socialSecurityNumber;
 	private String faculty;
 	private String degree;
 }

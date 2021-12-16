@@ -34,6 +34,7 @@ public class RegistrationQueryImpl implements RegistrationQuery {
 				_r.getName(),
 				_r.getFirstName(),
 				_r.getDateOfBirth(),
+				_r.getSocialSecurityNumber(),
 				_r.getFaculty(),
 				_r.getDegree(),
 				_r.getStatus()				

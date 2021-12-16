@@ -30,6 +30,7 @@ public class Registration extends AggregateRoot{
 	private String name;
 	private String firstName;
 	private LocalDate dateOfBirth;
+	private String socialSecurityNumber;
 	private String faculty;
 	private String degree;
 	private Status status;	
@@ -37,12 +38,13 @@ public class Registration extends AggregateRoot{
 	private Boolean isActive;
 	
 	
-	public Registration(Date _registrationDate, String _email, String _name, String _firstName, LocalDate _dateOfBirth, String _faculty, String _degree) {
+	public Registration(Date _registrationDate, String _email, String _name, String _firstName, LocalDate _dateOfBirth, String _socialSecurityNumber, String _faculty, String _degree) {
 		this.registrationDate = _registrationDate;		
 		setEmail(_email);
 		this.name = _name;
 		this.firstName = _firstName;
-		setDateOfBirth(_dateOfBirth);		
+		setDateOfBirth(_dateOfBirth);
+		this.socialSecurityNumber = _socialSecurityNumber;
 		this.faculty = _faculty;
 		this.degree = _degree;
 		this.status = Status.SUBMITTED;
@@ -57,12 +59,11 @@ public class Registration extends AggregateRoot{
 	}
 	
 	public void reject() {
-		this.status = Status.DENIED;		
-		//notification service aanspreken
+		this.status = Status.DENIED;
 	}
 	
 	public void noteLatePayment() {
-		this.status = status.ACCEPTED_LATE_PAYMENT;
+		this.status = Status.ACCEPTED_LATE_PAYMENT;
 	}
 	
 	public void noteNewViolation() {

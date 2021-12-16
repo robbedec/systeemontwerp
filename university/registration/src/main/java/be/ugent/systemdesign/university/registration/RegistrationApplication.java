@@ -40,8 +40,8 @@ public class RegistrationApplication {
 		return (args) -> {
 			DMrepo.deleteAll();
 			
-			Registration r = new Registration(new Date(), "bramdb@gmail.com", "De Bleecker", "Bram", LocalDate.of(1999, 12, 24), "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
-			Registration r2 = new Registration(new Date(), "bob@gmail.com", "De Bleecker", "BOB", LocalDate.of(1720, 10, 2), "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
+			Registration r = new Registration(new Date(), "bramdb@gmail.com", "De Bleecker", "Bram", LocalDate.of(1999, 12, 24), "123456789", "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
+			Registration r2 = new Registration(new Date(), "bob@gmail.com", "De Bleecker", "BOB", LocalDate.of(1720, 10, 2), "987654321", "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
 			repo.save(r);
 			repo.save(r2);
 			logger.info("Database populated");
@@ -86,9 +86,9 @@ public class RegistrationApplication {
 			logger.info("$Testing RegistrationService."); 
 			Response response;
 			logger.info("Register new registration (success).");
-			response = service.addRegistration("new@mail.be", "De Bleecker", "Sam", "2001-01-01", "Geneeskunde", "Biomedische Wetenschappen");			
+			response = service.addRegistration("new@mail.be", "De Bleecker", "Sam", "2001-01-01", "12345648", "Geneeskunde", "Biomedische Wetenschappen");			
 			logResponse(response);
-			response = service.addRegistration("new@mail.be", "Cool", "Bobby", "2001-01-01", "Architectuur", "Architect");
+			response = service.addRegistration("new@mail.be", "Cool", "Bobby", "2001-01-01", "125112151", "Architectuur", "Architect");
 			logResponse(response);		
 			List<RegistrationReadModel> list = query.giveRegistrations("SUBMITTED");
 			for(var x : list) {
@@ -98,6 +98,7 @@ public class RegistrationApplication {
 				logger.info("   - firstname: "+x.getFirstName());
 				logger.info("   - lastname: "+x.getName());
 				logger.info("   - date of birth: "+x.getDateOfBirth());
+				logger.info("   - socialsecuritynumber: "+x.getSocialSecurityNumber());
 				logger.info("   - faculty: "+x.getFaculty());
 				logger.info("   - degree: "+x.getDegree());
 				logger.info("-----------------------");

@@ -1,5 +1,7 @@
 package be.ugent.systemdesign.university.invoice.application;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +23,37 @@ public class InvoiceServiceImpl implements InvoiceService{
 			invoice.calculateAmount(faculty);
 			invoiceRepo.save(invoice);
 		} catch(RuntimeException ex) {
+			return new Response(ResponseStatus.FAIL, "id:"+studentNumber);
+		}
+		return new Response(ResponseStatus.SUCCESS, "id:"+studentNumber);
+	}
+
+	@Override
+	public Response payInvoices(String studentNumber) {
+		try {
+			List<Invoice> list = invoiceRepo.findByStudentNumber(studentNumber);
+			for(Invoice i : list) {
+				i.isPaid();
+				invoiceRepo.save(i);
+			}
+		} catch (RuntimeException ex) {
+			return new Response(ResponseStatus.FAIL, "id:"+studentNumber);
+		}
+		return new Response(ResponseStatus.SUCCESS, "id:"+studentNumber);
+	}
+
+	@Override
+	public Response expireInvoices(String studentNumber) {
+		try {
+			List<Invoice> list = invoiceRepo.findByStudentNumber(studentNumber);
+			for(Invoice i : list) {
+				i.isOverdue();
+				invoiceRepo.save(i);
+			}
+		} catch (RuntimeException ex) {
 			return new Response(ResponseStatus.FAIL, "id "+studentNumber);
 		}
-		return new Response(ResponseStatus.SUCCESS, "id "+studentNumber);
+		return new Response(ResponseStatus.SUCCESS, "id:"+studentNumber);
 	}
 
 }

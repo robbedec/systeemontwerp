@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateAccountRequest {
+	private String registrationId;
 	private String email;
 	private String name;
 	private String firstname;

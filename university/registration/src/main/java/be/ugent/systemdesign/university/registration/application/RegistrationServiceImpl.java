@@ -24,17 +24,18 @@ public class RegistrationServiceImpl implements RegistrationService {
 	CommandDispatcher commandDispatcher;
 
 	@Override
-	public Response addRegistration(String email, String name, String firstName, String dateOfBirth, String faculty, String degree) {
+	public Response addRegistration(String email, String name, String firstName, String dateOfBirth, String socialSecurityNumber, String faculty, String degree) {
 		Registration r;		
+		int id;
 		try {
-			r = new Registration(new Date(), email, name, firstName, LocalDate.parse(dateOfBirth), faculty, degree);			
-			registrationRepo.save(r);
+			r = new Registration(new Date(), email, name, firstName, LocalDate.parse(dateOfBirth), socialSecurityNumber, faculty, degree);			
+			id = registrationRepo.save(r);
 		} catch(InvalidRegistrationException ex) {
 			return new Response(ResponseStatus.FAIL, "The registration was invalid");
 		} catch(RuntimeException ex) {
 			return new Response(ResponseStatus.FAIL, "Registration could not be registered"+" - "+ex.getMessage());
 		}		
-		return new Response(ResponseStatus.SUCCESS, "id:"+r.getRegistrationId());
+		return new Response(ResponseStatus.SUCCESS, "id:"+id);
 	}
 
 	@Override
@@ -44,14 +45,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 			r = registrationRepo.findOne(Integer.parseInt(registrationId));
 			if(r.getAccountId() == null){
 				commandDispatcher.sendCreateAccountCommand(new CreateAccountCommand(r.getEmail(), r.getName(), r.getFirstName(), r.getDateOfBirth()));
+				return new Response(ResponseStatus.SUCCESS, "Account is being created");
 			} else {
 			r.accept();
-			registrationRepo.save(r);
+				registrationRepo.save(r);
 			}
 		} catch(RuntimeException ex) {
 			return new Response(ResponseStatus.FAIL, "Registration could not be accepted");
 		}
-		return new Response(ResponseStatus.SUCCESS, "id:"+r.getRegistrationId());
+		return new Response(ResponseStatus.SUCCESS, "id:"+registrationId);
 	}
 
 	@Override
@@ -64,11 +66,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 		} catch(RuntimeException ex) {
 			return new Response(ResponseStatus.FAIL, "Failed to reject the registration");
 		}
-		return new Response(ResponseStatus.SUCCESS, "id:"+r.getRegistrationId());
+		return new Response(ResponseStatus.SUCCESS, "id:"+registrationId);
 	}
 
 	@Override
-	public Response removeRegistration(String registrationId) {		
+	public Response removeRegistration(String registrationId) {
 		try {
 			registrationRepo.removeRegistration(Integer.parseInt(registrationId));
 		} catch(RuntimeException ex) {
@@ -83,6 +85,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		try {
 			r = registrationRepo.getActiveRegistration(accountId);
 			r.noteLatePayment();
+			registrationRepo.save(r);
 		} catch (RuntimeException ex) {
 			return new Response(ResponseStatus.FAIL, "Failed to note the late payment");
 		}
@@ -95,6 +98,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		try {
 			r = registrationRepo.getActiveRegistration(accountId);
 			r.noteNewViolation();
+			registrationRepo.save(r);
 		} catch (RuntimeException ex) {
 			return new Response(ResponseStatus.FAIL, "Failed to note the new violation");
 		}
@@ -107,6 +111,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		try {
 			r = registrationRepo.getActiveRegistration(accountId);
 			r.notePayment();
+			registrationRepo.save(r);
 		} catch (RuntimeException ex) {
 			return new Response(ResponseStatus.FAIL, "Failed to note the payment");
 		}

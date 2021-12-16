@@ -32,6 +32,7 @@ public class ApiGatewayApplication {
                 .route(r -> r.path("/api/registration/**").uri(String.format("http://%s:2227/api/registration/", getEnvOrLocalhost("REGISTRATION_HOST"))))
                 .route(r -> r.path("/api/evaluation/**").uri(String.format("http://%s:2225/api/evaluation/", getEnvOrLocalhost("EVALUATION_HOST"))))
                 .route(r -> r.path("/api/account/**").uri(String.format("http://%s:2226/api/account/", getEnvOrLocalhost("ACCOUNT_HOST"))))
+                .route(r -> r.path("/api/invoice/**").uri(String.format("http://%s:2228/api/invoice/", getEnvOrLocalhost("INVOICE_HOST"))))
                 .build();
         
     	}

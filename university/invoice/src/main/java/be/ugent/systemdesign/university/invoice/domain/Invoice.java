@@ -46,6 +46,10 @@ public class Invoice extends AggregateRoot {
 		addDomainEvent(new InvoicePaidEvent(studentNumber, amount));
 	}
 	
+	public void isOverdue() {
+		addDomainEvent(new PaymentOverdueEvent(invoiceId, studentNumber, dueDate.toString(), Double.toString(amount)));
+	}
+	
 	public void calculateAmount(String faculty) {
 		if(faculty.equals("Industriële Wetenschappen")) {
 			this.amount = 700.00;

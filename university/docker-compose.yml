@@ -108,6 +108,7 @@ services:
       - EVALUATION_HOST=evaluation
       - ACCOUNT_HOST=account
       - REGISTRATION_HOST=registration
+      - INVOICE_HOST=invoice
     ports:
       - 80:8080
     container_name: api_gateway

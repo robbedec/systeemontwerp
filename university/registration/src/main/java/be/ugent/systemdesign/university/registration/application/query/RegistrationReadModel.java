@@ -17,6 +17,7 @@ public class RegistrationReadModel {
 	private String name;
 	private String firstName;
 	private LocalDate dateOfBirth;
+	private String socialSecurityNumber;
 	private String faculty;
 	private String degree;
 	private String status;

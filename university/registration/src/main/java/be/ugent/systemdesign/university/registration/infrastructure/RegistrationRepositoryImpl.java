@@ -31,12 +31,13 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 	}
 
 	@Override
-	public void save(Registration _r) {
+	public int save(Registration _r) {
 		RegistrationDataModel dataModel = mapToRegistrationDataModel(_r);		
-		registrationRepo.save(dataModel);
+		RegistrationDataModel dm = registrationRepo.save(dataModel);
 		
 		_r.getDomainEvents().forEach(domainEvent -> eventPublisher.publishEvent(domainEvent));
-		_r.clearDomainEvents();		
+		_r.clearDomainEvents();
+		return dm.getRegistrationId();
 	}
 	
 	public void removeRegistration(int registrationId) {
@@ -45,7 +46,7 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 	
 	private RegistrationDataModel mapToRegistrationDataModel(Registration _r) {
 		return new RegistrationDataModel(_r.getRegistrationId(), _r.getAccountId(), _r.getRegistrationDate(), 
-				_r.getEmail(), _r.getName(), _r.getFirstName(), _r.getDateOfBirth(), _r.getFaculty(), _r.getDegree(), _r.getStatus(), _r.getIsActive());
+				_r.getEmail(), _r.getName(), _r.getFirstName(), _r.getDateOfBirth(), _r.getSocialSecurityNumber(), _r.getFaculty(), _r.getDegree(), _r.getStatus(), _r.getIsActive());
 	}
 	
 	private Registration mapToRegistration(RegistrationDataModel _rdm) {
@@ -57,6 +58,7 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 							.name(_rdm.getName())
 							.firstName(_rdm.getFirstName())							
 							.dateOfBirth(_rdm.getDateOfBirth())
+							.socialSecurityNumber(_rdm.getSocialSecurityNumber())
 							.faculty(_rdm.getFaculty())
 							.degree(_rdm.getDegree())
 							.status(Status.valueOf(_rdm.getStatus()))	

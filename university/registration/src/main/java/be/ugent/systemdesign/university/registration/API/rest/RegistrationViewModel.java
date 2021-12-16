@@ -18,6 +18,7 @@ public class RegistrationViewModel {
 	private String name;
 	private String firstName;
 	private String dateOfBirth;
+	private String socialSecurityNumber;
 	private String faculty;
 	private String degree;
 	private String status;
@@ -30,6 +31,7 @@ public class RegistrationViewModel {
 		name = r.getName();
 		firstName = r.getFirstName();
 		dateOfBirth = r.getDateOfBirth()==null?"":r.getDateOfBirth().toString();
+		socialSecurityNumber = r.getSocialSecurityNumber();
 		faculty = r.getFaculty();
 		degree = r.getDegree();
 		status = r.getStatus();

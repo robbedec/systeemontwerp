@@ -57,6 +57,13 @@
         	<input name="registrationId" id="registrationIdInput" placeholder="eg. 1"/>
         	<input type="button" value="accept" onclick="acceptRegistration()"> <input type="button" value="reject" onclick="rejectRegistration()"/> 
         </div>
+        <div class="payInvoice">
+        	<h2> Invoice controls (dummy service)</h2>
+        	<label for="accountId">accountId</label>
+        	<input name="accountId" id="accountIdInvoiceInput" placeholder="accountId"/>
+        	<input type="button" value="Pay invoices" onclick="payInvoices()"/> 
+        	<input type="button" value="Expire invoices" onclick="expireInvoices()"/>
+        </div>
     </div>    
     
     <script src="js/registration.js"></script>

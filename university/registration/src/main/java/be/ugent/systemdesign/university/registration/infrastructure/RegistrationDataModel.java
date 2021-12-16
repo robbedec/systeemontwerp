@@ -31,13 +31,14 @@ public class RegistrationDataModel {
 	private String name;
 	private String firstName;
 	private LocalDate dateOfBirth;	
+	private String socialSecurityNumber;
 	private String faculty;
 	private String degree;
 	private String status;
 	private Boolean isActive;
 	
 	public RegistrationDataModel(Integer registrationId, String accountId, Date registrationDate, String email, String name, String firstName, 
-			LocalDate dateOfBirth, String faculty, String degree, Status status, boolean isActive){		
+			LocalDate dateOfBirth, String socialSecurityNumber, String faculty, String degree, Status status, boolean isActive){		
 				this.registrationId = registrationId;
 				this.accountId = accountId;
 				this.registrationDate = registrationDate;
@@ -45,6 +46,7 @@ public class RegistrationDataModel {
 				this.name = name;
 				this.firstName = firstName;
 				this.dateOfBirth = dateOfBirth;
+				this.socialSecurityNumber = socialSecurityNumber;
 				this.faculty = faculty;
 				this.degree = degree;
 				this.status = status.name();	

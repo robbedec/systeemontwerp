@@ -27,7 +27,7 @@ public class MessageInputGateway {
 		Account account = new Account(null, req.getFirstname(), req.getName(), username, req.getEmail(), email, req.getDateOfBirth(), req.getSocialSecurityNumber(), AccountType.STUDENT, new ArrayList<>());
 		account = accountRepo.save(account);
 		
-		return new AccountCreatedResponse(account.getAccountId(), username, email);
+		return new AccountCreatedResponse(req.getRegistrationId(), account.getAccountId(), username, email);
 	}
 	
 	@StreamListener(Channels.PLAGIARISM_DETECTED_EVENT)

@@ -15,8 +15,9 @@ public class AccountCreatedResponse extends Response {
 	private String registrationId;
 	private String accountId;
 	
-	public AccountCreatedResponse(ResponseStatus status, String message, String accountId) {
+	public AccountCreatedResponse(ResponseStatus status, String message, String accountId, String registrationId) {
 		super(status, message);
 		this.accountId = accountId;
+		this.registrationId = registrationId;
 	}
 }

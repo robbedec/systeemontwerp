@@ -64,6 +64,7 @@ public class RegistrationController {
 				r.getName(), 
 				r.getFirstName(),			
 				r.getDateOfBirth(),
+				r.getSocialSecurityNumber(),
 				r.getFaculty(),
 				r.getDegree()
 		);

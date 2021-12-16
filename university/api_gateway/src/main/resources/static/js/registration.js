@@ -1,5 +1,6 @@
  const REGISTRATION_URL = "api/registration/"
 const FACULTY_URL = "api/faculty/"
+const INVOICE_URL = "api/invoice/"
 
 const facultyMap = new Map();
 const registrationMap = new Map();
@@ -39,6 +40,37 @@ async function rejectRegistrationCall(registrationId) {
 		}
    	}};
    	xhr.send();
+}
+
+async function payInvoicesCall(studentNumber){
+	var xhr = new XMLHttpRequest();
+	xhr.open("PUT", INVOICE_URL + studentNumber + "/pay/");
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.onreadystatechange = function () {
+   	if (xhr.readyState === 4) {
+		console.log(xhr);
+		if(xhr.status == 200){
+			window.alert(xhr.responseText)
+			console.log("Reject registration call");
+      		console.log(xhr.responseText);	
+		}
+   	}};
+   	xhr.send();	
+}
+
+async function expireInvoiceCall(studentNumber){
+	var xhr = new XMLHttpRequest();
+	xhr.open("PUT", INVOICE_URL + studentNumber + "/expire/");
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.onreadystatechange = function () {
+   	if (xhr.readyState === 4) {
+		if(xhr.status == 200){
+			window.alert(xhr.responseText)
+			console.log("Reject registration call");
+      		console.log(xhr.responseText);	
+		}
+   	}};
+   	xhr.send();	
 }
 
 async function getFaculties(){
@@ -87,6 +119,24 @@ function sendRegistration(event){
 	xhr.send(JSON.stringify(body));	
 	event.preventDefault();
 	
+}
+
+
+
+function payInvoices(){
+	let accountId = document.getElementById("accountIdInvoiceInput").value;
+	const response = payInvoicesCall(accountId).then((response) => {
+		console.log("Invoices paid")
+		console.log(response);
+	})
+}
+
+function expireInvoices(){
+	let accountId = document.getElementById("accountIdInvoiceInput").value;
+	const response = expireInvoiceCall(accountId).then((response) => {
+		console.log("Invoices expired")
+		console.log(response);
+	})
 }
 
 function fillFacultySelect(){    
