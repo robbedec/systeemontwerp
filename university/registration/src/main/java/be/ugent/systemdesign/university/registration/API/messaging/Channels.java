@@ -9,7 +9,7 @@ public interface Channels {
 	static final String NEW_REGISTRATION_EVENT = "new_registration_event";
 	static final String SCORES_PUBLISHED_EVENT = "scores_published_event";
 	static final String INVOICE_PAID_EVENT = "invoice_paid_event";
-	static final String PAYMENT_LATE_EVENT = "payment_late_event";
+	static final String PAYMENT_OVERDUE_EVENT = "payment_overdue_event";
 	static final String PLAGIARISM_DETECTED_EVENT = "plagiarism_event";
 	static final String CREATE_ACCOUNT_REQUEST = "create_account_request";
 	static final String ACCOUNT_CREATED_RESPONSE = "account_created_response";
@@ -24,7 +24,7 @@ public interface Channels {
 	@Input(INVOICE_PAID_EVENT)
 	SubscribableChannel invoicePaidEvent();
 	
-	@Input(PAYMENT_LATE_EVENT)
+	@Input(PAYMENT_OVERDUE_EVENT)
 	SubscribableChannel paymentLateEvent();
 	
 	@Input(PLAGIARISM_DETECTED_EVENT)

@@ -35,7 +35,7 @@ public class MessageInputGateway {
 		eventHandler.handleInvoicePaid(event);
 	}
 	
-	@StreamListener(Channels.PAYMENT_LATE_EVENT)
+	@StreamListener(Channels.PAYMENT_OVERDUE_EVENT)
 	public void consumePayementLateEvent(PaymentOverdueEvent event) {
 		log.info("Registration hasn't been paid on time");
 		eventHandler.handlePaymentToLate(event);

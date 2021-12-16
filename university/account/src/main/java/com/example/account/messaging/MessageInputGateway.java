@@ -21,19 +21,32 @@ public class MessageInputGateway {
 	
 	@StreamListener(Channels.CREATE_ACCOUNT_REQUEST)
 	@SendTo(Channels.ACCOUNT_CREATED_RESPONSE)
-	public AccountCreatedResponse receiveCreateAccountRequest(CreateAccountRequest req) {
+	public Response receiveCreateAccountRequest(CreateAccountRequest req) {
+		Response response;
+		try {
+			
+		
 		String username = (req.getFirstname() + req.getName()).toLowerCase();
 		String email = username + "@ugent.be";
-		Account account = new Account(null, req.getFirstname(), req.getName(), username, req.getEmail(), email, req.getDateOfBirth(), AccountType.STUDENT, new ArrayList<>());
-		account = accountRepo.save(account);
 		
-		return new AccountCreatedResponse(req.getRegistrationId(), account.getAccountId(), username, email);
+		Account account = accountRepo.findBySocialSecurityNumber(req.getSocialSecurityNumber()).orElse(new Account(null, req.getFirstname(), req.getName(), username, req.getEmail(), email, req.getDateOfBirth(), req.getSocialSecurityNumber(), AccountType.STUDENT, new ArrayList<>()));
+		account = accountRepo.save(account);
+		response = new AccountCreatedResponse(ResponseStatus.SUCCESS, "id "+req.getRegistrationId(), req.getRegistrationId(), account.getAccountId(), username, email); 
+		 
+		} catch (RuntimeException e) {
+			response = new AccountCreatedResponse(ResponseStatus.FAIL, "id "+req.getRegistrationId(), null, null, null, null);
+		}
+		return response;
 	}
 	
 	@StreamListener(Channels.PLAGIARISM_DETECTED_EVENT)
 	public void registerPlagiarismViolation(PlagiarismEvent event) {
-		Account account = accountRepo.getById(event.getStudentId());
-		account.getComments().add("Plagiarized task " + event.getTaskId());
-		accountRepo.save(account);
+		try {
+			Account account = accountRepo.getById(event.getStudentId());
+			account.getComments().add("Plagiarized task " + event.getTaskId());
+			accountRepo.save(account);
+		} catch( RuntimeException e) {
+			
+		}
 	}
 }

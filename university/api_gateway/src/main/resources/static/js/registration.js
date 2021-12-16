@@ -16,7 +16,7 @@ async function acceptRegistrationCall(registrationId) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("PUT", REGISTRATION_URL + registrationId + "/accept/");
 	xhr.setRequestHeader("Content-Type", "application/json");
-	xhr.onreadystatechange = function () {
+	xhr.onreadystatechange = function () {		
    	if (xhr.readyState === 4) {
 		if(xhr.status == 200){
 			window.alert(xhr.responseText)
@@ -51,7 +51,7 @@ async function payInvoicesCall(studentNumber){
 		console.log(xhr);
 		if(xhr.status == 200){
 			window.alert(xhr.responseText)
-			console.log("Reject registration call");
+			console.log("Pay invoices call");
       		console.log(xhr.responseText);	
 		}
    	}};
@@ -66,7 +66,7 @@ async function expireInvoiceCall(studentNumber){
    	if (xhr.readyState === 4) {
 		if(xhr.status == 200){
 			window.alert(xhr.responseText)
-			console.log("Reject registration call");
+			console.log("Expire invoices call");
       		console.log(xhr.responseText);	
 		}
    	}};
@@ -112,6 +112,7 @@ function sendRegistration(event){
 		name: document.getElementById("nameInput").value,
 		firstName: document.getElementById("firstNameInput").value,
 		dateOfBirth: document.getElementById("dateOfBirthInput").value,
+		socialSecurityNumber: document.getElementById("socialSecurityNumberInput").value,
 		faculty: facultySelect.value,
 		degree: degreeSelect.value		
 	};
@@ -216,6 +217,18 @@ function showOverview() {
 			emailInput.type = "text";
 			emailInput.value = registration.email;
 			emailInput.readOnly = true;
+			//dateOfBirth
+			const dateOfBirthLabel = document.createElement("label");
+			const dateOfBirthInput = document.createElement("input");
+			dateOfBirthInput.type = "text";
+			dateOfBirthInput.value = registration.dateOfBirth;
+			dateOfBirthInput.readOnly = true;
+			//socialSecurityNumber
+			const socialSecurityNumberLabel = document.createElement("label");
+			const socialSecurityNumberInput = document.createElement("input");
+			socialSecurityNumberInput.type = "text";
+			socialSecurityNumberInput.value = registration.email;
+			socialSecurityNumberInput.readOnly = true;
 			//faculty
 			const facultyLabel = document.createElement("label");
 			const facultyInput = document.createElement("input");
@@ -235,7 +248,7 @@ function showOverview() {
 			statusInput.value = registration.status;
 			statusInput.readOnly = true;
 			
-			divEl.append(studentNrLabel, studentNrInput, firstNameLabel, firstNameInput, nameLabel, nameInput, emailLabel, nameInput, facultyLabel, facultyInput, degreeLabel, degreeInput, statusLabel, statusInput);
+			divEl.append(studentNrLabel, studentNrInput, firstNameLabel, firstNameInput, nameLabel, nameInput, emailLabel, emailInput, dateOfBirthLabel, dateOfBirthInput, socialSecurityNumberLabel, socialSecurityNumberInput, facultyLabel, facultyInput, degreeLabel, degreeInput, statusLabel, statusInput);
 			parent.append(btn, divEl)
 			
 		});		

@@ -24,13 +24,13 @@ public class InvoiceController {
 	@PutMapping("{id}/pay")
 	public ResponseEntity<String> payInvoice(@PathVariable("id") String studentNumber){
 		Response response = invoiceService.payInvoices(studentNumber);
-		return createResponseEntity(response.status, "Failed to pay invoice", HttpStatus.OK, response.message ,HttpStatus.CONFLICT);		
+		return createResponseEntity(response.status, "studentNumber: "+studentNumber, HttpStatus.OK, response.message ,HttpStatus.CONFLICT);		
 	}
 	
 	@PutMapping("{id}/expire")
 	public ResponseEntity<String> expireInvoice(@PathVariable("id") String studentNumber){
-		Response response = invoiceService.payInvoices(studentNumber);
-		return createResponseEntity(response.status, "Failed to expire invoice", HttpStatus.OK, response.message ,HttpStatus.CONFLICT);		
+		Response response = invoiceService.expireInvoices(studentNumber);
+		return createResponseEntity(response.status, "studentNumber: "+studentNumber, HttpStatus.OK, response.message ,HttpStatus.CONFLICT);		
 	}
 	
 	private ResponseEntity<String> createResponseEntity(ResponseStatus status, String happyMessage, HttpStatus happyStatus, String sadMessage, HttpStatus sadStatus){

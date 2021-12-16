@@ -3,11 +3,14 @@ package be.ugent.systemdesign.university.registration.application;
 import java.time.LocalDate;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import be.ugent.systemdesign.university.registration.application.command.CommandDispatcher;
+import be.ugent.systemdesign.university.registration.application.command.CommandHandler;
 import be.ugent.systemdesign.university.registration.application.command.CreateAccountCommand;
 import be.ugent.systemdesign.university.registration.domain.InvalidRegistrationException;
 import be.ugent.systemdesign.university.registration.domain.Registration;
@@ -16,6 +19,8 @@ import be.ugent.systemdesign.university.registration.domain.RegistrationReposito
 @Transactional
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
+	
+	private static final Logger log = LoggerFactory.getLogger(RegistrationServiceImpl.class);
 	
 	@Autowired
 	RegistrationRepository registrationRepo;
@@ -30,6 +35,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		try {
 			r = new Registration(new Date(), email, name, firstName, LocalDate.parse(dateOfBirth), socialSecurityNumber, faculty, degree);			
 			id = registrationRepo.save(r);
+			log.info("New registration created: id="+id);
 		} catch(InvalidRegistrationException ex) {
 			return new Response(ResponseStatus.FAIL, "The registration was invalid");
 		} catch(RuntimeException ex) {
@@ -44,7 +50,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		try {
 			r = registrationRepo.findOne(Integer.parseInt(registrationId));
 			if(r.getAccountId() == null){
-				commandDispatcher.sendCreateAccountCommand(new CreateAccountCommand(r.getEmail(), r.getName(), r.getFirstName(), r.getDateOfBirth()));
+				commandDispatcher.sendCreateAccountCommand(new CreateAccountCommand(r.getRegistrationId().toString(), r.getEmail(), r.getName(), r.getFirstName(), r.getDateOfBirth()));
 				return new Response(ResponseStatus.SUCCESS, "Account is being created");
 			} else {
 			r.accept();

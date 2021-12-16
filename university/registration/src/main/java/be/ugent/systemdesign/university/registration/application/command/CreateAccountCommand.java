@@ -9,6 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CreateAccountCommand {
 	
+	private String registrationId;
 	private String email;
 	private String name;
 	private String firstname;	
