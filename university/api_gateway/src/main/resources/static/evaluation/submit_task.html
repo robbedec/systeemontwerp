@@ -9,7 +9,7 @@
 					file: document.getElementById("file").value
 				};
 				
-				fetch("/api/evaluation/tasks/" + selectedTask + "/submit?studentId=" + sessionStorage.userId, {
+				fetch("../api/evaluation/tasks/" + selectedTask + "/submit?studentId=" + sessionStorage.userId, {
 					method: "PUT",
 					mode: "cors",
 					headers: {
@@ -21,7 +21,7 @@
 			
 			function selectTask(taskId) {
 				selectedTask = taskId;
-				fetch("/api/evaluation/tasks/" + taskId + "/submission?studentId=" + sessionStorage.userId, {
+				fetch("../api/evaluation/tasks/" + taskId + "/submission?studentId=" + sessionStorage.userId, {
 					method: "GET",
 					mode: "cors",
 				}).then(res => res.json()).then(submission => {
