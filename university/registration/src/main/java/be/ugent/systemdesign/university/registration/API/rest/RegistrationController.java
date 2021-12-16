@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import be.ugent.systemdesign.university.registration.application.RegistrationService;
@@ -23,7 +22,7 @@ import be.ugent.systemdesign.university.registration.application.ResponseStatus;
 import be.ugent.systemdesign.university.registration.application.query.RegistrationQuery;
 
 @RestController
-@RequestMapping(path="api/registrations/")
+@RequestMapping(path="api/registration/")
 @CrossOrigin(origins="*")
 public class RegistrationController {
 

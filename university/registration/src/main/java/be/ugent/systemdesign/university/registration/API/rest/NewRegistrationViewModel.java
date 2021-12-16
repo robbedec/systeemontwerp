@@ -1,5 +1,6 @@
 package be.ugent.systemdesign.university.registration.API.rest;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class NewRegistrationViewModel {
 	private String accountId;
 	private String email;

@@ -24,11 +24,11 @@ public class RegistrationViewModel {
 	
 	public RegistrationViewModel(RegistrationReadModel r) {
 		accountId = r.getAccountId();
-		registrationDate = r.getRegistrationDate().toString();
+		registrationDate = r.getRegistrationDate()==null?"":r.getRegistrationDate().toString();
 		email = r.getEmail();
 		name = r.getName();
 		firstName = r.getFirstName();
-		dateOfBirth = r.getDateOfBirth().toString();
+		dateOfBirth = r.getDateOfBirth()==null?"":r.getDateOfBirth().toString();
 		faculty = r.getFaculty();
 		degree = r.getDegree();
 		status = r.getStatus();

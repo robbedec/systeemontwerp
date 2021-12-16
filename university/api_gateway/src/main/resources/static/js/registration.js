@@ -11,36 +11,50 @@ async function getRegistrationOverview(studentId){ //for students --> readonly
     return registrationsResponse;
 }
 
-async function getUnhandledRegistrationList(){
-    const registrationResponse = await fetch(BASE_URL); 
-	if(!registrationResponse.ok){
-		return await registrationResponse.body.getReader().read();
-	}
-	const registrations = await registrationResponse.json();    
-    return registrations;
+async function acceptRegistrationCall(registrationId) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("PUT", REGISTRATION_URL + registrationId + "/accept/");
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.onreadystatechange = function () {
+   	if (xhr.readyState === 4) {
+      console.log(xhr.status);
+      console.log(xhr.responseText);
+   	}};
+   	xhr.send();
 }
 
-async function acceptRegistration(registrationId) {
-    const response = await fetch(BASE_URL + registrationId);
-    if(!response.ok){
-        return await response.body.getReader().read()
-    }
-}
-
-async function rejectRegistration(registrationId) {
-    const response = await fetch(BASE_URL + registrationId);
-    
-}
-
-function showRegistrationsList(){
-    const registrations = getUnhandledRegistrationList();
-    
+async function rejectRegistrationCall(registrationId) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("PUT", REGISTRATION_URL + registrationId + "/reject/");
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.onreadystatechange = function () {
+   	if (xhr.readyState === 4) {
+      console.log(xhr.status);
+      console.log(xhr.responseText);
+   	}};
+   	xhr.send();
 }
 
 async function getFaculties(){
     const response = await fetch(FACULTY_URL);    
     return response;
 }
+
+function acceptRegistration(){	
+	registrationId = document.getElementById("registrationIdInput").value;
+	const response = acceptRegistrationCall(registrationId).then((response) => {
+		console.log(response);
+	})
+}
+
+function rejectRegistration(){	
+	registrationId = document.getElementById("registrationIdInput").value;
+	const response = rejectRegistrationCall(registrationId).then((response) => {
+		console.log(response);
+	})
+}
+
+
 
 function sendRegistration(event){	
 	var xhr = new XMLHttpRequest();
