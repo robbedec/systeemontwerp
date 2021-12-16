@@ -68,9 +68,6 @@ public class CurriculumApplication {
 			Curriculum c = new Curriculum("9998", "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
 			Curriculum c2 = new Curriculum("9999", "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
 			
-			c.addCourse("Gevorderde algoritmen", 6);
-			c.addCourse("Wiskunde 1", 6);
-			
 			repo.save(c);
 			repo.save(c2);
 			log.info("Saved curriculum");
