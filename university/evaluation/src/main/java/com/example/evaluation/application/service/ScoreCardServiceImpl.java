@@ -24,7 +24,7 @@ import com.example.evaluation.domain.model.ScoreCard;
 @Service
 public class ScoreCardServiceImpl implements ScoreCardService {
 
-	Logger log = LoggerFactory.getLogger(ScoreCardServiceImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(ScoreCardServiceImpl.class);
 
 	@Autowired
 	ScoreCardRepository scoreCardRepo;

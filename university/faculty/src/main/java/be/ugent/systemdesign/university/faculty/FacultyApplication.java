@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.lang.Thread;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -48,7 +49,16 @@ public class FacultyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FacultyApplication.class, args);
 	}
-	
+
+	@Bean
+	CommandLineRunner delay() {
+		return (args) -> {
+			logger.info("SLEEP");
+			Thread.sleep(60000);
+			logger.info("WAKE");
+		};
+	}
+
 	@Bean
 	CommandLineRunner seedDatabase(FacultyRepository repo){ 
 		return(args)->{

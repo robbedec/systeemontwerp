@@ -17,7 +17,7 @@ import com.example.evaluation.infrastructure.exception.CourseNotFoundException;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-	Logger log = LoggerFactory.getLogger(getClass());
+	private static final Logger log = LoggerFactory.getLogger(CourseServiceImpl.class);
 
 	@Autowired
 	CourseRepository courseRepo;
@@ -27,7 +27,7 @@ public class CourseServiceImpl implements CourseService {
 		try {
 			Course course = new Course(courseId, courseName, teacherId, degreeId, new ArrayList<>());
 			courseRepo.save(course);
-			log.info("Course added {}", courseId);
+			log.info("Course added {}, teacher {}", courseId, teacherId);
 			return new Response(ResponseStatus.SUCCESS, "Course added");
 		} catch (Exception e) {
 			return new Response(ResponseStatus.FAIL, "Failed");

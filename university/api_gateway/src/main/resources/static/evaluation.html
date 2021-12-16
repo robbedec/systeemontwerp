@@ -10,20 +10,47 @@
 					mode: "cors"
 				});
 			}
+			
+			function login(userId) {
+				sessionStorage.userId = userId;
+			}
+			
+			function studentIdChanged() {
+				login(document.getElementById("student_ids").value);
+			}
+			
+			async function fetchStudents() {
+				const curriculumResponse = await fetch("api/curriculum/"); 
+				const curriculums = await curriculumResponse.json();
+				curriculums.forEach(curr => {
+					option = document.createElement("option"); 
+					option.value = curr.studentId;
+					option.label = curr.studentId;
+					option.innerText = option.label;
+					option.selected = false;
+
+					document.getElementById("student_ids").appendChild(option);
+				});
+			};
+			
+			document.body.onload = fetchStudents();
 		</script>
 	</head>
 	<body>
 		<b>Student</b>
+		<select id="student_ids" onChange="studentIdChanged()">
+			<option id="dropdown_placeholder" value="" disabled selected>Select a studentID</option>
+		</select>
 		<ul>
 			<li><a href="evaluation/submit_task.html">Tasks</a></li>
 			<li><a href="evaluation/score_cards.html">Score Cards</a></li>
 			<li><a href="evaluation/certificates.html">Certificates</a></li>
 		</ul>
 		<br/><br />
-		<b>Teacher</b>
+		<b>Teacher</b> <button onclick="login('2')">login</button>
 		<ul>
 			<li><a href="evaluation/create_task.html">Create Task</a></li>
-			<li><a href="assign_scores.html">Assign Scores</a></li>
+			<li><a href="evaluation/assign_scores.html">Assign Scores</a></li>
 		</ul>
 		<br /><br />
 		<b>Anyone</b>
@@ -31,7 +58,7 @@
 			<li><a href="evaluation/verify_certificate.html">Verify Certificate</a></li>
 		</ul>
 		<br /><br />
-		<b>Administrator</b>
+		<b>Administrator</b> <button>login</button>
 		<button onclick="evaluation/generateScoreCards()">Generate score cards</button>
 	</body>
 </html
