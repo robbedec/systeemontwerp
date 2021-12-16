@@ -1,0 +1,82 @@
+body {
+	background-color: rgba(240, 233, 173, 0.466);	
+    align-content: center;
+    text-align: center;
+}
+nav {    
+    padding-top: 10px;
+    margin: 0px 10px;
+    align-content: left;
+    text-align: left;
+    width: 100%;
+}
+
+.roleSelection{    
+    display: inline-block;
+}
+
+.roleSelection input[type=button] {
+    display: inline;
+    width:auto
+}
+h1 {   
+    text-align: center;
+}
+
+
+a{    
+    display: inline;
+    color: black;
+}
+
+.roleSelection input {
+    display: inline-block;
+    width: auto;
+}
+form, .overview {    
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+form input , form select, .overview input, .overview select{
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1500px;    
+    display: block;
+    margin-bottom: 5px;
+    
+}
+form input[type=submit] {
+    
+	border-radius:5px;
+	cursor:pointer;
+	color:black;
+	font-family:Arial;
+	font-size:17px;
+	
+	text-decoration:none;	
+}
+
+.collapsible {
+	background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #ccc;
+}
+
+.overview_content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}

@@ -46,7 +46,7 @@ public class Registration extends AggregateRoot{
 		this.faculty = _faculty;
 		this.degree = _degree;
 		this.status = Status.SUBMITTED;
-		this.numberOfOpenViolations = 0;	//can't create a new registration with open valiations
+		this.numberOfOpenViolations = 0;	//can't create a new registration with open violations
 		this.isActive = false;
 	}
 	

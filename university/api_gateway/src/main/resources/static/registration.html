@@ -1,0 +1,65 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Registration</title>
+    <meta name="description" content="Frontend for the registration service">
+    <meta name="author" content="Bram De Bleecker">
+    <link rel="stylesheet" href="css/registration.css">
+</head>
+
+<body onload="init();">
+    <nav>
+        <a href="index.html">Go back</a>
+    </nav>
+    <h1>Registration</h1>
+
+    <div class="studentOptions">
+        <div class="newRegistrationForm">
+            <h2>Make new registration</h2>
+            <br>            
+            <form id="newRegistrationForm" action="javascript:void(0)" onsubmit="return false;">
+                <label for="firstName"> first name: </label>
+                <input type="text" name="firstName" id="firstNameInput" />
+                <label for="name">last name: </label>
+                <input type="text" name="name" id="nameInput" />
+                <label for="email">email: </label>
+                <input type="text" name="email" id="emailInput" />
+                <label for="dateOfBirth">date of birth:</label>
+                <input type="date" name="dateOfBirth" id="dateOfBirthInput" />
+                <label for="faculty">faculty: </label>
+                <select name="faculty" id="facultySelect" onchange="showDegrees(this.value)">
+                	<option value="----" selected>----</option>
+                </select>
+                <label for="degree">degree: </label>
+                <select name="degree" id="degreeSelect">
+                	<option value="----" selected>----</option>
+                </select>
+                <input type="submit" value="Submit" />
+            </form>    
+        </div>
+        <div class="overviewStudent">
+            <h2>Registration overview (student)</h2>
+            <br>        
+            <input name="studentId" id="studentIdInput" placeholder="Student number"/> <input type="button" value="show" onclick="showOverview()">
+            <div id="overview">
+            
+        	</div >
+        </div>   
+        <div class="teacherOverview">
+        	<h2>Accept / reject registration (teacher)</h2>
+        	</br>
+        	<label for="registrationId">registrationId</label>
+        	<input name="registrationId" id="registrationIdInput" placeholder="eg. 1"/>
+        	<input type="button" value="accept" onclick="acceptRegistration()"> <input type="button" value="reject" onclick="rejectRegistration()"/> 
+        </div>
+    </div>    
+    
+    <script src="js/registration.js"></script>
+</body>
+
+</html>

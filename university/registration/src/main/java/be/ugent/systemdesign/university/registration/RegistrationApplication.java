@@ -105,6 +105,10 @@ public class RegistrationApplication {
 			response = service.acceptRegistration("1");
 			logResponse(response);
 			
+			
+			List<RegistrationReadModel> regs = query.giveRegistrations("1");
+			logger.info(Integer.toString(regs.size()));
+			
 		};
 	}
 }
