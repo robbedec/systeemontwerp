@@ -16,8 +16,8 @@ public class RegistrationQueryImpl implements RegistrationQuery {
 	RegistrationDataModelRepository repo;
 	
 	@Override
-	public List<RegistrationReadModel> giveRegistrations(String status) {		// 
-		return repo.findByStatus(status).stream().map(el -> mapToRegistrationReadModel(el)).collect(Collectors.toList());		
+	public List<RegistrationReadModel> giveRegistrations(String accountId) {		 
+		return repo.findByAccountId(accountId).stream().map(el -> mapToRegistrationReadModel(el)).collect(Collectors.toList());		
 	}	
 
 	@Override
@@ -28,13 +28,15 @@ public class RegistrationQueryImpl implements RegistrationQuery {
 	private RegistrationReadModel mapToRegistrationReadModel(RegistrationDataModel _r) {
 		RegistrationReadModel r = new RegistrationReadModel(
 				_r.getRegistrationId(),
+				_r.getAccountId(),
+				_r.getRegistrationDate(),
 				_r.getEmail(),
 				_r.getName(),
 				_r.getFirstName(),
 				_r.getDateOfBirth(),
 				_r.getFaculty(),
 				_r.getDegree(),
-				_r.getStatus()
+				_r.getStatus()				
 		);
 		return r;
 	}

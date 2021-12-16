@@ -11,12 +11,19 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=learningplatform
+  registration_db:
+    image: mysql:5.7
+    container_name: registration_db
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=registration
   zookeeper:
     image: confluentinc/cp-zookeeper
     environment:
       - ZOOKEEPER_CLIENT_PORT=2181
   kafka:
-    image: confluentinc/cp-kafka
+    image: confluentinc/cp-kafka:5.4.2
     depends_on: 
       - zookeeper
     environment: 
@@ -71,6 +78,16 @@ services:
     depends_on:
       - kafka
       - learningplatform
+    environment:
+      - spring.cloud.stream.kafka.binder.brokers=kafka
+      - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
+  registration:
+    build: ./registration
+    container_name: registration
+    links:
+      - kafka
+    depends_on:
+      - kafka      
     environment:
       - spring.cloud.stream.kafka.binder.brokers=kafka
       - spring.cloud.stream.kafka.binder.zkNodes=zookeeper

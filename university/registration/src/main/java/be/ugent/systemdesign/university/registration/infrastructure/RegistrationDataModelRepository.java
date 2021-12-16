@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RegistrationDataModelRepository extends JpaRepository<RegistrationDataModel, Integer> {
 	
-	List<RegistrationDataModel> findByStatus(String status);	
+	List<RegistrationDataModel> findByAccountId(String accountId);	
 	List<RegistrationDataModel> findByNameAndFirstName(String name, String firstName);
 	List<RegistrationDataModel> findByFacultyAndDegree(String faculty, String degree);
 	List<RegistrationDataModel> findByEmail(String email);

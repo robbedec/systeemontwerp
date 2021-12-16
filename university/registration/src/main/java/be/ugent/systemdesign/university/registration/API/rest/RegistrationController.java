@@ -33,9 +33,9 @@ public class RegistrationController {
 	@Autowired
 	RegistrationQuery registrationQuery;
 	
-	@GetMapping
-	public List<RegistrationViewModel> getRegistrations(@RequestParam("status") String status){
-		return registrationQuery.giveRegistrations(status)
+	@GetMapping("student/{id}")
+	public List<RegistrationViewModel> getRegistrations(@PathVariable("id") String accountId){
+		return registrationQuery.giveRegistrations(accountId)
 				.stream()
 				.map(el -> new RegistrationViewModel(el))
 				.collect(Collectors.toList());

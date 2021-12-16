@@ -28,6 +28,9 @@ public class ApiGatewayApplication {
                 .route(r -> r.path("/api/curriculum/**").uri(String.format("http://%s:2223/api/curriculum/", getEnvOrLocalhost("CURRICULUM_HOST"))))
                 .route(r -> r.path("/api/faculty/**").uri(String.format("http://%s:2224/api/faculty/", getEnvOrLocalhost("FACULTY_HOST"))))
                 .route(r -> r.path("/api/learningplatform/**").uri(String.format("http://%s:2229/api/learningplatform/", getEnvOrLocalhost("LEARNINGPLATFORM_HOST"))))
+                .route(r -> r.path("/api/registration/**").uri(String.format("http://%s:2245/api/registration/", getEnvOrLocalhost("REGISTRATION_HOST"))))
                 .build();
+        
     }
+	
 }

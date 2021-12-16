@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface RegistrationQuery {
 
-	public List<RegistrationReadModel> giveRegistrations(String status);
+	public List<RegistrationReadModel> giveRegistrations(String accountId);
 	public RegistrationReadModel getRegistration(String registrationId);
 }
