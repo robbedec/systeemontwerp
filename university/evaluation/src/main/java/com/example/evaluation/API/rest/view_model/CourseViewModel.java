@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class CourseViewModel {
+
 	public final String courseId;
 	public final String courseName;
+
 }

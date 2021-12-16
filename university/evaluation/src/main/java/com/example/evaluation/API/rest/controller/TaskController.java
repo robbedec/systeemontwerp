@@ -58,12 +58,12 @@ public class TaskController {
 		return taskQuery.getTaskSubmissions(taskId, teacherId).stream()
 				.map(taskSubmissionRM -> new TaskSubmissionViewModel(taskSubmissionRM)).collect(Collectors.toList());
 	}
-	
+
 	@GetMapping("/responsibilities")
 	public List<CourseViewModel> getTaskResponsibilities(String teacherId) {
 		return taskQuery.getTaskResponsibilities(teacherId);
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<String> createTask(@RequestBody TaskPostModel task, String teacherId) {
 		log.info("rw {}", task.getWeight());
@@ -91,9 +91,8 @@ public class TaskController {
 	@PutMapping("{taskId}/submissions/score")
 	public ResponseEntity<String> assignScore(@RequestBody AssignScorePostModel score, @PathVariable String taskId,
 			String teacherId) {
-		log.info("{} {}", score.getStudentId(), score.getScore());
+		log.info("{} {}", teacherId, score.getScore());
 		Response response = taskService.assignScore(taskId, score.getStudentId(), score.getScore(), teacherId);
-		log.info("{} {}", response.status, response.message);
 		return createResponseEntity(response.status, "Score assigned", HttpStatus.OK, response.message,
 				HttpStatus.CONFLICT);
 	}

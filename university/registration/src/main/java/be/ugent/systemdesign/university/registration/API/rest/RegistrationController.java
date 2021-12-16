@@ -59,7 +59,7 @@ public class RegistrationController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<String> createRegistration(@RequestBody RegistrationViewModel r){
+	public ResponseEntity<String> createRegistration(@RequestBody NewRegistrationViewModel r){
 		Response response = registrationService.addRegistration(
 				r.getEmail(), 
 				r.getName(), 

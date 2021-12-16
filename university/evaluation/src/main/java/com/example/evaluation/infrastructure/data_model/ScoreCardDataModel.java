@@ -2,7 +2,6 @@ package com.example.evaluation.infrastructure.data_model;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -24,6 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScoreCardDataModel {
+
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
@@ -34,4 +34,5 @@ public class ScoreCardDataModel {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "course_score_data_model", joinColumns = @JoinColumn(name = "score_card_id"))
 	private List<CourseScoreDataModel> scores;
+
 }

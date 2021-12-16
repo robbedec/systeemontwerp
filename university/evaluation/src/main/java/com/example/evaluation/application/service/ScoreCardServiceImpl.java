@@ -23,6 +23,7 @@ import com.example.evaluation.domain.model.ScoreCard;
 @Transactional
 @Service
 public class ScoreCardServiceImpl implements ScoreCardService {
+
 	Logger log = LoggerFactory.getLogger(ScoreCardServiceImpl.class);
 
 	@Autowired
@@ -55,7 +56,8 @@ public class ScoreCardServiceImpl implements ScoreCardService {
 						} catch (TaskSubmissionNotFoundException e) {
 						}
 					}
-					scoreCard.getScores().add(new CourseScore(courseId, (int) Math.round(score)));
+					scoreCard.getScores()
+							.add(new CourseScore(courseRepo.findCourseName(courseId), (int) Math.round(score)));
 				}
 
 				// Generate certificate if student passed all courses
@@ -63,6 +65,7 @@ public class ScoreCardServiceImpl implements ScoreCardService {
 						&& scoreCard.passedAllCourses()) {
 					Certificate certificate = new Certificate(null, degreeId, studentId);
 					certificate = certificateRepo.save(certificate);
+					log.info("Certificate generated for student {} for degree {}", studentId, degreeId);
 					scoreCard.passed(true);
 				} else {
 					scoreCard.passed(false);
@@ -70,6 +73,8 @@ public class ScoreCardServiceImpl implements ScoreCardService {
 				scoreCardRepo.save(scoreCard);
 			}
 		}
+		log.info("Score cards generated");
 		return new Response(ResponseStatus.SUCCESS, "Score cards generated");
 	}
+
 }

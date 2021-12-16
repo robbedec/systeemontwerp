@@ -1,6 +1,8 @@
 const BASE_URL = "/api/learningplatform/"
 const STUDENT_URL = BASE_URL + "students/"
 const TEACHERS_URL = BASE_URL + "teachers/"
+const SEED_DB_URL = "/api/facultydb/";
+
 
 async function getTeacherCourses(teacherId){
     const coursesResponse = await fetch(TEACHERS_URL + teacherId +  "/courses/"); 
@@ -17,6 +19,11 @@ async function getStudentCourses(studentId){
 	const courses = await coursesResponse.json();
     
     return courses;
+}
+
+async function reseedCoursesDb(){
+    const courseReseedResponse = await fetch(SEED_DB_URL); 
+    return await courseReseedResponse.json();
 }
 
 async function getStudentCourseMaterials(studentId, courseId){
@@ -146,6 +153,11 @@ function showCourseContents(studentId, courseId){
 }
 
 window.onload = function(){
+	let getAllCoursesButton = document.getElementById("getAllCoursesButton");
+	getAllCoursesButton.addEventListener("click", function(){
+		reseedCoursesDb().then(msg => console.log(msg));
+	})
+	
 	// GET COURSES OF STUDENT
 	let getAllStudentCoursesButton = document.getElementById("getStudentCoursesButton");
 	let myCoursesDiv = document.getElementById("myCoursesDiv");

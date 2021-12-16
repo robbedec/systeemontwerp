@@ -23,7 +23,7 @@ services:
     environment:
       - ZOOKEEPER_CLIENT_PORT=2181
   kafka:
-    image: confluentinc/cp-kafka:5.4.2
+    image: confluentinc/cp-kafka:5.2.4
     depends_on: 
       - zookeeper
     environment: 
@@ -105,6 +105,42 @@ services:
       - CURRICULUM_HOST=curriculum
       - FACULTY_HOST=faculty
       - LEARNINGPLATFORM_HOST=learningplatform
+      - EVALUATION_HOST=evaluation
+      - ACCOUNT_HOST=account
+      - REGISTRATION_HOST=registration
     ports:
       - 80:8080
     container_name: api_gateway
+  faculty:
+    build: ./faculty
+    container_name: faculty
+    links:
+      - kafka
+    depends_on:
+      - kafka
+      - learningplatform
+    environment:
+      - spring.cloud.stream.kafka.binder.brokers=kafka
+      - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
+  evaluation:
+    build: ./evaluation
+    container_name: evaluation
+    links:
+      - kafka
+    depends_on:
+      - kafka
+      - faculty
+      - curriculum
+    environment:
+      - spring.cloud.stream.kafka.binder.brokers=kafka
+      - spring.cloud.stream.kafka.binder.zkNodes=zookeeper
+  account:
+    build: ./account
+    container_name: account
+    links:
+      - kafka
+    depends_on:
+      - kafka
+    environment:
+      - spring.cloud.stream.kafka.binder.brokers=kafka
+      - spring.cloud.stream.kafka.binder.zkNodes=zookeeper

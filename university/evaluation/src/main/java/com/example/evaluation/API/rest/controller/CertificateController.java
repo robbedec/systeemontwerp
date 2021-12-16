@@ -3,8 +3,6 @@ package com.example.evaluation.API.rest.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +18,12 @@ import com.example.evaluation.application.query.CertificateQuery;
 @RequestMapping(path = "api/evaluation/certificates")
 @CrossOrigin(origins = "*")
 public class CertificateController {
-	Logger log = LoggerFactory.getLogger(CertificateController.class);
-	
+
 	@Autowired
 	private CertificateQuery certificateQuery;
 
 	@GetMapping
 	public List<CertificateViewModel> getCertificates(String studentId) {
-		log.info("cert {}", studentId);
 		return certificateQuery.getCertificates(studentId).stream()
 				.map(certificateRM -> new CertificateViewModel(certificateRM)).collect(Collectors.toList());
 	}

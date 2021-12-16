@@ -15,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScoreCard extends AggregateRoot {
+
 	private String scoreCardId;
 	private String studentId;
 	private String degreeId;
@@ -27,8 +28,9 @@ public class ScoreCard extends AggregateRoot {
 		}
 		return true;
 	}
-	
+
 	public void passed(boolean passed) {
 		addDomainEvent(new ScoreCardGeneratedDomainEvent(studentId, degreeId, passed));
 	}
+
 }

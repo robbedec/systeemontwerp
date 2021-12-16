@@ -1,4 +1,4 @@
-const REGISTRATION_URL = "/api/registration/"
+const REGISTRATION_URL = "api/registration/"
 const FACULTY_URL = "api/faculty/"
 
 const facultyMap = new Map();
@@ -53,9 +53,20 @@ function sendRegistration(event){
 	xhr.onerror = function(){
 		window.alert("Registration failed");
 	}
-	
-	xhr.send(new FormData(event.target));	
+	facultySelect = document.getElementById("facultySelect");	
+	degreeSelect = document.getElementById("degreeSelect");
+	const body = {
+		email: document.getElementById("emailInput").value,
+		name: document.getElementById("nameInput").value,
+		firstName: document.getElementById("firstNameInput").value,
+		dateOfBirth: document.getElementById("dateOfBirthInput").value,
+		faculty: facultySelect.value,
+		degree: degreeSelect.value		
+	};
+	console.log(JSON.stringify(body));
+	xhr.send(JSON.stringify(body));	
 	event.preventDefault();
+	
 }
 
 function fillFacultySelect(){    

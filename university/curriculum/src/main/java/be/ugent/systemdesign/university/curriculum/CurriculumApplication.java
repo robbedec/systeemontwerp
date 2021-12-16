@@ -65,15 +65,14 @@ public class CurriculumApplication {
 		return (args) -> {
 			DMrepo.deleteAll();
 			
-			Curriculum c = new Curriculum("1", "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
-			Curriculum c2 = new Curriculum("2", "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
+			Curriculum c = new Curriculum("9998", "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
+			Curriculum c2 = new Curriculum("9999", "Ingenieurswetenschappen & architectuur", "Industrieel Ingenieur");
 			
 			c.addCourse("Gevorderde algoritmen", 6);
 			c.addCourse("Wiskunde 1", 6);
 			
 			repo.save(c);
 			repo.save(c2);
-			//log.info("Saved new inpatient {}", cId);
 			log.info("Saved curriculum");
 		};
 	}
@@ -88,7 +87,7 @@ public class CurriculumApplication {
 			  logCurriculumDataModels(curriculumAll);
 			  
 			  log.info(">Find by studentId.");
-			  repo.findByStudentId("1").ifPresentOrElse((value) -> {
+			  repo.findByStudentId("9998").ifPresentOrElse((value) -> {
 					  logCurriculumDataModels(Arrays.asList(value));
 				  }, () -> {
 					  logCurriculumDataModels(Collections.emptyList());
@@ -96,24 +95,6 @@ public class CurriculumApplication {
 			  );
 		 };
 	 }
-	
-	@Bean
-	public CommandLineRunner markAsProposed(CurriculumDataModelRepository DMrepo, CurriculumRepository repo) {
-		return (args) -> {
-			
-		};
-	}
-	
-	 private static void logResponse(Response response) {
-		  log.info("-response status[{}] message[{}]", response.status,
-		  response.message); }
-		
-	  @Bean 
-	  CommandLineRunner testInpatientHasLeftEvent(CurriculumService service) {
-		  return (args) -> { 
-			  //Response response = service.noteLeftAgainstMedicalAdvice("3"); logResponse(response);
-		  }; 
-	  }
 	  
 	  @Bean
 	  CommandLineRunner testDIFF() {

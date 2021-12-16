@@ -10,7 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Certificate {
+
 	private String certificateId;
 	private String degreeId;
 	private String studentId;
+
 }

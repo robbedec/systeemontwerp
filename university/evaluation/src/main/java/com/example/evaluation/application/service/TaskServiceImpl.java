@@ -23,6 +23,7 @@ import com.example.evaluation.infrastructure.exception.TaskSubmissionNotFoundExc
 @Transactional
 @Service
 public class TaskServiceImpl implements TaskService {
+
 	Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
 
 	@Autowired
@@ -35,7 +36,7 @@ public class TaskServiceImpl implements TaskService {
 	public Response createTask(String courseId, String description, LocalDateTime dueDate, double weight,
 			String teacherId) {
 		try {
-			log.info("weight sum {}", taskRepo.findTotalWeight(courseId) + weight);
+			// Check total weight of all tasks & if teacher is responsible for course
 			if (taskRepo.findTotalWeight(courseId) + weight > 1) {
 				return new Response(ResponseStatus.FAIL, "Total weight greater then 100%");
 			} else if (!teacherId.equals(courseRepo.findTeacherForCourse(courseId))) {
@@ -44,7 +45,9 @@ public class TaskServiceImpl implements TaskService {
 
 			Task task = new Task(null, courseId, description, dueDate, weight);
 			task = taskRepo.save(task);
+			log.info("Task created {}", task.getTaskId());
 
+			// Create submission entry for every student
 			for (String studentId : courseRepo.findStudentsFollowingCourse(courseId)) {
 				TaskSubmission taskSubmission = new TaskSubmission(task.getTaskId(), studentId);
 				taskSubmission = taskRepo.save(taskSubmission);
@@ -66,6 +69,7 @@ public class TaskServiceImpl implements TaskService {
 			TaskSubmission taskSubmission = taskRepo.findSubmissionByTaskIdAndStudentId(taskId, studentId);
 			taskSubmission.setFile(file);
 			taskSubmission = taskRepo.save(taskSubmission);
+			log.info("Task submitted by {}", studentId);
 			return new Response(ResponseStatus.SUCCESS, "Task submitted");
 		} catch (TaskNotFoundException e) {
 			return new Response(ResponseStatus.FAIL, "Task doesn't exist");
@@ -77,7 +81,12 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public Response assignScore(String taskId, String studentId, int score, String teacherId) {
 		try {
-			String responsibleTeacher = courseRepo.findTeacherForCourse(taskRepo.findById(taskId).getCourseId());
+			Task task = taskRepo.findById(taskId);
+			if (!task.dueDatePassed()) {
+				return new Response(ResponseStatus.FAIL, "The due date hasn't passed");
+			}
+
+			String responsibleTeacher = courseRepo.findTeacherForCourse(task.getCourseId());
 			if (!teacherId.equals(responsibleTeacher)) {
 				return new Response(ResponseStatus.FAIL, "Only the teacher can assign a score");
 			}
@@ -85,6 +94,7 @@ public class TaskServiceImpl implements TaskService {
 			TaskSubmission taskSubmission = taskRepo.findSubmissionByTaskIdAndStudentId(taskId, studentId);
 			taskSubmission.assignScore(score);
 			taskRepo.save(taskSubmission);
+			log.info("Score assigned for task {} by student {} ({}/20)", taskId, studentId, score);
 			return new Response(ResponseStatus.SUCCESS, "Updated score");
 		} catch (InvalidScoreException e) {
 			return new Response(ResponseStatus.FAIL, "Invalid score");
@@ -100,6 +110,7 @@ public class TaskServiceImpl implements TaskService {
 		List<TaskSubmission> taskSubmissions = taskRepo.findSubmissionsByTaskId(taskId);
 		Set<String> plagiarismTasks = new HashSet<>();
 
+		// Compare submitted files
 		for (int i = 0; i < taskSubmissions.size(); i++) {
 			String file1 = taskSubmissions.get(i).getFile();
 			if (file1 == null || file1.length() == 0)
@@ -110,6 +121,8 @@ public class TaskServiceImpl implements TaskService {
 				if (file2 == null || file2.length() == 0)
 					continue;
 
+				// If LCS length is above a certain threshold the 2 students committed
+				// plagiarism
 				double similarity = (double) longestCommonSubsequence(file1, file2)
 						/ Math.max(file1.length(), file2.length());
 				if (similarity > 0.5) {
@@ -126,6 +139,7 @@ public class TaskServiceImpl implements TaskService {
 				}
 			}
 		}
+		log.info("Plagiarism violations {}", plagiarismTasks.size());
 		return new Response(ResponseStatus.SUCCESS, "Submissions checked for plagiarism");
 	}
 

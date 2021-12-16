@@ -35,6 +35,11 @@ public class FacultyController {
 		return new FacultyViewModel(f.getFacultyId().toString(), f.getFacultyName(), mapDegreesToViewModel(f.getDegrees()));
 	}
 	
+	@GetMapping("test/{id}")
+	public String get(@PathVariable("id") String facultyId) {
+		return "test";
+	}
+	
 	/*
 	 * http://localhost/api/faculty/all?facultyName=Ingenieurswetenschappen+%26+architectuur
 	 * Voor encodings zie: https://www.w3schools.com/tags/ref_urlencode.asp
@@ -46,6 +51,7 @@ public class FacultyController {
 		return new FacultyViewModel(f.getFacultyId().toString(), f.getFacultyName(), mapDegreesToViewModel(f.getDegrees()));
 		
 	}
+	
 	
 	private List<DegreeProgrammeViewModel> mapDegreesToViewModel(List<DegreeProgramme> dl) {
 		return dl.stream().map(d -> new DegreeProgrammeViewModel(

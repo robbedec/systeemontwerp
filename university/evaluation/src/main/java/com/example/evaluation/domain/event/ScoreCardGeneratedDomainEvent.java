@@ -8,7 +8,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ScoreCardGeneratedDomainEvent extends DomainEvent {
+
 	private String studentId;
 	private String degreeId;
 	private boolean passed;
+
 }
