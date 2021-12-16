@@ -23,6 +23,7 @@ public class RegistrationViewModel {
 	private String status;
 	
 	public RegistrationViewModel(RegistrationReadModel r) {
+		registrationId = r.getRegistrationId().toString();
 		accountId = r.getAccountId();
 		registrationDate = r.getRegistrationDate()==null?"":r.getRegistrationDate().toString();
 		email = r.getEmail();

@@ -1,4 +1,4 @@
-const REGISTRATION_URL = "api/registration/"
+ const REGISTRATION_URL = "api/registration/"
 const FACULTY_URL = "api/faculty/"
 
 const facultyMap = new Map();
@@ -17,8 +17,11 @@ async function acceptRegistrationCall(registrationId) {
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.onreadystatechange = function () {
    	if (xhr.readyState === 4) {
-      console.log(xhr.status);
-      console.log(xhr.responseText);
+		if(xhr.status == 200){
+			window.alert(xhr.responseText)
+			console.log("Accept registration call:");
+      		console.log(xhr.responseText);	
+		}
    	}};
    	xhr.send();
 }
@@ -29,8 +32,11 @@ async function rejectRegistrationCall(registrationId) {
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.onreadystatechange = function () {
    	if (xhr.readyState === 4) {
-      console.log(xhr.status);
-      console.log(xhr.responseText);
+		if(xhr.status == 200){
+			window.alert(xhr.responseText)
+			console.log("Reject registration call");
+      		console.log(xhr.responseText);	
+		}
    	}};
    	xhr.send();
 }
@@ -60,13 +66,13 @@ function sendRegistration(event){
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", REGISTRATION_URL, true);
 	xhr.setRequestHeader("Content-Type", "application/json");
-	xhr.onload = function() {  //request succesful
-		window.alert("Registraiton succesful");
-	};
-	
-	xhr.onerror = function(){
-		window.alert("Registration failed");
-	}
+	if (xhr.readyState === 4) {
+		if(xhr.status == 200){
+			window.alert(xhr.responseText)
+			console.log("Send new registration call:");
+      		console.log(xhr.responseText);	
+		}
+   	}
 	facultySelect = document.getElementById("facultySelect");	
 	degreeSelect = document.getElementById("degreeSelect");
 	const body = {
@@ -120,16 +126,21 @@ function showDegrees(faculty){
 
 function showOverview() {
 	const studentId = document.getElementById("studentIdInput").value;
+	const parent = document.getElementById("overview");
+	//remove existing list (if there is one)	
+	while(parent.firstChild) {
+		parent.removeChild(parent.lastChild);
+	}
+	//make new list
 	getRegistrationOverview(studentId).then(response => response.json()).then(data => {
 		data.forEach(registration => {
-			registrationMap.set(registration.registrationId, registration)
-			const parent = document.getElementById("overview");
+			registrationMap.set(registration.registrationId, registration);
 			const btn = document.createElement("button");
 			btn.className = "collapsible";
 			btn.value = registration.registrationDate + " --- " + "Status: " + registration.status;
+			btn.innerHTML = registration.registrationDate + " --- " + "Status: " + registration.status;
 			const divEl = document.createElement("div");
 			divEl.className="overview_content";
-			parent.after(btn, divEl)
 			
 			//studentnr
 			const studentNrLabel = document.createElement("label");
@@ -158,9 +169,9 @@ function showOverview() {
 			//faculty
 			const facultyLabel = document.createElement("label");
 			const facultyInput = document.createElement("input");
-			degreeInput.type = "text";
-			degreeInput.value = registration.faculty;
-			degreeInput.readOnly = true;
+			facultyInput.type = "text";
+			facultyInput.value = registration.faculty;
+			facultyInput.readOnly = true;
 			//degree 
 			const degreeLabel = document.createElement("label");
 			const degreeInput = document.createElement("input");
@@ -175,6 +186,7 @@ function showOverview() {
 			statusInput.readOnly = true;
 			
 			divEl.append(studentNrLabel, studentNrInput, firstNameLabel, firstNameInput, nameLabel, nameInput, emailLabel, nameInput, facultyLabel, facultyInput, degreeLabel, degreeInput, statusLabel, statusInput);
+			parent.append(btn, divEl)
 			
 		});		
 	});

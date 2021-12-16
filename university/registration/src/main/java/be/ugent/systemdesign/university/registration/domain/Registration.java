@@ -48,7 +48,6 @@ public class Registration extends AggregateRoot{
 		this.status = Status.SUBMITTED;
 		this.numberOfOpenViolations = 0;	//can't create a new registration with open violations
 		this.isActive = false;
-		this.accountId = "1";
 	}
 	
 	public void accept () {
