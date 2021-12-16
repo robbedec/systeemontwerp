@@ -12,7 +12,7 @@ public interface Channels {
 	public final static String FACULTY_EVENT = "faculty_event";
 	public final static String CURRICULUM_CHANGED_EVENT = "curriculum_changed_event";
 	public final static String PAYMENT_OVERDUE_EVENT = "payment_overdue_event";
-	public final static String PLAGIARISM_REGISTERED_EVENT = "plagiarism_registered_event";
+	public final static String PLAGIARISM_REGISTERED_EVENT = "plagiarism_detected_event";
 
 
 	@Output(NEW_ANNOUNCEMENT_EVENT)
