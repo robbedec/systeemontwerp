@@ -42,7 +42,7 @@ public class LearningPlatformController {
 	
 	// GET 
 	@GetMapping("teachers/{teacherId}/courses/")
-	public  List<CourseViewModel> testRestController(@PathVariable("teacherId") String teacherId){
+	public  List<CourseViewModel> getAvailableTeacherCourses(@PathVariable("teacherId") String teacherId){
 		return q.getTeacherCourses(teacherId);
 	}
 	
